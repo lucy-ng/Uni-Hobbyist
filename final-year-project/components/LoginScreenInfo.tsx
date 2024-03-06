@@ -1,7 +1,8 @@
 import React from "react";
-import { Button, StyleSheet, TextInput } from "react-native";
+import { Button } from "react-native";
 
-import { Text, View } from "./Themed";
+import { Text, View, TextInput } from "./Themed";
+import { styles } from "./Styles";
 
 export default function LoginScreenInfo({ path }: { path: string }) {
   return (
@@ -13,7 +14,11 @@ export default function LoginScreenInfo({ path }: { path: string }) {
       >
         Email
       </Text>
-      <TextInput style={styles.input} />
+      <TextInput 
+        style={styles.input}
+        lightColor="rgba(0,0,0,0.8)"
+        darkColor="rgba(255,255,255,0.8)"
+      />
       <Text
         style={styles.text}
         lightColor="rgba(0,0,0,0.8)"
@@ -21,30 +26,15 @@ export default function LoginScreenInfo({ path }: { path: string }) {
       >
         Password
       </Text>
-      <TextInput style={styles.input} secureTextEntry={true} />
+      <TextInput 
+        style={styles.input} 
+        secureTextEntry={true}
+        lightColor="rgba(0,0,0,0.8)"
+        darkColor="rgba(255,255,255,0.8)"
+      />
       <Button
         title="Login"
       />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  loginContainer: {
-    alignItems: "center",
-    marginHorizontal: 50,
-  },
-  text: {
-    fontSize: 17,
-    lineHeight: 24,
-    textAlign: "center",
-  },
-  input: {
-    borderColor: "white",
-    borderWidth: 1,
-    width: 200,
-    color: "white",
-    padding: 5,
-    margin: 20,
-  },
-});

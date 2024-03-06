@@ -25,6 +25,7 @@ export default function TabLayout() {
         name="LoginScreen"
         options={{
           title: 'Login',
+          unmountOnBlur: true,
           tabBarIcon: ({ color }) => <SimpleLineIcons name="login" size={24} color="white" />,
           headerRight: () => (
             <Link href="/modal" asChild>
@@ -46,6 +47,7 @@ export default function TabLayout() {
         name="RegisterScreen"
         options={{
           title: 'Register',
+          unmountOnBlur: true,
           tabBarIcon: ({ color }) => <AntDesign name="adduser" size={24} color="white" />,
           headerRight: () => (
             <Link href="/modal" asChild>
