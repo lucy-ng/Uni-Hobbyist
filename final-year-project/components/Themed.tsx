@@ -4,7 +4,6 @@
  */
 
 import { Text as DefaultText, TextInput as DefaultTextInput, View as DefaultView } from 'react-native';
-
 import Colors from '@/constants/Colors';
 import { useColorScheme } from './useColorScheme';
 import React from 'react';
@@ -44,9 +43,9 @@ export function Text(props: TextProps) {
 export function TextInput(props: TextInputProps) {
   const { style, lightColor, darkColor, lightBorderColor, darkBorderColor, ...otherProps } = props;
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
-  const borderColor = useThemeColor({ light: lightBorderColor, dark: darkBorderColor }, 'text');
+  const borderColor = useThemeColor({ light: lightBorderColor, dark: darkBorderColor }, 'borderColor');
 
-  return <DefaultTextInput style={[{ color }, style]} {...otherProps} />;
+  return <DefaultTextInput style={[{ color, borderColor }, style]} {...otherProps} />;
 }
 
 export function View(props: ViewProps) {

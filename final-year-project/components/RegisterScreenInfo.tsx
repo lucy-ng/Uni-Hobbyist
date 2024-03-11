@@ -1,43 +1,115 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "react-native";
-
+import { Button, Modal } from "react-native";
 import { Text, View, TextInput } from "./Themed";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { ref, set } from "firebase/database";
-import { database } from "@/app/database";
 import { styles } from "./Styles";
+import Toast from "react-native-toast-message";
+import {
+  CodeField,
+  Cursor,
+  useBlurOnFulfill,
+  useClearByFocusCell,
+} from "react-native-confirmation-code-field";
+import email from "react-native-email";
+import { getCode, saveCode } from "@/app/database";
 
 export default function RegisterScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [university, setUniversity] = useState("");
-  const [email, setEmail] = useState("");
+  const [emailValue, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [authenticationModal, setAuthenticationModal] = React.useState(false);
+  const [value, setValue] = useState("");
+  const refObj = useBlurOnFulfill({ value, cellCount: 4 });
+  const [props, getCellOnLayoutHandler] = useClearByFocusCell({
+    value,
+    setValue,
+  });
 
   useEffect(() => {
     validateForm();
-  }, [firstName, lastName, university, email, password]);
+  }, [firstName, lastName, university, emailValue, password]);
 
-  const validateForm = () => {
-    
+  const validateForm = () => {};
+
+  const sendEmail = () => {
+    const codeValue = saveCode(emailValue);
+    const to = emailValue;
+    email(to, {
+      subject: "Uni Hobbyist Verification",
+      body:
+        "Hi there! Your verification code is " +
+        codeValue +
+        ". Please enter this code in the app.",
+      checkCanOpen: false,
+    }).catch(console.error);
+
+    setAuthenticationModal(true);
   };
 
-  const registerUser = () => {
-
-    const db = database;
-    set(ref(db, "users/" + email.replace(/\./g, ',')), {
-      first_name: firstName,
-      last_name: lastName,
-      email: email,
-      university: university,
-      password: password,
+  const showSuccessToast = () => {
+    Toast.show({
+      type: "success",
+      text1: "Successfully registered!",
     });
+  };
+
+  const showErrorToast = () => {
+    Toast.show({
+      type: "error",
+      text1: "Please try again.",
+    });
+  };
+
+
+  const handleSubmit = () => {
+    const returnedCode = getCode(emailValue);
+
+    if (value == returnedCode) {
+      setAuthenticationModal(false);
+      showSuccessToast();
+    }
+    else {
+      showErrorToast();
+    }
   };
 
   return (
     <>
       <KeyboardAwareScrollView>
         <View style={styles.registerContainer}>
+          <Modal visible={authenticationModal}>
+            <View style={styles.authenticationContainer}>
+              <Text
+                style={styles.text}
+                lightColor="rgba(0,0,0,0.8)"
+                darkColor="rgba(255,255,255,0.8)"
+              >
+                Please input the code sent to your email.
+              </Text>
+              <CodeField
+                ref={refObj}
+                {...props}
+                value={value}
+                onChangeText={setValue}
+                cellCount={4}
+                rootStyle={styles.codeFieldRoot}
+                keyboardType="number-pad"
+                textContentType="oneTimeCode"
+                renderCell={({ index, symbol, isFocused }) => (
+                  <Text
+                    key={index}
+                    style={[styles.cell, isFocused && styles.focusCell]}
+                    onLayout={getCellOnLayoutHandler(index)}
+                  >
+                    {symbol || (isFocused ? <Cursor /> : null)}
+                  </Text>
+                )}
+              />
+              <Button title="Authenticate" onPress={handleSubmit} />
+            </View>
+          </Modal>
           <Text
             style={styles.text}
             lightColor="rgba(0,0,0,0.8)"
@@ -49,8 +121,10 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             style={styles.input}
             value={firstName}
             onChangeText={setFirstName}
-            lightColor="rgba(255,255,255,0.8)"
-            darkColor="rgba(0,0,0,0.8)"
+            lightColor="rgba(0,0,0,0.8)"
+            darkColor="rgba(255,255,255,0.8)"
+            lightBorderColor="rgba(0,0,0,0.8)"
+            darkBorderColor="rgba(255,255,255,0.8)"
           />
           <Text
             style={styles.text}
@@ -63,8 +137,10 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             style={styles.input}
             value={lastName}
             onChangeText={setLastName}
-            lightColor="rgba(255,255,255,0.8)"
-            darkColor="rgba(0,0,0,0.8)"
+            lightColor="rgba(0,0,0,0.8)"
+            darkColor="rgba(255,255,255,0.8)"
+            lightBorderColor="rgba(0,0,0,0.8)"
+            darkBorderColor="rgba(255,255,255,0.8)"
           />
           <Text
             style={styles.text}
@@ -77,8 +153,10 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             style={styles.input}
             value={university}
             onChangeText={setUniversity}
-            lightColor="rgba(255,255,255,0.8)"
-            darkColor="rgba(0,0,0,0.8)"
+            lightColor="rgba(0,0,0,0.8)"
+            darkColor="rgba(255,255,255,0.8)"
+            lightBorderColor="rgba(0,0,0,0.8)"
+            darkBorderColor="rgba(255,255,255,0.8)"
           />
           <Text
             style={styles.text}
@@ -89,10 +167,12 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
           </Text>
           <TextInput
             style={styles.input}
-            value={email}
+            value={emailValue}
             onChangeText={setEmail}
-            lightColor="rgba(255,255,255,0.8)"
-            darkColor="rgba(0,0,0,0.8)"
+            lightColor="rgba(0,0,0,0.8)"
+            darkColor="rgba(255,255,255,0.8)"
+            lightBorderColor="rgba(0,0,0,0.8)"
+            darkBorderColor="rgba(255,255,255,0.8)"
           />
           <Text
             style={styles.text}
@@ -106,10 +186,12 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             secureTextEntry={true}
             value={password}
             onChangeText={setPassword}
-            lightColor="rgba(255,255,255,0.8)"
-            darkColor="rgba(0,0,0,0.8)"
+            lightColor="rgba(0,0,0,0.8)"
+            darkColor="rgba(255,255,255,0.8)"
+            lightBorderColor="rgba(0,0,0,0.8)"
+            darkBorderColor="rgba(255,255,255,0.8)"
           />
-          <Button title="Register" onPress={registerUser} />
+          <Button title="Register" onPress={sendEmail} />
         </View>
       </KeyboardAwareScrollView>
     </>

@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     marginTop: 30,
+    color: "purple"
   },
   separator: {
     marginVertical: 30,
@@ -22,13 +23,17 @@ export const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 14,
-    color: '#2e78b7',
+    color: "#2e78b7",
   },
   registerContainer: {
     alignItems: "center",
     marginHorizontal: 50,
   },
   loginContainer: {
+    alignItems: "center",
+    marginHorizontal: 50,
+  },
+  authenticationContainer: {
     alignItems: "center",
     marginHorizontal: 50,
   },
@@ -42,5 +47,18 @@ export const styles = StyleSheet.create({
     width: 200,
     padding: 5,
     margin: 20,
+  },
+  codeFieldRoot: { marginTop: 20 },
+  cell: {
+    width: 40,
+    height: 40,
+    lineHeight: 38,
+    fontSize: 24,
+    borderWidth: 2,
+    borderColor: "#00000030",
+    textAlign: "center",
+  },
+  focusCell: {
+    borderColor: "#000",
   },
 });
