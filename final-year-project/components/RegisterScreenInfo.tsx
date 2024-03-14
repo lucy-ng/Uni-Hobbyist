@@ -8,8 +8,7 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from "react-native-confirmation-code-field";
-import email from "react-native-email";
-import { getCode, saveCode } from "@/app/database";
+import { getCode, registerUser, saveCode } from "@/app/database";
 import { AntDesign } from "@expo/vector-icons";
 import Button from "./Button";
 import {
@@ -18,8 +17,6 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "./Toast";
-import { Linking } from "react-native";
-import qs from "qs";
 
 export default function RegisterScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
@@ -62,57 +59,18 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
     }
   };
 
-  /*
-  Zaichenko, D., 2021. How to make your React Native app send emails. [Online] 
-  Available at: https://blog.codemagic.io/how-to-make-your-react-native-app-send-emails/
-  [Accessed 14 March 2024].
-   */
-
-  const sendEmail = async () => {
-    let url = `mailto:${emailValue}`;
+  const sendEmail = () => {
     const codeValue = saveCode(emailValue);
-
-    const query = qs.stringify({
-      subject: "Uni Hobbyist Verification",
-      body:
-        "Hi there! Your verification code is " +
-        codeValue +
-        ". Please enter this code in the app.",
-    });
-
-    if (query.length) {
-      url += `?${query}`;
-    }
-
-    const canOpen = await Linking.canOpenURL(url);
-
-    if (!canOpen) {
-      throw new Error("Provided URL can not be handled");
-    }
-
-    return Linking.openURL(url);
+    const to = emailValue;
+    
   };
-
-  // const sendEmail = () => {
-  //   // const codeValue = saveCode(emailValue);
-  //   // const to = emailValue;
-  //   // email(to, {
-  //   //   subject: "Uni Hobbyist Verification",
-  //   //   body:
-  //   //     "Hi there! Your verification code is " +
-  //   //     codeValue +
-  //   //     ". Please enter this code in the app.",
-  //   //   checkCanOpen: false,
-  //   // }).catch(console.error);
-
-  //   validateForm();
-  // };
 
   const handleSubmit = () => {
     const returnedCode = getCode(emailValue);
 
     if (value == returnedCode) {
       setAuthenticationModal(false);
+      registerUser(emailValue, firstName, lastName, university, password)
       showSuccessToast();
     } else {
       showErrorToast();
