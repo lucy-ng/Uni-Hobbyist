@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Text, View, TextInput, Modal } from "./Themed";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { styles } from "./Styles";
-import Toast from "react-native-toast-message";
 import {
   CodeField,
   Cursor,
@@ -13,6 +12,14 @@ import email from "react-native-email";
 import { getCode, saveCode } from "@/app/database";
 import { AntDesign } from "@expo/vector-icons";
 import Button from "./Button";
+import {
+  showEmailErrorToast,
+  showEmptyValueToast,
+  showErrorToast,
+  showSuccessToast,
+} from "./Toast";
+import { Linking } from "react-native";
+import qs from "qs";
 
 export default function RegisterScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
@@ -28,40 +35,78 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
     setValue,
   });
 
-  useEffect(() => {
-    validateForm();
-  }, [firstName, lastName, university, emailValue, password]);
+  const validateForm = () => {
+    /*
+    prabushitha, 2018. How to do Email validation using Regular expression in Typescript [duplicate]. [Online] 
+    Available at: https://stackoverflow.com/questions/46370725/how-to-do-email-validation-using-regular-expression-in-typescript
+    [Accessed 14 March 2024].
+    */
 
-  const validateForm = () => {};
+    const emailReg = new RegExp(
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
 
-  const sendEmail = () => {
-    // const codeValue = saveCode(emailValue);
-    // const to = emailValue;
-    // email(to, {
-    //   subject: "Uni Hobbyist Verification",
-    //   body:
-    //     "Hi there! Your verification code is " +
-    //     codeValue +
-    //     ". Please enter this code in the app.",
-    //   checkCanOpen: false,
-    // }).catch(console.error);
-
-    setAuthenticationModal(true);
+    if (
+      firstName === "" ||
+      lastName === "" ||
+      university === "" ||
+      emailValue === "" ||
+      password === ""
+    ) {
+      showEmptyValueToast();
+    } else if (!emailValue.includes("ac.uk") || !emailReg.test(emailValue)) {
+      showEmailErrorToast();
+    } else {
+      setAuthenticationModal(true);
+      sendEmail()
+    }
   };
 
-  const showSuccessToast = () => {
-    Toast.show({
-      type: "success",
-      text1: "Successfully registered!",
+  /*
+  Zaichenko, D., 2021. How to make your React Native app send emails. [Online] 
+  Available at: https://blog.codemagic.io/how-to-make-your-react-native-app-send-emails/
+  [Accessed 14 March 2024].
+   */
+
+  const sendEmail = async () => {
+    let url = `mailto:${emailValue}`;
+    const codeValue = saveCode(emailValue);
+
+    const query = qs.stringify({
+      subject: "Uni Hobbyist Verification",
+      body:
+        "Hi there! Your verification code is " +
+        codeValue +
+        ". Please enter this code in the app.",
     });
+
+    if (query.length) {
+      url += `?${query}`;
+    }
+
+    const canOpen = await Linking.canOpenURL(url);
+
+    if (!canOpen) {
+      throw new Error("Provided URL can not be handled");
+    }
+
+    return Linking.openURL(url);
   };
 
-  const showErrorToast = () => {
-    Toast.show({
-      type: "error",
-      text1: "Please try again.",
-    });
-  };
+  // const sendEmail = () => {
+  //   // const codeValue = saveCode(emailValue);
+  //   // const to = emailValue;
+  //   // email(to, {
+  //   //   subject: "Uni Hobbyist Verification",
+  //   //   body:
+  //   //     "Hi there! Your verification code is " +
+  //   //     codeValue +
+  //   //     ". Please enter this code in the app.",
+  //   //   checkCanOpen: false,
+  //   // }).catch(console.error);
+
+  //   validateForm();
+  // };
 
   const handleSubmit = () => {
     const returnedCode = getCode(emailValue);
@@ -209,7 +254,7 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             lightBorderColor="rgba(0,0,0,0.8)"
             darkBorderColor="rgba(255,255,255,0.8)"
           />
-          <Button title="Register" onPress={sendEmail} />
+          <Button title="Register" onPress={validateForm} />
         </View>
       </KeyboardAwareScrollView>
     </>
