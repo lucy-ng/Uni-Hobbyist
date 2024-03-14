@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "react-native";
 import { Text, View, TextInput, Modal } from "./Themed";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { styles } from "./Styles";
@@ -13,6 +12,7 @@ import {
 import email from "react-native-email";
 import { getCode, saveCode } from "@/app/database";
 import { AntDesign } from "@expo/vector-icons";
+import Button from "./Button";
 
 export default function RegisterScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
@@ -83,17 +83,19 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             animationType="slide"
             transparent={true}
           >
-            <View
-              style={styles.modalView}
-              lightColor="rgba(0,0,0,0.8)"
-              darkColor="rgba(255,255,255,0.8)"
-            >
+            <View style={styles.modalView}>
               <View
                 style={styles.modalInfoView}
                 lightColor="rgba(0,0,0,0.8)"
                 darkColor="rgba(255,255,255,0.8)"
               >
-                <AntDesign name="closecircle" size={24} color="purple" />
+                <AntDesign
+                  name="closecircle"
+                  size={24}
+                  color="purple"
+                  onPress={() => setAuthenticationModal(false)}
+                  style={styles.closeIcon}
+                />
                 <Text
                   style={styles.text}
                   darkColor="rgba(0,0,0,0.8)"

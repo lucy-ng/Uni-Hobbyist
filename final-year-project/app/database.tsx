@@ -7,10 +7,9 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const database = getDatabase(app);
+export const db = getDatabase(app);
 
 export const saveCode = (emailValue: string) => {
-  const db = database;
   const codeValue = String(Math.floor(1000 + Math.random() * 9000));
 
   set(ref(db, "verifications/" + emailValue.replace(/\./g, ",")), {
@@ -21,6 +20,11 @@ export const saveCode = (emailValue: string) => {
   return codeValue
 };
 
+/*
+Google LLC, 2024. Read and Write Data on the Web. [Online] 
+Available at: https://firebase.google.com/docs/database/web/read-and-write
+[Accessed 14 March 2024].
+*/
 export const registerUser = (
   emailValue: string,
   firstName: string,
@@ -28,7 +32,6 @@ export const registerUser = (
   university: string,
   password: string
 ) => {
-  const db = database;
   set(ref(db, "users/" + emailValue.replace(/\./g, ",")), {
     first_name: firstName,
     last_name: lastName,
@@ -39,7 +42,6 @@ export const registerUser = (
 };
 
 export const getCode = (emailValue: string) => {
-  const db = database;
   const verificationRef = ref(
     db,
     "verifications/" + emailValue.replace(/\./g, ",")
@@ -50,4 +52,12 @@ export const getCode = (emailValue: string) => {
     return String(data);
   });
   return ""
+};
+
+export const loginUser = (emailValue: string) => {
+  const userRef = ref(db, "users/" + emailValue.replace(/\./g, ","));
+  onValue(userRef, (snapshot) => {
+    const data = snapshot.val();
+    console.log(data);
+  });
 };

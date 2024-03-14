@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "react-native";
-
 import { Text, View, TextInput } from "./Themed";
 import { styles } from "./Styles";
-import { database } from "@/app/database";
-import { ref, onValue } from "firebase/database";
+import { loginUser } from "@/app/database";
+import Button from "./Button";
 
 export default function LoginScreenInfo({ path }: { path: string }) {
   const [email, setEmail] = useState("");
@@ -16,14 +14,13 @@ export default function LoginScreenInfo({ path }: { path: string }) {
 
   const validateForm = () => {};
 
-  const loginUser = () => {
-    const db = database;
-    const userRef = ref(db, "users/" + email.replace(/\./g, ","));
-    onValue(userRef, (snapshot) => {
-      const data = snapshot.val();
-      console.log(data);
-    });
-  };
+  /*
+  Google LLC, 2024. Read and Write Data on the Web. [Online] 
+  Available at: https://firebase.google.com/docs/database/web/read-and-write
+  [Accessed 14 March 2024].
+  */
+
+
 
   return (
     <View style={styles.loginContainer}>

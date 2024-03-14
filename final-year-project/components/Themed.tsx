@@ -8,6 +8,8 @@ import {
   TextInput as DefaultTextInput,
   View as DefaultView,
   Modal as DefaultModal,
+  Pressable as DefaultPressable,
+  PressableProps,
 } from "react-native";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "./useColorScheme";
@@ -24,6 +26,7 @@ export type TextProps = ThemeProps & DefaultText["props"];
 export type TextInputProps = ThemeProps & DefaultTextInput["props"];
 export type ViewProps = ThemeProps & DefaultView["props"];
 export type ModalProps = ThemeProps & DefaultModal["props"];
+export type CustomPressableProps = ThemeProps & PressableProps;
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
@@ -100,4 +103,14 @@ export function Modal(props: ModalProps) {
       {...otherProps}
     />
   );
+}
+
+export function Pressable(props: CustomPressableProps) {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  const backgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "background"
+  );
+
+  return <DefaultPressable style={[{ backgroundColor }]} {...otherProps} />;
 }

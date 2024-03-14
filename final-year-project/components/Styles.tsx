@@ -4,13 +4,12 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    // justifyContent: 'center',
   },
   title: {
     fontSize: 30,
     fontWeight: "bold",
     marginTop: 30,
-    color: "purple"
+    color: "purple",
   },
   separator: {
     marginVertical: 30,
@@ -53,6 +52,7 @@ export const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#00000030",
     textAlign: "center",
+    marginBottom: 20
   },
   focusCell: {
     borderColor: "#000",
@@ -65,6 +65,25 @@ export const styles = StyleSheet.create({
   modalInfoView: {
     borderRadius: 20,
     padding: 50,
-    alignItems: 'center',
   },
+  closeIcon: {
+    marginBottom: 20,
+    alignSelf: "flex-end",
+  },
+
+  /* 
+  650 Industries, Inc., 2024. Styling a React Native button. [Online] 
+  Available at: https://docs.expo.dev/ui-programming/react-native-styling-buttons/
+  [Accessed 14 March 2024].
+  */
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 4,
+    elevation: 3,
+  },
+  buttonText: {
+    padding: 10,
+    textAlign: "center",
+  }
 });
