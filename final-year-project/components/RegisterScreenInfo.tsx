@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal } from "react-native";
-import { Text, View, TextInput } from "./Themed";
+import { Button } from "react-native";
+import { Text, View, TextInput, Modal } from "./Themed";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { styles } from "./Styles";
 import Toast from "react-native-toast-message";
@@ -12,6 +12,7 @@ import {
 } from "react-native-confirmation-code-field";
 import email from "react-native-email";
 import { getCode, saveCode } from "@/app/database";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function RegisterScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
@@ -34,16 +35,16 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
   const validateForm = () => {};
 
   const sendEmail = () => {
-    const codeValue = saveCode(emailValue);
-    const to = emailValue;
-    email(to, {
-      subject: "Uni Hobbyist Verification",
-      body:
-        "Hi there! Your verification code is " +
-        codeValue +
-        ". Please enter this code in the app.",
-      checkCanOpen: false,
-    }).catch(console.error);
+    // const codeValue = saveCode(emailValue);
+    // const to = emailValue;
+    // email(to, {
+    //   subject: "Uni Hobbyist Verification",
+    //   body:
+    //     "Hi there! Your verification code is " +
+    //     codeValue +
+    //     ". Please enter this code in the app.",
+    //   checkCanOpen: false,
+    // }).catch(console.error);
 
     setAuthenticationModal(true);
   };
@@ -62,15 +63,13 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
     });
   };
 
-
   const handleSubmit = () => {
     const returnedCode = getCode(emailValue);
 
     if (value == returnedCode) {
       setAuthenticationModal(false);
       showSuccessToast();
-    }
-    else {
+    } else {
       showErrorToast();
     }
   };
@@ -79,35 +78,52 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
     <>
       <KeyboardAwareScrollView>
         <View style={styles.registerContainer}>
-          <Modal visible={authenticationModal}>
-            <View style={styles.authenticationContainer}>
-              <Text
-                style={styles.text}
+          <Modal
+            visible={authenticationModal}
+            animationType="slide"
+            transparent={true}
+          >
+            <View
+              style={styles.modalView}
+              lightColor="rgba(0,0,0,0.8)"
+              darkColor="rgba(255,255,255,0.8)"
+            >
+              <View
+                style={styles.modalInfoView}
                 lightColor="rgba(0,0,0,0.8)"
                 darkColor="rgba(255,255,255,0.8)"
               >
-                Please input the code sent to your email.
-              </Text>
-              <CodeField
-                ref={refObj}
-                {...props}
-                value={value}
-                onChangeText={setValue}
-                cellCount={4}
-                rootStyle={styles.codeFieldRoot}
-                keyboardType="number-pad"
-                textContentType="oneTimeCode"
-                renderCell={({ index, symbol, isFocused }) => (
-                  <Text
-                    key={index}
-                    style={[styles.cell, isFocused && styles.focusCell]}
-                    onLayout={getCellOnLayoutHandler(index)}
-                  >
-                    {symbol || (isFocused ? <Cursor /> : null)}
-                  </Text>
-                )}
-              />
-              <Button title="Authenticate" onPress={handleSubmit} />
+                <AntDesign name="closecircle" size={24} color="purple" />
+                <Text
+                  style={styles.text}
+                  darkColor="rgba(0,0,0,0.8)"
+                  lightColor="rgba(255,255,255,0.8)"
+                >
+                  Please input the code we have sent to your email.
+                </Text>
+                <CodeField
+                  ref={refObj}
+                  {...props}
+                  value={value}
+                  onChangeText={setValue}
+                  cellCount={4}
+                  rootStyle={styles.codeFieldRoot}
+                  keyboardType="number-pad"
+                  textContentType="oneTimeCode"
+                  renderCell={({ index, symbol, isFocused }) => (
+                    <Text
+                      key={index}
+                      style={[styles.cell, isFocused && styles.focusCell]}
+                      onLayout={getCellOnLayoutHandler(index)}
+                      darkColor="rgba(0,0,0,0.8)"
+                      lightColor="rgba(255,255,255,0.8)"
+                    >
+                      {symbol || (isFocused ? <Cursor /> : null)}
+                    </Text>
+                  )}
+                />
+                <Button title="Authenticate" onPress={handleSubmit} />
+              </View>
             </View>
           </Modal>
           <Text

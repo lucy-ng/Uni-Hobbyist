@@ -3,10 +3,15 @@
  * https://docs.expo.io/guides/color-schemes/
  */
 
-import { Text as DefaultText, TextInput as DefaultTextInput, View as DefaultView } from 'react-native';
-import Colors from '@/constants/Colors';
-import { useColorScheme } from './useColorScheme';
-import React from 'react';
+import {
+  Text as DefaultText,
+  TextInput as DefaultTextInput,
+  View as DefaultView,
+  Modal as DefaultModal,
+} from "react-native";
+import Colors from "@/constants/Colors";
+import { useColorScheme } from "./useColorScheme";
+import React from "react";
 
 type ThemeProps = {
   lightColor?: string;
@@ -15,15 +20,16 @@ type ThemeProps = {
   darkBorderColor?: string;
 };
 
-export type TextProps = ThemeProps & DefaultText['props'];
-export type TextInputProps = ThemeProps & DefaultTextInput['props'];
-export type ViewProps = ThemeProps & DefaultView['props'];
+export type TextProps = ThemeProps & DefaultText["props"];
+export type TextInputProps = ThemeProps & DefaultTextInput["props"];
+export type ViewProps = ThemeProps & DefaultView["props"];
+export type ModalProps = ThemeProps & DefaultModal["props"];
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
   colorName: keyof typeof Colors.light & keyof typeof Colors.dark
 ) {
-  const theme = useColorScheme() ?? 'light';
+  const theme = useColorScheme() ?? "light";
   const colorFromProps = props[theme];
 
   if (colorFromProps) {
@@ -35,22 +41,63 @@ export function useThemeColor(
 
 export function Text(props: TextProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+  const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
 
   return <DefaultText style={[{ color }, style]} {...otherProps} />;
 }
 
 export function TextInput(props: TextInputProps) {
-  const { style, lightColor, darkColor, lightBorderColor, darkBorderColor, ...otherProps } = props;
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
-  const borderColor = useThemeColor({ light: lightBorderColor, dark: darkBorderColor }, 'borderColor');
+  const {
+    style,
+    lightColor,
+    darkColor,
+    lightBorderColor,
+    darkBorderColor,
+    ...otherProps
+  } = props;
+  const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
+  const borderColor = useThemeColor(
+    { light: lightBorderColor, dark: darkBorderColor },
+    "borderColor"
+  );
 
-  return <DefaultTextInput style={[{ color, borderColor }, style]} {...otherProps} />;
+  return (
+    <DefaultTextInput style={[{ color, borderColor }, style]} {...otherProps} />
+  );
 }
 
 export function View(props: ViewProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
-  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
+  const backgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "background"
+  );
 
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
+}
+
+export function Modal(props: ModalProps) {
+  const {
+    style,
+    lightColor,
+    darkColor,
+    lightBorderColor,
+    darkBorderColor,
+    ...otherProps
+  } = props;
+  const backgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "background"
+  );
+  const borderColor = useThemeColor(
+    { light: lightBorderColor, dark: darkBorderColor },
+    "borderColor"
+  );
+
+  return (
+    <DefaultModal
+      style={[{ backgroundColor, borderColor }, style]}
+      {...otherProps}
+    />
+  );
 }

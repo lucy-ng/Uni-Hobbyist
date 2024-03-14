@@ -33,10 +33,6 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 50,
   },
-  authenticationContainer: {
-    alignItems: "center",
-    marginHorizontal: 50,
-  },
   text: {
     fontSize: 17,
     lineHeight: 24,
@@ -60,5 +56,15 @@ export const styles = StyleSheet.create({
   },
   focusCell: {
     borderColor: "#000",
+  },
+  modalView: {
+    marginTop: 250,
+    borderRadius: 20,
+    padding: 10,
+  },
+  modalInfoView: {
+    borderRadius: 20,
+    padding: 50,
+    alignItems: 'center',
   },
 });
