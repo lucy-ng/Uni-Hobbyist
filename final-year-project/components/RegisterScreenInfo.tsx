@@ -1,19 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Text, View, TextInput, Modal } from "./Themed";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { styles } from "./Styles";
-import dynamicLinks from '@react-native-firebase/dynamic-links';
+import {
+  CodeField,
+  Cursor,
+  useBlurOnFulfill,
+  useClearByFocusCell,
+} from "react-native-confirmation-code-field";
+import { getCode, registerUser, saveCode } from "@/app/database";
+import { AntDesign } from "@expo/vector-icons";
+import Button from "./Button";
 import {
   showEmailErrorToast,
   showEmptyValueToast,
   showErrorToast,
   showSuccessToast,
 } from "./Toast";
-import { sendSignInLink } from "@/app/firebase";
-import { firebase } from "@react-native-firebase/auth";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AntDesign } from "@expo/vector-icons";
-import Button from "./Button";
+
 export default function RegisterScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -21,6 +25,12 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
   const [emailValue, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [authenticationModal, setAuthenticationModal] = React.useState(false);
+  const [value, setValue] = useState("");
+  const refObj = useBlurOnFulfill({ value, cellCount: 4 });
+  const [props, getCellOnLayoutHandler] = useClearByFocusCell({
+    value,
+    setValue,
+  });
 
   const validateForm = () => {
     /*
@@ -44,43 +54,28 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
     } else if (!emailValue.includes("ac.uk") || !emailReg.test(emailValue)) {
       showEmailErrorToast();
     } else {
-      handleSubmit();
+      setAuthenticationModal(true);
+      sendEmail()
     }
   };
 
-  const handleSubmit = () => {
-    setAuthenticationModal(true);
-    sendSignInLink(emailValue)
+  const sendEmail = () => {
+    const codeValue = saveCode(emailValue);
+    const to = emailValue;
+    
   };
-  
-  /*
-  kidroca, 2020. How to setup sendSignInLinkToEmail() from Firebase in react-native? [Online] 
-  Available at: https://stackoverflow.com/questions/61564203/how-to-setup-sendsigninlinktoemail-from-firebase-in-react-native
-  [Accessed 15 March 2024].
-  */
-  useEffect(() => {
-    const handleDynamicLink = async (link: any) => {
-      if (firebase.auth().isSignInWithEmailLink(link.url)) {
 
-        try {
-          const email = await AsyncStorage.getItem(emailValue);
-          await firebase.auth().signInWithEmailLink(email ?? "", link.url);
-          showSuccessToast()
-        }
-        catch (e) {
-          console.log(e)
-          showErrorToast()
-        }
-      }
-    };
+  const handleSubmit = () => {
+    const returnedCode = getCode(emailValue);
 
-    const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
-
-    dynamicLinks().getInitialLink()
-      .then(link => link && handleDynamicLink(link));
-
-    return () => unsubscribe();
-  }, []);
+    if (value == returnedCode) {
+      setAuthenticationModal(false);
+      registerUser(emailValue, firstName, lastName, university, password)
+      showSuccessToast();
+    } else {
+      showErrorToast();
+    }
+  };
 
   return (
     <>
@@ -109,8 +104,30 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
                   darkColor="rgba(0,0,0,0.8)"
                   lightColor="rgba(255,255,255,0.8)"
                 >
-                  Please verify your account with the link sent to your email.
+                  Please input the code we have sent to your email.
                 </Text>
+                <CodeField
+                  ref={refObj}
+                  {...props}
+                  value={value}
+                  onChangeText={setValue}
+                  cellCount={4}
+                  rootStyle={styles.codeFieldRoot}
+                  keyboardType="number-pad"
+                  textContentType="oneTimeCode"
+                  renderCell={({ index, symbol, isFocused }) => (
+                    <Text
+                      key={index}
+                      style={[styles.cell, isFocused && styles.focusCell]}
+                      onLayout={getCellOnLayoutHandler(index)}
+                      darkColor="rgba(0,0,0,0.8)"
+                      lightColor="rgba(255,255,255,0.8)"
+                    >
+                      {symbol || (isFocused ? <Cursor /> : null)}
+                    </Text>
+                  )}
+                />
+                <Button title="Authenticate" onPress={handleSubmit} />
               </View>
             </View>
           </Modal>

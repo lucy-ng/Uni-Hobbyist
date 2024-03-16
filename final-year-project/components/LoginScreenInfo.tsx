@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, TextInput } from "./Themed";
 import { styles } from "./Styles";
-import { loginUser } from "@/app/firebase";
+import { loginUser } from "@/app/database";
 import Button from "./Button";
 
 export default function LoginScreenInfo({ path }: { path: string }) {

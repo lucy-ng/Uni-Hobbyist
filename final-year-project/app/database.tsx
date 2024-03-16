@@ -3,12 +3,11 @@ import { getDatabase, onValue, ref, set } from "firebase/database";
 import {
   initializeAuth,
   getReactNativePersistence,
+  EmailAuthProvider,
   getAuth,
-  ActionCodeSettings,
+  linkWithCredential,
 } from "@firebase/auth";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
-import { firebase } from "@react-native-firebase/auth";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const firebaseConfig = {
   databaseURL: process.env.EXPO_PUBLIC_DATABASE_URL ?? "",
@@ -19,49 +18,41 @@ const firebaseConfig = {
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 const db = getDatabase(app);
-export const auth =
+const auth =
   getAuth.length === 0
     ? initializeAuth(app, {
         persistence: getReactNativePersistence(ReactNativeAsyncStorage),
       })
     : getAuth();
 
-/* 
-Invertase Limited, 2024. auth [Online] 
-Available at: https://rnfirebase.io/reference/auth
-[Accessed 15 March 2024].
-*/
 /*
 Google LLC, 2024. Authenticate with Firebase Using Email Link in JavaScript. [Online] 
 Available at: https://firebase.google.com/docs/auth/web/email-link-auth
-[Accessed 15 March 2024].
-*/
-/*
-kidroca, 2020. How to setup sendSignInLinkToEmail() from Firebase in react-native? [Online] 
-Available at: https://stackoverflow.com/questions/61564203/how-to-setup-sendsigninlinktoemail-from-firebase-in-react-native
-[Accessed 15 March 2024].
-*/
+[Accessed 14 March 2024].
+ */
 
-export const sendSignInLink = async (emailValue: string) => {
-  const actionCodeSettings: ActionCodeSettings = {
-    url:
-      "https://final-year-project-b45b9.firebaseapp.com/?email=" +
-      firebase.auth().currentUser?.email,
-    handleCodeInApp: true,
-    iOS: {
-      bundleId: "com.anonymous.finalyearproject",
-    },
-    android: {
-      packageName: "com.anonymous.finalyearproject",
-      installApp: true,
-      minimumVersion: "12",
-    },
-    dynamicLinkDomain: "unihobbyist.page.link",
-  };
+export const sendEmail = (emailValue: string) => {
+  const credential = EmailAuthProvider.credentialWithLink(
+    emailValue,
+    window.location.href
+  );
 
-  await AsyncStorage.setItem("emailForSignIn", emailValue);
+  if (auth.currentUser) {
+    linkWithCredential(auth.currentUser, credential)
+    .then((usercred) => {})
+    .catch((error) => {});
+  }
+};
 
-  await firebase.auth().sendSignInLinkToEmail(emailValue, actionCodeSettings);
+export const saveCode = (emailValue: string) => {
+  const codeValue = String(Math.floor(1000 + Math.random() * 9000));
+
+  set(ref(db, "verifications/" + emailValue.replace(/\./g, ",")), {
+    email: emailValue,
+    code: codeValue,
+  });
+
+  return codeValue;
 };
 
 /*
@@ -83,6 +74,19 @@ export const registerUser = (
     university: university,
     password: password,
   });
+};
+
+export const getCode = (emailValue: string) => {
+  const verificationRef = ref(
+    db,
+    "verifications/" + emailValue.replace(/\./g, ",")
+  );
+  onValue(verificationRef, (snapshot) => {
+    const data = snapshot.val();
+    console.log(data);
+    return String(data);
+  });
+  return "";
 };
 
 export const loginUser = (emailValue: string) => {
