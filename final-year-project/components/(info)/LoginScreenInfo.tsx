@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, TextInput } from "./Themed";
-import { styles } from "./Styles";
+import { Text, View, TextInput } from "../Themed";
+import { styles } from "../Styles";
 import { loginUser } from "@/app/database";
-import Button from "./Button";
+import Button from "../Button";
 
 export default function LoginScreenInfo({ path }: { path: string }) {
   const [email, setEmail] = useState("");
@@ -14,16 +14,18 @@ export default function LoginScreenInfo({ path }: { path: string }) {
 
   const validateForm = () => {};
 
+  const navRegisterPage = () => {
+
+  }
+
   /*
   Google LLC, 2024. Read and Write Data on the Web. [Online] 
   Available at: https://firebase.google.com/docs/database/web/read-and-write
   [Accessed 14 March 2024].
   */
 
-
-
   return (
-    <View style={styles.loginContainer}>
+    <View style={styles.container}>
       <Text
         style={styles.text}
         lightColor="rgba(0,0,0,0.8)"
@@ -58,6 +60,14 @@ export default function LoginScreenInfo({ path }: { path: string }) {
         darkBorderColor="rgba(255,255,255,0.8)"
       />
       <Button title="Login" onPress={loginUser} />
+      <Text
+        style={styles.text}
+        lightColor="rgba(0,0,0,0.8)"
+        darkColor="rgba(255,255,255,0.8)"
+      >
+        Don't have an account?
+      </Text>
+      <Button title="Register" onPress={navRegisterPage} />
     </View>
   );
 }

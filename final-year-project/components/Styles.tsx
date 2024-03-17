@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  container: {
+  screenContainer: {
     flex: 1,
     alignItems: "center",
   },
@@ -24,11 +24,15 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     color: "#2e78b7",
   },
-  registerContainer: {
+  loginScreenContainer: {
     alignItems: "center",
-    marginHorizontal: 50,
+    marginVertical: 100,
   },
-  loginContainer: {
+  registerScreenContainer: {
+    alignItems: "center",
+    marginVertical: 100,
+  },
+  container: {
     alignItems: "center",
     marginHorizontal: 50,
   },
@@ -42,20 +46,6 @@ export const styles = StyleSheet.create({
     width: 200,
     padding: 5,
     margin: 20,
-  },
-  codeFieldRoot: { marginTop: 20 },
-  cell: {
-    width: 40,
-    height: 40,
-    lineHeight: 38,
-    fontSize: 24,
-    borderWidth: 2,
-    borderColor: "#00000030",
-    textAlign: "center",
-    marginBottom: 20
-  },
-  focusCell: {
-    borderColor: "#000",
   },
   modalView: {
     marginTop: 250,

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "final-year-project",
-    "slug": "final-year-project",
+    "name": "unihobbyist",
+    "slug": "unihobbyist",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -23,7 +23,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.finalyearproject"
+      "package": "com.anonymous.unihobbyist"
     },
     "web": {
       "bundler": "metro",
