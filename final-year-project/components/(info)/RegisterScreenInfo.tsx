@@ -3,13 +3,19 @@ import { Text, View, TextInput, Modal } from "../Themed";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { styles } from "../Styles";
 import { sendEmail, verifyEmail } from "@/app/database";
+
+/*
+Ant Group and Ant Design Community, 2024. 
+Icon details - "closecircle" from AntDesign [Online] 
+Available at: https://icons.expo.fyi/Index/AntDesign/closecircle
+[Accessed 24 March 2024]. 
+*/
+
 import { AntDesign } from "@expo/vector-icons";
 import Button from "../Button";
 import {
   showEmailErrorToast,
   showEmptyValueToast,
-  showErrorToast,
-  showSuccessToast,
 } from "../Toast";
 
 export default function RegisterScreenInfo({ path }: { path: string }) {

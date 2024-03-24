@@ -14,7 +14,7 @@ export default function AccountScreen() {
           lightColor="#eee"
           darkColor="rgba(255,255,255,0.1)"
         />
-        <AccountScreenInfo path="app/(screens)/AccountScreen.tsx" />
+        <AccountScreenInfo path="app/(tabs)/AccountScreen.tsx" />
       </View>
       <Toast />
     </>

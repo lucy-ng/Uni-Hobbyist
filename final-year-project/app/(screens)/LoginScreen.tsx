@@ -19,7 +19,7 @@ export default function LoginScreen() {
           lightColor="#eee"
           darkColor="rgba(255,255,255,0.1)"
         />
-        <LoginScreenInfo path="app/(screens)/LoginScreen.tsx" />
+        <LoginScreenInfo path="app/(screens)/LoginScreen.tsx"/>
       </View>
       <Toast />
     </>

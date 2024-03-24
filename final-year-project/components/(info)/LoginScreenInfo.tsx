@@ -1,27 +1,44 @@
-import React, { useEffect, useState } from "react";
-import { Text, View, TextInput } from "../Themed";
+import React, { useState } from "react";
+import { Text, View, TextInput, Pressable } from "../Themed";
 import { styles } from "../Styles";
-import { loginUser } from "@/app/database";
 import Button from "../Button";
+import { Link, router } from "expo-router";
+import { showEmptyValueToast, showSuccessToast } from "../Toast";
+import { useDispatch } from "react-redux";
+import { login } from "@/app/authenticationSlice";
 
 export default function LoginScreenInfo({ path }: { path: string }) {
-  const [email, setEmail] = useState("");
+  const [emailValue, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch()
 
-  useEffect(() => {
-    validateForm();
-  }, [email, password]);
+  const validateForm = () => {
+    if (
+      emailValue === "" ||
+      password === ""
+    ) {
+      showEmptyValueToast();
+    } else {
+      handleSubmit()
+    }
+  };
 
-  const validateForm = () => {};
-
-  const navRegisterPage = () => {
-
-  }
+  const handleSubmit = () => {
+    showSuccessToast();
+    dispatch(login())
+    router.replace("/(tabs)/HomeScreen")
+  };
 
   /*
   Google LLC, 2024. Read and Write Data on the Web. [Online] 
   Available at: https://firebase.google.com/docs/database/web/read-and-write
   [Accessed 14 March 2024].
+  */
+
+  /* 
+  650 Industries, Inc., 2024. Navigate between pages. [Online] 
+  Available at: https://docs.expo.dev/router/navigating-pages/
+  [Accessed 24 March 2024].
   */
 
   return (
@@ -35,7 +52,7 @@ export default function LoginScreenInfo({ path }: { path: string }) {
       </Text>
       <TextInput
         style={styles.input}
-        value={email}
+        value={emailValue}
         onChangeText={setEmail}
         lightColor="rgba(0,0,0,0.8)"
         darkColor="rgba(255,255,255,0.8)"
@@ -59,15 +76,31 @@ export default function LoginScreenInfo({ path }: { path: string }) {
         lightBorderColor="rgba(0,0,0,0.8)"
         darkBorderColor="rgba(255,255,255,0.8)"
       />
-      <Button title="Login" onPress={loginUser} />
-      <Text
-        style={styles.text}
-        lightColor="rgba(0,0,0,0.8)"
-        darkColor="rgba(255,255,255,0.8)"
-      >
-        Don't have an account?
-      </Text>
-      <Button title="Register" onPress={navRegisterPage} />
+      <Button title="Login" onPress={validateForm} />
+      <View style={styles.noAccountContainer}>
+        <Text
+          style={styles.text}
+          lightColor="rgba(0,0,0,0.8)"
+          darkColor="rgba(255,255,255,0.8)"
+        >
+          Don't have an account?
+        </Text>
+        <Link href="/RegisterScreen" asChild>
+          <Pressable
+            style={styles.button}
+            lightColor="rgba(0,0,0,0.8)"
+            darkColor="rgba(255,255,255,0.8)"
+          >
+            <Text
+              style={styles.buttonText}
+              darkColor="rgba(0,0,0,0.8)"
+              lightColor="rgba(255,255,255,0.8)"
+            >
+              Register
+            </Text>
+          </Pressable>
+        </Link>
+      </View>
     </View>
   );
 }

@@ -5,6 +5,19 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
   },
+  titleIconBox: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  backIcon: {
+    flex: 1,
+  },
+  inlineTitle: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "purple",
+    flex: 2
+  },
   title: {
     fontSize: 30,
     fontWeight: "bold",
@@ -30,6 +43,9 @@ export const styles = StyleSheet.create({
   },
   registerScreenContainer: {
     alignItems: "center",
+    marginVertical: 100,
+  },
+  noAccountContainer: {
     marginVertical: 100,
   },
   container: {

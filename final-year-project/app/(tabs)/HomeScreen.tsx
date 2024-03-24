@@ -14,7 +14,7 @@ export default function HomeScreen() {
           lightColor="#eee"
           darkColor="rgba(255,255,255,0.1)"
         />
-        <HomeScreenInfo path="app/(screens)/HomeScreen.tsx" />
+        <HomeScreenInfo path="app/(tabs)/HomeScreen.tsx" />
       </View>
       <Toast />
     </>

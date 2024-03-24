@@ -5,11 +5,21 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
 import { useColorScheme } from "@/components/useColorScheme";
+
+/*
+Dan Abramov and the Redux documentation authors, 2024. 
+Redux Toolkit Quick Start [Online] 
+Available at: https://redux-toolkit.js.org/tutorials/quick-start
+[Accessed 24 March 2024]. 
+*/
+
+import { Provider } from "react-redux";
+import { store } from "./store";
+import RootNavigation from "./RootNavigation";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -53,13 +63,9 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen
-          name="(screens)/LoginScreen"
-          options={{ headerShown: false }}
-        />
-        {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> */}
-      </Stack>
+      <Provider store={store}>
+        <RootNavigation />
+      </Provider>
     </ThemeProvider>
   );
 }
