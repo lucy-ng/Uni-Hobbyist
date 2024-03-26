@@ -55,10 +55,6 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
-}
-
-function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (

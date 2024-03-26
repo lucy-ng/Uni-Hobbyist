@@ -76,7 +76,7 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
     alignSelf: "flex-end",
   },
-
+  
   /* 
   650 Industries, Inc., 2024. Styling a React Native button. [Online] 
   Available at: https://docs.expo.dev/ui-programming/react-native-styling-buttons/

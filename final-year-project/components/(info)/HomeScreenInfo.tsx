@@ -1,29 +1,51 @@
-import { View } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { View, FlatList, SafeAreaView } from "react-native";
 import { styles } from "../Styles";
-import { bookEvent, createEventInfo } from "@/app/database";
 import Button from "../Button";
+import { hostEventAction, searchAction } from "@/app/actions";
 import { useDispatch } from "react-redux";
 import { logout } from "@/app/authenticationSlice";
 import { router } from "expo-router";
 
 export default function HomeScreenInfo({ path }: { path: string }) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const logoutAction = () => {
-    dispatch(logout())
-    router.replace("/(screens)/LoginScreen")
-  }
+    dispatch(logout());
+    router.replace("/(screens)/LoginScreen");
+  };
+
+  const itemData = [
+    {
+      title: "Book",
+      onPress: searchAction,
+    },
+    {
+      title: "Host",
+      onPress: hostEventAction,
+    },
+    {
+      title: "Logout",
+      onPress: logoutAction,
+    },
+  ];
+
+  type ItemProps = { title: string; onPress: any };
+  const Item = ({ title, onPress }: ItemProps) => (
+    <Button title={title} onPress={onPress} />
+  );
 
   return (
     <>
-      <KeyboardAwareScrollView>
+      <SafeAreaView>
         <View style={styles.container}>
-          <Button title="Book" onPress={bookEvent} />
-          <Button title="Host" onPress={createEventInfo} />
-          <Button title="Logout" onPress={logoutAction} />
+          <FlatList
+            data={itemData}
+            renderItem={({ item }) => (
+              <Item title={item.title} onPress={item.onPress} />
+            )}
+          />
         </View>
-      </KeyboardAwareScrollView>
+      </SafeAreaView>
     </>
   );
 }
