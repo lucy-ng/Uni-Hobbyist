@@ -2,7 +2,7 @@ import { View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { styles } from "../Styles";
 import { Text } from "../Themed";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "../Button";
 import { updateUser } from "@/app/database";
 import { deleteUser } from "firebase/auth";
@@ -12,8 +12,6 @@ export default function AccountScreenInfo({ path }: { path: string }) {
   const [lastName, setLastName] = useState("");
   const [university, setUniversity] = useState("");
   const [emailValue, setEmail] = useState("");
-
-  useEffect(() => {}, []);
 
   return (
     <>

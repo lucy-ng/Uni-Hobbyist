@@ -12,12 +12,6 @@ export const styles = StyleSheet.create({
   backIcon: {
     flex: 1,
   },
-  inlineTitle: {
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "purple",
-    flex: 2
-  },
   title: {
     fontSize: 30,
     fontWeight: "bold",
@@ -37,20 +31,8 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     color: "#2e78b7",
   },
-  loginScreenContainer: {
-    alignItems: "center",
-    marginVertical: 100,
-  },
-  registerScreenContainer: {
-    alignItems: "center",
-    marginVertical: 100,
-  },
-  noAccountContainer: {
-    marginVertical: 100,
-  },
   container: {
     alignItems: "center",
-    marginHorizontal: 50,
   },
   text: {
     fontSize: 17,

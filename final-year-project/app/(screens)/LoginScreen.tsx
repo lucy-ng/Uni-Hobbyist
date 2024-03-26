@@ -12,7 +12,7 @@ import Toast from "react-native-toast-message";
 export default function LoginScreen() {
   return (
     <>
-      <View style={styles.loginScreenContainer}>
+      <View style={styles.container}>
         <Text style={styles.title}>Login</Text>
         <View
           style={styles.separator}

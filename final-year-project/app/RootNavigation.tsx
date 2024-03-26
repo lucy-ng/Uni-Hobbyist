@@ -19,11 +19,11 @@ export default function RootNavigation() {
         <Stack>
           <Stack.Screen
             name="(screens)/LoginScreen"
-            options={{ headerShown: false }}
+            options={{ headerShown: true, title: "Login" }}
           />
           <Stack.Screen
             name="(screens)/RegisterScreen"
-            options={{ headerShown: false }}
+            options={{ headerShown: true, title: "Register"  }}
           />
         </Stack>
       ) : (
