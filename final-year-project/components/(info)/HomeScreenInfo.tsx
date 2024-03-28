@@ -1,49 +1,59 @@
-import { View, FlatList, SafeAreaView } from "react-native";
+import { View, SafeAreaView } from "react-native";
 import { styles } from "../Styles";
 import Button from "../Button";
-import { hostEventAction, searchAction } from "@/app/actions";
+import {
+  createEventAction,
+  dashboardAction,
+  searchAction,
+  updateEventAction,
+} from "@/app/actions";
 import { useDispatch } from "react-redux";
 import { logout } from "@/app/authenticationSlice";
 import { router } from "expo-router";
+import { Card } from "@rneui/themed";
+import { auth } from "@/app/database";
+import { signOut } from "@firebase/auth";
 
 export default function HomeScreenInfo({ path }: { path: string }) {
   const dispatch = useDispatch();
 
+  /*
+  Google LLC, 2024. Authenticate with Firebase using Password-Based Accounts using Javascript. [Online] 
+  Available at: https://firebase.google.com/docs/auth/web/password-auth
+  [Accessed 27 March 2024].
+  */
+
   const logoutAction = () => {
-    dispatch(logout());
-    router.replace("/(screens)/LoginScreen");
+    signOut(auth)
+      .then(() => {
+        dispatch(logout());
+        router.replace("/(screens)/LoginScreen");
+      })
+      .catch((error: any) => {
+        console.log(error.code, error.message)
+      });
   };
-
-  const itemData = [
-    {
-      title: "Book",
-      onPress: searchAction,
-    },
-    {
-      title: "Host",
-      onPress: hostEventAction,
-    },
-    {
-      title: "Logout",
-      onPress: logoutAction,
-    },
-  ];
-
-  type ItemProps = { title: string; onPress: any };
-  const Item = ({ title, onPress }: ItemProps) => (
-    <Button title={title} onPress={onPress} />
-  );
 
   return (
     <>
       <SafeAreaView>
         <View style={styles.container}>
-          <FlatList
-            data={itemData}
-            renderItem={({ item }) => (
-              <Item title={item.title} onPress={item.onPress} />
-            )}
-          />
+          <Card>
+            <Card.Title>Book</Card.Title>
+            <Card.Divider />
+            <Button title={"Search"} onPress={searchAction}></Button>
+            <Button
+              title={"Manage Bookings"}
+              onPress={dashboardAction}
+            ></Button>
+          </Card>
+          <Card>
+            <Card.Title>Host</Card.Title>
+            <Card.Divider />
+            <Button title={"Create Event"} onPress={createEventAction}></Button>
+            <Button title={"Update Event"} onPress={updateEventAction}></Button>
+          </Card>
+          <Button title={"Logout"} onPress={logoutAction}></Button>
         </View>
       </SafeAreaView>
     </>

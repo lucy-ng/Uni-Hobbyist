@@ -42,10 +42,6 @@ export default function RootNavigation() {
             options={{ headerShown: true, title: "Book Event" }}
           />
           <Stack.Screen
-            name="(screens)/HostEventScreen"
-            options={{ headerShown: true, title: "Host Event" }}
-          />
-          <Stack.Screen
             name="(screens)/CreateEventScreen"
             options={{ headerShown: true, title: "Create Event" }}
           />

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Text, View, TextInput, Modal } from "../Themed";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { styles } from "../Styles";
-import { sendEmail, verifyEmail } from "@/app/database";
+import { auth, db } from "@/app/database";
+import "react-native-get-random-values";
 
 /*
 Ant Group and Ant Design Community, 2024. 
@@ -14,9 +15,18 @@ Available at: https://icons.expo.fyi/Index/AntDesign/closecircle
 import { AntDesign } from "@expo/vector-icons";
 import Button from "../Button";
 import {
-  showEmailErrorToast,
-  showEmptyValueToast,
+  emailErrorToast,
+  emptyValueToast,
+  passwordLengthErrorToast,
+  passwordLowerErrorToast,
+  passwordNonAlphanumericErrorToast,
+  passwordNumberErrorToast,
+  passwordUpperErrorToast,
+  registerErrorToast,
+  registerSuccessToast,
 } from "../Toast";
+import { ref, set } from "firebase/database";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function RegisterScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
@@ -24,7 +34,11 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
   const [university, setUniversity] = useState("");
   const [emailValue, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [authenticationModal, setAuthenticationModal] = React.useState(false);
+  const [authenticationModal, setAuthenticationModal] = useState(false);
+
+  // useEffect(() => {
+  //   verifyEmail(emailValue)
+  // }, [emailValue])
 
   const validateForm = () => {
     /*
@@ -37,6 +51,16 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
 
+    /*
+    Kiers, Bart, 2022. RegEx to make sure that the string contains at least one lower case char, upper case char, digit and symbol. [Online] 
+    Available at: https://stackoverflow.com/questions/1559751/regex-to-make-sure-that-the-string-contains-at-least-one-lower-case-char-upper
+    [Accessed 27 March 2024].
+    */
+    const passwordDigitReg = new RegExp(/(?=.*\d)/);
+    const passwordUpperReg = new RegExp(/(?=.*[A-Z])/);
+    const passwordLowerReg = new RegExp(/(?=.*[a-z])/);
+    const passwordNonAlphanumericReg = new RegExp(/[-+_!@#$%^&*.,?]/);
+
     if (
       firstName === "" ||
       lastName === "" ||
@@ -44,22 +68,59 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
       emailValue === "" ||
       password === ""
     ) {
-      showEmptyValueToast();
+      emptyValueToast();
     } else if (!emailValue.includes("ac.uk") || !emailReg.test(emailValue)) {
-      showEmailErrorToast();
+      emailErrorToast();
+    } else if (password.length < 6) {
+      passwordLengthErrorToast();
+    } else if (!passwordDigitReg.test(password)) {
+      passwordNumberErrorToast();
+    } else if (!passwordLowerReg.test(password)) {
+      passwordLowerErrorToast();
+    } else if (!passwordUpperReg.test(password)) {
+      passwordUpperErrorToast();
+    } else if (!passwordNonAlphanumericReg.test(password)) {
+      passwordNonAlphanumericErrorToast();
     } else {
-      handleSubmit()
+      handleSubmit();
     }
   };
 
-  const handleSubmit = () => {
-    sendEmail(emailValue)
-    setAuthenticationModal(true);
-  };
+  /*
+  Google LLC, 2024. Read and Write Data on the Web. [Online] 
+  Available at: https://firebase.google.com/docs/database/web/read-and-write
+  [Accessed 14 March 2024].
+  */
+  /*
+  Google LLC, 2024. Authenticate with Firebase using Password-Based Accounts using Javascript. [Online] 
+  Available at: https://firebase.google.com/docs/auth/web/password-auth
+  [Accessed 27 March 2024].
+  */
 
-  useEffect(() => {
-    verifyEmail(emailValue)
-  }, [])
+  const handleSubmit = () => {
+    // sendEmail(emailValue)
+    // setAuthenticationModal(true);
+
+    createUserWithEmailAndPassword(auth, emailValue, password)
+    .then((userCredential) => {
+      set(ref(db, "accounts/" + userCredential.user.uid), {
+        first_name: firstName,
+        last_name: lastName,
+        email: emailValue,
+        university: university,
+        password: password,
+      });  
+
+      registerSuccessToast();
+    })
+    .catch((error: any) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode, errorMessage);
+      registerErrorToast();
+    });
+
+  };
 
   return (
     <>

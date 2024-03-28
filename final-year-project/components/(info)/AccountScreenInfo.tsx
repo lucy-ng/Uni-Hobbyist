@@ -2,16 +2,40 @@ import { View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { styles } from "../Styles";
 import { Text } from "../Themed";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../Button";
-import { updateUser } from "@/app/database";
+import { auth, updateUser } from "@/app/database";
 import { deleteUser } from "firebase/auth";
+import { ref, getDatabase, get, child } from "firebase/database";
+import { errorToast } from "../Toast";
 
 export default function AccountScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [university, setUniversity] = useState("");
   const [emailValue, setEmail] = useState("");
+
+  useEffect(() => {
+    const dbRef = ref(getDatabase());
+    const id = auth.currentUser ? auth.currentUser.uid : "";
+
+    get(child(dbRef, `accounts/${id}`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          setFirstName(data.first_name);
+          setLastName(data.last_name);
+          setUniversity(data.university);
+          setEmail(data.email);
+        } else {
+          errorToast();
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        errorToast();
+      });
+  }, []);
 
   return (
     <>

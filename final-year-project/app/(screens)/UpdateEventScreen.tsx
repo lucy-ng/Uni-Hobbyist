@@ -8,7 +8,7 @@ export default function UpdateEventScreen() {
   return (
     <>
       <View style={styles.screenContainer}>
-        <Text style={styles.title}>UpdateEvent</Text>
+        <Text style={styles.title}>Update Event</Text>
         <View
           style={styles.separator}
           lightColor="#eee"

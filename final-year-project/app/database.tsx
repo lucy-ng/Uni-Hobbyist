@@ -1,5 +1,13 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getDatabase, onValue, ref, set } from "firebase/database";
+import {
+  child,
+  get,
+  getDatabase,
+  onValue,
+  ref,
+  set,
+  update,
+} from "firebase/database";
 import {
   initializeAuth,
   getReactNativePersistence,
@@ -10,6 +18,35 @@ import {
 } from "firebase/auth";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { Linking } from "react-native";
+import { errorToast } from "@/components/Toast";
+
+export type Account = {
+  first_name: string;
+  last_name: string;
+  email: string;
+  university: string;
+};
+
+export type Event = {
+  id: string;
+  title: string;
+  date: string;
+  time: string;
+  location: string;
+  description?: string;
+  tags?: string[];
+  timeCreated: string;
+  dateCreated: string;
+  maxTickets: number;
+  bookedTickets: number;
+};
+
+export type Booking = {
+  accountId: string;
+  timeBooked: string;
+  dateBooked: string;
+  eventId: string;
+};
 
 const firebaseConfig = {
   databaseURL: process.env.EXPO_PUBLIC_DATABASE_URL ?? "",
@@ -18,10 +55,10 @@ const firebaseConfig = {
   projectId: process.env.EXPO_PUBLIC_PROJECT_ID ?? "",
 };
 
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-const db = getDatabase(app);
-const auth =
-  getAuth.length === 0
+const app = getApps().length == 0 ? initializeApp(firebaseConfig) : getApp();
+export const db = getDatabase(app);
+export const auth =
+  getAuth.length == 0
     ? initializeAuth(app, {
         persistence: getReactNativePersistence(ReactNativeAsyncStorage),
       })
@@ -57,7 +94,6 @@ export const sendEmail = (emailValue: string) => {
   sendSignInLinkToEmail(auth, emailValue, actionCodeSettings)
     .then(() => {
       // sessionStorage.setItem("emailForSignIn", emailValue);
-      console.log("sent verification email");
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -72,7 +108,6 @@ export const verifyEmail = async (emailValue: string) => {
     signInWithEmailLink(auth, emailValue, emailLink)
       .then(() => {
         // sessionStorage.setItem("emailForSignIn", emailValue);
-        console.log("sent verification email");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -83,39 +118,75 @@ export const verifyEmail = async (emailValue: string) => {
 };
 
 /*
-Google LLC, 2024. Read and Write Data on the Web. [Online] 
-Available at: https://firebase.google.com/docs/database/web/read-and-write
-[Accessed 14 March 2024].
-*/
-export const registerUser = (
-  emailValue: string,
-  firstName: string,
-  lastName: string,
-  university: string,
-  password: string
-) => {
-  set(ref(db, "users/" + emailValue.replace(/\./g, ",")), {
-    first_name: firstName,
-    last_name: lastName,
-    email: emailValue,
-    university: university,
-    password: password,
+  Google LLC, 2024. Read and Write Data on the Web. [Online] 
+  Available at: https://firebase.google.com/docs/database/web/read-and-write
+  [Accessed 14 March 2024].
+  */
+
+export function fetchUserDetails(): Account {
+  const dbRef = ref(getDatabase());
+  const id = auth.currentUser ? auth.currentUser.uid : "";
+
+  get(child(dbRef, `accounts/${id}`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log(snapshot.val());
+        const data = snapshot.val();
+        const account: Account = {
+          email: data.email,
+          first_name: data.first_name,
+          last_name: data.last_name,
+          university: data.university,
+        };
+        return account;
+      } else {
+        errorToast();
+        return {} as Account;
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      errorToast();
+      return {} as Account;
+    });
+  return {} as Account;
+}
+
+export const updateUser = (account: Account) => {};
+
+export const createEventInfo = (account: Account, event: Event) => {
+  set(ref(db, "events/" + event.id), {
+    title: event.title,
+    date: event.date,
+    time: event.time,
+    location: event.location,
+    description: event.description || "",
+    tags: event.tags || [],
+    timeCreated: event.timeCreated,
+    dateCreated: event.dateCreated,
+    maxTickets: event.maxTickets,
+    bookedTickets: event.bookedTickets,
+  });
+
+  set(ref(db, "bookings/" + account), {
+    eventId: event.id,
+    dateBooked: "",
+    timeBooked: "",
   });
 };
 
-export const loginUser = (emailValue: string) => {
-  const userRef = ref(db, "users/" + emailValue.replace(/\./g, ","));
-  onValue(userRef, (snapshot) => {
+export const updateEventInfo = () => {};
+export const deleteEventInfo = () => {};
+
+export const bookEvent = (event: Event, account: Account) => {};
+
+export const updateEvent = () => {};
+export const deleteEvent = () => {};
+
+export const searchEvent = (filters: string[], searchValue: string) => {
+  const eventsRef = ref(db, "posts");
+  onValue(eventsRef, (snapshot) => {
     const data = snapshot.val();
     console.log(data);
   });
 };
-
-export const updateUser = () => {};
-export const createEventInfo = () => {};
-export const updateEventInfo = () => {};
-export const deleteEventInfo = () => {};
-export const bookEvent = () => {};
-export const updateEvent = () => {};
-export const deleteEvent = () => {};
-export const searchEvent = () => {};

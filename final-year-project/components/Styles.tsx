@@ -5,13 +5,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
   },
-  titleIconBox: {
-    display: "flex",
-    flexDirection: "row",
-  },
-  backIcon: {
-    flex: 1,
-  },
   title: {
     fontSize: 30,
     fontWeight: "bold",
@@ -57,6 +50,9 @@ export const styles = StyleSheet.create({
   closeIcon: {
     marginBottom: 20,
     alignSelf: "flex-end",
+  },
+  homeButtonsList: {
+    padding: 10
   },
   
   /* 
