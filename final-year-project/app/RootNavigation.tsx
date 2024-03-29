@@ -28,11 +28,6 @@ export default function RootNavigation() {
         </Stack>
       ) : (
         <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false, title: "Home" }} />
-          <Stack.Screen
-            name="(screens)/SearchScreen"
-            options={{ headerShown: true, title: "Search" }}
-          />
           <Stack.Screen
             name="(screens)/EventScreen"
             options={{ headerShown: true, title: "Event" }}
@@ -46,9 +41,14 @@ export default function RootNavigation() {
             options={{ headerShown: true, title: "Create Event" }}
           />
           <Stack.Screen
-            name="(screens)/UpdateEventScreen"
-            options={{ headerShown: true, title: "Update Event" }}
+            name="(screens)/ManageEventScreen"
+            options={{ headerShown: true, title: "Manage Event" }}
           />
+          <Stack.Screen
+            name="(screens)/ManageAccountScreen"
+            options={{ headerShown: true, title: "Manage Account" }}
+          />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false, title: "Home" }} />
         </Stack>
       )}
     </>

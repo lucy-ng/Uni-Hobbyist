@@ -118,12 +118,38 @@ export const verifyEmail = async (emailValue: string) => {
 };
 
 /*
-  Google LLC, 2024. Read and Write Data on the Web. [Online] 
-  Available at: https://firebase.google.com/docs/database/web/read-and-write
-  [Accessed 14 March 2024].
-  */
+Google LLC, 2024. Read and Write Data on the Web. [Online] 
+Available at: https://firebase.google.com/docs/database/web/read-and-write
+[Accessed 14 March 2024].
+*/
 
-export const updateUser = (account: Account) => {};
+export const fetchEvents = () => {
+  let eventsList: Event[] = [];
+
+  const dbRef = ref(getDatabase());
+  get(child(dbRef, `events`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+
+        for (let i = 0; i < Object.keys(data).length; i++) {
+          let id = [Object.keys(data)[i]][0];
+          eventsList.push(data[Object.keys(data)[i]] as Event);
+          eventsList[i].id = id;
+        }
+        return eventsList;
+      } else {
+        errorToast();
+        return eventsList;
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      errorToast();
+      return eventsList;
+    });
+  return eventsList;
+};
 
 export const createEventInfo = (accountId: string, event: Event) => {
   set(ref(db, "events/" + event.id), {
@@ -159,7 +185,5 @@ export const createEventInfo = (accountId: string, event: Event) => {
 export const updateEventInfo = () => {};
 export const deleteEventInfo = () => {};
 
-export const bookEvent = (event: Event, account: Account) => {};
-
-export const updateEvent = () => {};
-export const deleteEvent = () => {};
+export const updateAccountInfo = () => {};
+export const deleteAccountInfo = () => {};

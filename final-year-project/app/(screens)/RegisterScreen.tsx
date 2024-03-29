@@ -1,4 +1,4 @@
-import { Text, View } from "@/components/Themed";
+import { View } from "@/components/Themed";
 import RegisterScreenInfo from "@/components/(info)/RegisterScreenInfo";
 import { styles } from "@/components/Styles";
 /*

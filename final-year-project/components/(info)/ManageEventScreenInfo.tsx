@@ -3,9 +3,9 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { styles } from "../Styles";
 import { Text, TextInput } from "../Themed";
 import { useState } from "react";
-import { updateEventInfo } from "@/app/database";
+import { updateEventInfo, deleteEventInfo } from "@/app/database";
 
-export default function UpdateEventScreenInfo({ path }: { path: string }) {
+export default function ManageEventScreenInfo({ path }: { path: string }) {
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -97,6 +97,7 @@ export default function UpdateEventScreenInfo({ path }: { path: string }) {
             darkBorderColor="rgba(255,255,255,0.8)"
           />
           <Button title="Update" onPress={updateEventInfo} />
+          <Button title="Update" onPress={deleteEventInfo} />
         </View>
       </KeyboardAwareScrollView>
     </>

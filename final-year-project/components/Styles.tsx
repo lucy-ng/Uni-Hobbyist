@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: "bold",
-    marginTop: 30,
+    marginTop: 10,
     color: "purple",
   },
   separator: {
@@ -73,5 +73,10 @@ export const styles = StyleSheet.create({
   buttonText: {
     padding: 10,
     textAlign: "center",
-  }
+  },
+  searchBarBox: {
+    width: "100%",
+    marginLeft: 100,
+    marginRight: 100
+  },
 });

@@ -4,13 +4,15 @@ import { styles } from "../Styles";
 import { Text } from "../Themed";
 import { useEffect, useState } from "react";
 import Button from "../Button";
-import { auth, updateUser } from "@/app/database";
-import { deleteUser, signOut } from "firebase/auth";
+import { auth } from "@/app/database";
+import { signOut } from "firebase/auth";
 import { ref, getDatabase, get, child } from "firebase/database";
 import { errorToast } from "../Toast";
 import { logout } from "@/app/authenticationSlice";
 import { router } from "expo-router";
 import { useDispatch } from "react-redux";
+import { Card } from "@rneui/base";
+import { manageAccountAction } from "@/app/actions";
 
 export default function AccountScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
@@ -63,30 +65,31 @@ export default function AccountScreenInfo({ path }: { path: string }) {
     <>
       <KeyboardAwareScrollView>
         <View style={styles.container}>
-          <Text
-            style={styles.text}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-          >
-            {firstName} {lastName}
-          </Text>
-          <Text
-            style={styles.text}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-          >
-            {university}
-          </Text>
-          <Text
-            style={styles.text}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-          >
-            {emailValue}
-          </Text>
-          <Button title="Update" onPress={updateUser} />
-          <Button title="Delete" onPress={deleteUser} />
-          <Button title={"Logout"} onPress={logoutAction}></Button>
+          <Card>
+            <Card.Title style={styles.title}>
+              {firstName} {lastName}
+            </Card.Title>
+            <Card.Divider />
+            <Text
+              style={styles.text}
+              darkColor="rgba(0,0,0,0.8)"
+              lightColor="rgba(255,255,255,0.8)"
+            >
+              {university}
+            </Text>
+            <Text
+              style={styles.text}
+              darkColor="rgba(0,0,0,0.8)"
+              lightColor="rgba(255,255,255,0.8)"
+            >
+              {emailValue}
+            </Text>
+          </Card>
+          <Card>
+            <Button title="Manage Account" onPress={manageAccountAction}></Button>
+            <Card.Divider />
+            <Button title="Logout" onPress={logoutAction}></Button>
+          </Card>
         </View>
       </KeyboardAwareScrollView>
     </>

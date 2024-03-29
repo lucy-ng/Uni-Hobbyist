@@ -1,14 +1,14 @@
-import EventScreenInfo from "@/components/(info)/EventScreenInfo";
+import ManageAccountScreenInfo from "@/components/(info)/ManageAccountScreenInfo";
 import { styles } from "@/components/Styles";
 import { View } from "@/components/Themed";
 
 import Toast from "react-native-toast-message";
 
-export default function EventScreen() {
+export default function ManageAccountScreen() {
   return (
     <>
       <View style={styles.container}>
-        <EventScreenInfo path="app/(screens)/EventScreen.tsx" />
+        <ManageAccountScreenInfo path="app/(screens)/ManageAccountScreen.tsx" />
       </View>
       <Toast />
     </>
