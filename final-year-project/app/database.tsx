@@ -18,7 +18,7 @@ import {
 } from "firebase/auth";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { Linking } from "react-native";
-import { errorToast } from "@/components/Toast";
+import { createEventSucessToast, errorToast } from "@/components/Toast";
 
 export type Account = {
   first_name: string;
@@ -123,38 +123,9 @@ export const verifyEmail = async (emailValue: string) => {
   [Accessed 14 March 2024].
   */
 
-export function fetchUserDetails(): Account {
-  const dbRef = ref(getDatabase());
-  const id = auth.currentUser ? auth.currentUser.uid : "";
-
-  get(child(dbRef, `accounts/${id}`))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        console.log(snapshot.val());
-        const data = snapshot.val();
-        const account: Account = {
-          email: data.email,
-          first_name: data.first_name,
-          last_name: data.last_name,
-          university: data.university,
-        };
-        return account;
-      } else {
-        errorToast();
-        return {} as Account;
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      errorToast();
-      return {} as Account;
-    });
-  return {} as Account;
-}
-
 export const updateUser = (account: Account) => {};
 
-export const createEventInfo = (account: Account, event: Event) => {
+export const createEventInfo = (accountId: string, event: Event) => {
   set(ref(db, "events/" + event.id), {
     title: event.title,
     date: event.date,
@@ -166,13 +137,23 @@ export const createEventInfo = (account: Account, event: Event) => {
     dateCreated: event.dateCreated,
     maxTickets: event.maxTickets,
     bookedTickets: event.bookedTickets,
+  }).catch((error: any) => {
+    console.error(error);
+    errorToast();
   });
 
-  set(ref(db, "bookings/" + account), {
+  set(ref(db, "bookings/" + accountId), {
     eventId: event.id,
     dateBooked: "",
     timeBooked: "",
-  });
+  })
+    .then(() => {
+      createEventSucessToast();
+    })
+    .catch((error: any) => {
+      console.error(error);
+      errorToast();
+    });
 };
 
 export const updateEventInfo = () => {};
@@ -182,11 +163,3 @@ export const bookEvent = (event: Event, account: Account) => {};
 
 export const updateEvent = () => {};
 export const deleteEvent = () => {};
-
-export const searchEvent = (filters: string[], searchValue: string) => {
-  const eventsRef = ref(db, "posts");
-  onValue(eventsRef, (snapshot) => {
-    const data = snapshot.val();
-    console.log(data);
-  });
-};

@@ -6,6 +6,20 @@
 
 import Toast from "react-native-toast-message";
 
+export const createEventSucessToast = () => {
+  Toast.show({
+    type: "success",
+    text1: "Successfully created!",
+  });
+};
+
+export const invalidDateToast = () => {
+  Toast.show({
+    type: "error",
+    text1: "Invalid date, please try again.",
+  });
+};
+
 export const registerSuccessToast = () => {
   Toast.show({
     type: "success",

@@ -54,6 +54,9 @@ export const styles = StyleSheet.create({
   homeButtonsList: {
     padding: 10
   },
+  dateTimeBox: {
+    marginBottom: 20
+  },
   
   /* 
   650 Industries, Inc., 2024. Styling a React Native button. [Online] 

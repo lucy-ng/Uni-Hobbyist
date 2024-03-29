@@ -5,28 +5,36 @@ import { styles } from "../Styles";
 import { Text, TextInput } from "../Themed";
 import Button from "../Button";
 import { Event, auth, createEventInfo } from "@/app/database";
-import "react-native-get-random-values";
-import { emptyValueToast } from "../Toast";
-import { DateTimeComponent } from "../DateTimeComponent";
+import { emptyValueToast, invalidDateToast } from "../Toast";
+import { v4 as uuid } from "uuid";
+
+/*
+React Native Community, 2024. react-native-datetimepicker. [Online] 
+Available at: https://github.com/react-native-datetimepicker/datetimepicker?tab=readme-ov-file#getting-started
+[Accessed 28 March 2024].
+*/
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 export default function CreateEventScreenInfo({ path }: { path: string }) {
   const [title, setTitle] = useState("");
-  const [date, setDate] = useState(new Date());
-  const [time, setTime] = useState(0);
+  const [dateTime, setDateTime] = useState(new Date());
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
-  const [tags, setTags] = useState([]);
   const [maxTickets, setMaxTickets] = useState("");
+  const dateToday = new Date();
+
+  let tags: string[] = [];
 
   const validateForm = () => {
     if (
       title === "" ||
-      date == null ||
-      time == null ||
+      dateTime == null ||
       location === "" ||
       description === ""
     ) {
       emptyValueToast();
+    } else if (dateTime <= dateToday) {
+      invalidDateToast();
     } else {
       handleSubmit();
     }
@@ -38,30 +46,29 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
     Available at: https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript
     [Accessed 27 March 2024].
     */
-    const dateToday = new Date();
     const dd = String(dateToday.getDate()).padStart(2, "0");
     const mm = String(dateToday.getMonth() + 1).padStart(2, "0");
     const yyyy = dateToday.getFullYear();
 
-    const hours = dateToday.getHours();
-    const minutes = dateToday.getMinutes();
+    const hours = String(dateToday.getHours());
+    const minutes = String(dateToday.getMinutes()).padStart(2, "0");
 
     const id = auth.currentUser ? auth.currentUser.uid : "";
 
     const event: Event = {
-      id: id,
+      id: uuid(),
       bookedTickets: 0,
-      date: date.toDateString(),
+      date: dateTime.toDateString(),
       dateCreated: dd + "/" + mm + "/" + yyyy,
       location: location,
       maxTickets: Number(maxTickets),
-      time: time.toString(),
+      time: dateTime.toTimeString(),
       timeCreated: hours + ":" + minutes,
       title: title,
       description: description,
       tags: tags,
     };
-    // createEventInfo(, event)
+    createEventInfo(id, event);
   };
 
   return (
@@ -84,7 +91,20 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
             lightBorderColor="rgba(0,0,0,0.8)"
             darkBorderColor="rgba(255,255,255,0.8)"
           />
-          <DateTimeComponent />
+          <View style={styles.dateTimeBox}>
+            <Text
+              style={styles.text}
+              lightColor="rgba(0,0,0,0.8)"
+              darkColor="rgba(255,255,255,0.8)"
+            >
+              Date and Time
+            </Text>
+            <RNDateTimePicker
+              mode={"datetime"}
+              value={dateTime}
+              onChange={dateTime => setDateTime(new Date(dateTime.nativeEvent.timestamp))}
+            />
+          </View>
           <Text
             style={styles.text}
             lightColor="rgba(0,0,0,0.8)"
@@ -122,7 +142,7 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
             lightColor="rgba(0,0,0,0.8)"
             darkColor="rgba(255,255,255,0.8)"
           >
-            Maximum Number of Tickets
+            Number of Tickets
           </Text>
           <TextInput
             style={styles.input}
@@ -132,6 +152,7 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
             darkColor="rgba(255,255,255,0.8)"
             lightBorderColor="rgba(0,0,0,0.8)"
             darkBorderColor="rgba(255,255,255,0.8)"
+            keyboardType="numeric"
           />
           <Button title="Create" onPress={validateForm} />
         </View>
