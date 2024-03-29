@@ -1,38 +1,30 @@
 import React, { useState } from "react";
-import { Text, View, TextInput, Modal } from "../Themed";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Text, View, TextInput } from "../Themed";
 import { styles } from "../Styles";
-import { auth, db } from "@/app/database";
-import "react-native-get-random-values";
-
-/*
-Ant Group and Ant Design Community, 2024. 
-Icon details - "closecircle" from AntDesign [Online] 
-Available at: https://icons.expo.fyi/Index/AntDesign/closecircle
-[Accessed 24 March 2024]. 
-*/
-
-import { AntDesign } from "@expo/vector-icons";
 import Button from "../Button";
 import {
-  emailErrorToast,
   emptyValueToast,
+  errorToast,
   passwordLengthErrorToast,
   passwordLowerErrorToast,
   passwordNonAlphanumericErrorToast,
   passwordNumberErrorToast,
+  passwordSameToast,
   passwordUpperErrorToast,
-  registerErrorToast,
-  registerSuccessToast,
+  updateAccountSuccessToast,
 } from "../Toast";
-import { ref, set } from "firebase/database";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { getDatabase, ref, set } from "firebase/database";
+import { useLocalSearchParams } from "expo-router";
+import { SafeAreaView } from "react-native";
+import { updatePassword } from "firebase/auth";
+import { getAuth } from "@firebase/auth";
+import { auth } from "@/app/database";
 
 export default function ManageAccountScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
-  const [authenticationModal, setAuthenticationModal] = useState(false);
+  const params = useLocalSearchParams();
 
   const validateForm = () => {
     /*
@@ -73,40 +65,36 @@ export default function ManageAccountScreenInfo({ path }: { path: string }) {
   [Accessed 27 March 2024].
   */
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    const db = getDatabase();
+
+    set(ref(db, "accounts/" + params.accountId), {
+      first_name: firstName,
+      last_name: lastName,
+      email: params.email,
+      university: params.university,
+    })
+      .then(() => {
+        if (auth.currentUser) {
+          updatePassword(auth.currentUser, password)
+            .then(() => {
+              updateAccountSuccessToast();
+            })
+            .catch((error) => {
+              console.log(error)
+              errorToast()
+            });
+        }
+      })
+      .catch((error) => {
+        errorToast();
+      });
+  };
 
   return (
     <>
-      <KeyboardAwareScrollView>
+      <SafeAreaView>
         <View style={styles.container}>
-          <Modal
-            visible={authenticationModal}
-            animationType="slide"
-            transparent={true}
-          >
-            <View style={styles.modalView}>
-              <View
-                style={styles.modalInfoView}
-                lightColor="rgba(0,0,0,0.8)"
-                darkColor="rgba(255,255,255,0.8)"
-              >
-                <AntDesign
-                  name="closecircle"
-                  size={24}
-                  color="purple"
-                  onPress={() => setAuthenticationModal(false)}
-                  style={styles.closeIcon}
-                />
-                <Text
-                  style={styles.text}
-                  darkColor="rgba(0,0,0,0.8)"
-                  lightColor="rgba(255,255,255,0.8)"
-                >
-                  Please verify your account with the link sent to your email.
-                </Text>
-              </View>
-            </View>
-          </Modal>
           <Text
             style={styles.text}
             lightColor="rgba(0,0,0,0.8)"
@@ -159,7 +147,7 @@ export default function ManageAccountScreenInfo({ path }: { path: string }) {
           />
           <Button title="Update" onPress={validateForm} />
         </View>
-      </KeyboardAwareScrollView>
+      </SafeAreaView>
     </>
   );
 }

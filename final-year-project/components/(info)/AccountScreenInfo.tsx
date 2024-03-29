@@ -10,11 +10,12 @@ import { ref, getDatabase, get, child } from "firebase/database";
 import { errorToast } from "../Toast";
 import { logout } from "@/app/authenticationSlice";
 import { router } from "expo-router";
-import { useDispatch } from "react-redux";
 import { Card } from "@rneui/base";
-import { manageAccountAction } from "@/app/actions";
+import { logoutAction, manageAccountAction } from "@/app/actions";
+import { useAppDispatch } from "@/app/hooks";
 
 export default function AccountScreenInfo({ path }: { path: string }) {
+  const [accountId, setAccountId] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [university, setUniversity] = useState("");
@@ -23,6 +24,7 @@ export default function AccountScreenInfo({ path }: { path: string }) {
   useEffect(() => {
     const dbRef = ref(getDatabase());
     const id = auth.currentUser ? auth.currentUser.uid : "";
+    setAccountId(id);
 
     get(child(dbRef, `accounts/${id}`))
       .then((snapshot) => {
@@ -42,7 +44,7 @@ export default function AccountScreenInfo({ path }: { path: string }) {
       });
   }, []);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   /*
   Google LLC, 2024. Authenticate with Firebase using Password-Based Accounts using Javascript. [Online] 
@@ -50,11 +52,11 @@ export default function AccountScreenInfo({ path }: { path: string }) {
   [Accessed 27 March 2024].
   */
 
-  const logoutAction = () => {
+  const logoutFunction = () => {
     signOut(auth)
       .then(() => {
         dispatch(logout());
-        router.replace("/(screens)/LoginScreen");
+        logoutAction();
       })
       .catch((error: any) => {
         console.log(error.code, error.message);
@@ -86,9 +88,12 @@ export default function AccountScreenInfo({ path }: { path: string }) {
             </Text>
           </Card>
           <Card>
-            <Button title="Manage Account" onPress={manageAccountAction}></Button>
+            <Button
+              title="Manage Account"
+              onPress={() => manageAccountAction(accountId, emailValue, university)}
+            ></Button>
             <Card.Divider />
-            <Button title="Logout" onPress={logoutAction}></Button>
+            <Button title="Logout" onPress={logoutFunction}></Button>
           </Card>
         </View>
       </KeyboardAwareScrollView>

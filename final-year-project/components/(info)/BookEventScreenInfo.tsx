@@ -16,10 +16,9 @@ export default function BookEventScreenInfo({ path }: { path: string }) {
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
 
-  const params = useLocalSearchParams();
-
   useEffect(() => {
     const dbRef = ref(getDatabase());
+    const params = useLocalSearchParams();
     get(child(dbRef, `events/${params.eventId}`))
       .then((snapshot) => {
         if (snapshot.exists()) {

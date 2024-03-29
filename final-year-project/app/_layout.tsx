@@ -58,10 +58,10 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Provider store={store}>
+    <Provider store={store}>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <RootNavigation />
-      </Provider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </Provider>
   );
 }

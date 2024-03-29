@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
-import { useSelector } from "react-redux";
 import { RootState } from "./store";
+import { useAppSelector } from "./hooks";
 
 export default function RootNavigation() {
   /*
@@ -9,7 +9,7 @@ export default function RootNavigation() {
   Available at: https://redux-toolkit.js.org/tutorials/quick-start
   [Accessed 24 March 2024]. 
   */
-  const isLoggedIn = useSelector(
+  const isLoggedIn = useAppSelector(
     (state: RootState) => state.counter.isLoggedIn
   );
 
@@ -23,14 +23,14 @@ export default function RootNavigation() {
           />
           <Stack.Screen
             name="(screens)/RegisterScreen"
-            options={{ headerShown: true, title: "Register"  }}
+            options={{ headerShown: true, title: "Register" }}
           />
         </Stack>
       ) : (
         <Stack>
           <Stack.Screen
-            name="(screens)/EventScreen"
-            options={{ headerShown: true, title: "Event" }}
+            name="(tabs)"
+            options={{ headerShown: false, title: "Home" }}
           />
           <Stack.Screen
             name="(screens)/BookEventScreen"
@@ -48,7 +48,10 @@ export default function RootNavigation() {
             name="(screens)/ManageAccountScreen"
             options={{ headerShown: true, title: "Manage Account" }}
           />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false, title: "Home" }} />
+          <Stack.Screen
+            name="(screens)/EventsScreen"
+            options={{ headerShown: true, title: "Events" }}
+          />
         </Stack>
       )}
     </>

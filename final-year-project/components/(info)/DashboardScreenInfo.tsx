@@ -2,6 +2,7 @@ import {
   dashboardAction,
   createEventAction,
   manageEventAction,
+  eventsAction,
 } from "@/app/actions";
 import { SafeAreaView, View } from "react-native";
 import { Card } from "@rneui/themed";
@@ -18,7 +19,7 @@ export default function DashboardScreenInfo({ path }: { path: string }) {
             <Card.Divider />
             <Button
               title={"Manage Bookings"}
-              onPress={dashboardAction}
+              onPress={eventsAction}
             ></Button>
           </Card>
           <Card>

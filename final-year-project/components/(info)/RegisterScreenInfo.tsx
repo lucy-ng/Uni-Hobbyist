@@ -4,15 +4,6 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { styles } from "../Styles";
 import { auth, db } from "@/app/database";
 import "react-native-get-random-values";
-
-/*
-Ant Group and Ant Design Community, 2024. 
-Icon details - "closecircle" from AntDesign [Online] 
-Available at: https://icons.expo.fyi/Index/AntDesign/closecircle
-[Accessed 24 March 2024]. 
-*/
-
-import { AntDesign } from "@expo/vector-icons";
 import Button from "../Button";
 import {
   emailErrorToast,
@@ -34,11 +25,37 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
   const [university, setUniversity] = useState("");
   const [emailValue, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [authenticationModal, setAuthenticationModal] = useState(false);
 
-  // useEffect(() => {
-  //   verifyEmail(emailValue)
-  // }, [emailValue])
+  /*
+  Google LLC, 2024. Read and Write Data on the Web. [Online] 
+  Available at: https://firebase.google.com/docs/database/web/read-and-write
+  [Accessed 14 March 2024].
+  */
+  /*
+  Google LLC, 2024. Authenticate with Firebase using Password-Based Accounts using Javascript. [Online] 
+  Available at: https://firebase.google.com/docs/auth/web/password-auth
+  [Accessed 27 March 2024].
+  */
+
+  const handleSubmit = () => {
+    createUserWithEmailAndPassword(auth, emailValue, password)
+      .then((userCredential) => {
+        set(ref(db, "accounts/" + userCredential.user.uid), {
+          first_name: firstName,
+          last_name: lastName,
+          email: emailValue,
+          university: university,
+        });
+
+        registerSuccessToast();
+      })
+      .catch((error: any) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        registerErrorToast();
+      });
+  };
 
   const validateForm = () => {
     /*
@@ -86,74 +103,10 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
     }
   };
 
-  /*
-  Google LLC, 2024. Read and Write Data on the Web. [Online] 
-  Available at: https://firebase.google.com/docs/database/web/read-and-write
-  [Accessed 14 March 2024].
-  */
-  /*
-  Google LLC, 2024. Authenticate with Firebase using Password-Based Accounts using Javascript. [Online] 
-  Available at: https://firebase.google.com/docs/auth/web/password-auth
-  [Accessed 27 March 2024].
-  */
-
-  const handleSubmit = () => {
-    // sendEmail(emailValue)
-    // setAuthenticationModal(true);
-
-    createUserWithEmailAndPassword(auth, emailValue, password)
-    .then((userCredential) => {
-      set(ref(db, "accounts/" + userCredential.user.uid), {
-        first_name: firstName,
-        last_name: lastName,
-        email: emailValue,
-        university: university,
-        password: password,
-      });  
-
-      registerSuccessToast();
-    })
-    .catch((error: any) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode, errorMessage);
-      registerErrorToast();
-    });
-
-  };
-
   return (
     <>
       <KeyboardAwareScrollView>
         <View style={styles.container}>
-          <Modal
-            visible={authenticationModal}
-            animationType="slide"
-            transparent={true}
-          >
-            <View style={styles.modalView}>
-              <View
-                style={styles.modalInfoView}
-                lightColor="rgba(0,0,0,0.8)"
-                darkColor="rgba(255,255,255,0.8)"
-              >
-                <AntDesign
-                  name="closecircle"
-                  size={24}
-                  color="purple"
-                  onPress={() => setAuthenticationModal(false)}
-                  style={styles.closeIcon}
-                />
-                <Text
-                  style={styles.text}
-                  darkColor="rgba(0,0,0,0.8)"
-                  lightColor="rgba(255,255,255,0.8)"
-                >
-                  Please verify your account with the link sent to your email.
-                </Text>
-              </View>
-            </View>
-          </Modal>
           <Text
             style={styles.text}
             lightColor="rgba(0,0,0,0.8)"

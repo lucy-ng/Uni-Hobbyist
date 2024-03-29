@@ -1,7 +1,19 @@
 import { router } from "expo-router";
 
+export const homeAction = () => {
+  router.replace("/(tabs)/HomeScreen");
+}
+
+export const logoutAction = () => {
+  router.replace("/(screens)/LoginScreen");
+}
+
 export const dashboardAction = () => {
-  router.push("/(tabs)/DashboardScreen");
+  router.replace("/(tabs)/DashboardScreen");
+};
+
+export const eventsAction = () => {
+  router.push("/(screens)/EventsScreen");
 };
 
 export const createEventAction = () => {
@@ -12,10 +24,20 @@ export const manageEventAction = () => {
   router.push("/(screens)/ManageEventScreen");
 };
 
-export const manageAccountAction = () => {
-  router.push("/(screens)/ManageAccountScreen");
+export const manageAccountAction = (
+  accountId: string,
+  email: string,
+  university: string,
+) => {
+  router.push({
+    pathname: "/(screens)/ManageAccountScreen",
+    params: { accountId: accountId, email: email, university: university },
+  });
 };
 
 export const eventInfoAction = (eventId: string) => {
-  router.push({ pathname: "/(screens)/BookEventScreen", params: { eventId: eventId } });
-}
+  router.push({
+    pathname: "/(screens)/BookEventScreen",
+    params: { eventId: eventId },
+  });
+};

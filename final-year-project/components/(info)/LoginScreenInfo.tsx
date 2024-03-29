@@ -2,22 +2,44 @@ import React, { useState } from "react";
 import { Text, View, TextInput, Pressable } from "../Themed";
 import { styles } from "../Styles";
 import Button from "../Button";
-import { Link, router } from "expo-router";
+import { Link } from "expo-router";
 import {
   emailErrorToast,
   emptyValueToast,
   loginErrorToast,
   loginSuccessToast,
 } from "../Toast";
-import { login } from "@/app/authenticationSlice";
 import { auth } from "@/app/database";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "@/app/hooks";
+import { login } from "@/app/authenticationSlice";
+import { homeAction } from "@/app/actions";
 
 export default function LoginScreenInfo({ path }: { path: string }) {
   const [emailValue, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+
+  /*
+  Google LLC, 2024. Authenticate with Firebase using Password-Based Accounts using Javascript. [Online] 
+  Available at: https://firebase.google.com/docs/auth/web/password-auth
+  [Accessed 27 March 2024].
+  */
+
+  const handleSubmit = () => {
+    signInWithEmailAndPassword(auth, emailValue, password)
+      .then((userCredential) => {
+        dispatch(login());
+        homeAction();
+        loginSuccessToast();
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        loginErrorToast();
+      });
+  };
 
   const validateForm = () => {
     /*
@@ -37,27 +59,6 @@ export default function LoginScreenInfo({ path }: { path: string }) {
     } else {
       handleSubmit();
     }
-  };
-
-  /*
-  Google LLC, 2024. Authenticate with Firebase using Password-Based Accounts using Javascript. [Online] 
-  Available at: https://firebase.google.com/docs/auth/web/password-auth
-  [Accessed 27 March 2024].
-  */
-
-  const handleSubmit = () => {
-    signInWithEmailAndPassword(auth, emailValue, password)
-      .then((userCredential) => {
-        loginSuccessToast();
-        dispatch(login());
-        router.replace("/(tabs)/HomeScreen");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-        loginErrorToast();
-      });
   };
 
   /*

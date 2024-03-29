@@ -6,6 +6,20 @@
 
 import Toast from "react-native-toast-message";
 
+export const passwordSameToast = () => {
+  Toast.show({
+    type: "error",
+    text2: "Password matches old password. Please try again.",
+  });
+};
+
+export const updateAccountSuccessToast = () => {
+  Toast.show({
+    type: "success",
+    text1: "Successfully updated!",
+  });
+};
+
 export const createEventSucessToast = () => {
   Toast.show({
     type: "success",

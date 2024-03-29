@@ -1,39 +1,39 @@
-import { View, SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
-import { styles } from "../Styles";
-import { useRef, useState } from "react";
-import { ref, getDatabase, child, get } from "firebase/database";
-import { errorToast, noSearchResultsToast } from "../Toast";
-import { Text } from "../Themed";
-import { Card } from "@rneui/base";
-import { Event, fetchEvents } from "@/app/database";
-import { eventInfoAction } from "@/app/actions";
-import { SearchBar } from "@rneui/themed";
+import { View, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
+import { styles } from '../Styles'
+import { useState } from 'react'
+import { ref, getDatabase, child, get } from 'firebase/database'
+import { errorToast, noSearchResultsToast } from '../Toast'
+import { Text } from '../Themed'
+import { Card } from '@rneui/base'
+import { type Event } from '@/app/database'
+import { eventInfoAction } from '@/app/actions'
+import { SearchBar } from '@rneui/themed'
 
-/* 
-React Native Elements Community, 2024. SearchBar. [Online] 
+/*
+React Native Elements Community, 2024. SearchBar. [Online]
 Available at: https://reactnativeelements.com/docs/components/searchbar
 [Accessed 29 March 2024].
 */
 
-export default function HomeScreenInfo({ path }: { path: string }) {
-  const [searchValue, setSearchValue] = useState("");
-  const [events, setEvents] = useState<Array<Event>>(fetchEvents() || []);
+export default function HomeScreenInfo ({ path }: { path: string }) {
+  const [searchValue, setSearchValue] = useState('')
+  const [events, setEvents] = useState<Event[]>([])
 
   const searchEvent = () => {
-    let eventsList: Event[] = [];
+    const eventsList: Event[] = []
 
-    const dbRef = ref(getDatabase());
-    get(child(dbRef, `events`))
+    const dbRef = ref(getDatabase())
+    get(child(dbRef, 'events'))
       .then((snapshot) => {
         if (snapshot.exists()) {
-          const data = snapshot.val();
+          const data = snapshot.val()
 
           for (let i = 0; i < Object.keys(data).length; i++) {
-            let event = data[Object.keys(data)[i]];
-            let title = event.title;
-            let eventId = String(Object.keys(data)[i]);
+            const event = data[Object.keys(data)[i]]
+            const title = event.title
+            const eventId = String(Object.keys(data)[i])
 
-            let eventData: Event = {
+            const eventData: Event = {
               id: eventId,
               title: event.title,
               bookedTickets: event.bookedTickets,
@@ -44,34 +44,34 @@ export default function HomeScreenInfo({ path }: { path: string }) {
               time: event.time,
               timeCreated: event.timeCreated,
               description: event.description,
-              tags: event.tags,
-            };
+              tags: event.tags
+            }
 
-            if (searchValue == "") {
-              eventsList.push(eventData);
+            if (searchValue == '') {
+              eventsList.push(eventData)
             } else if (
               title.includes(searchValue) ||
               searchValue.includes(title) ||
               searchValue == title
             ) {
-              eventsList.push(eventData);
+              eventsList.push(eventData)
             }
           }
 
-          if (eventsList.length == 0) {
-            noSearchResultsToast();
+          if (eventsList.length === 0) {
+            noSearchResultsToast()
           }
 
-          setEvents(eventsList);
+          setEvents(eventsList)
         } else {
-          errorToast();
+          errorToast()
         }
       })
       .catch((error) => {
-        console.error(error);
-        errorToast();
-      });
-  };
+        console.error(error)
+        errorToast()
+      })
+  }
 
   return (
     <>
@@ -87,7 +87,7 @@ export default function HomeScreenInfo({ path }: { path: string }) {
           </View>
           <ScrollView>
             {events.map((event) => (
-              <TouchableOpacity onPress={() => eventInfoAction(event.id)}>
+              <TouchableOpacity onPress={() => { eventInfoAction(event.id) }} key={event.id}>
                 <Card key={event.id}>
                   <Card.Title style={styles.title}>{event.title}</Card.Title>
                   <Card.Divider />
@@ -119,5 +119,5 @@ export default function HomeScreenInfo({ path }: { path: string }) {
         </View>
       </SafeAreaView>
     </>
-  );
+  )
 }

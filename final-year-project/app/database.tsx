@@ -21,6 +21,7 @@ import { Linking } from "react-native";
 import { createEventSucessToast, errorToast } from "@/components/Toast";
 
 export type Account = {
+  id: string;
   first_name: string;
   last_name: string;
   email: string;
@@ -55,14 +56,15 @@ const firebaseConfig = {
   projectId: process.env.EXPO_PUBLIC_PROJECT_ID ?? "",
 };
 
-const app = getApps().length == 0 ? initializeApp(firebaseConfig) : getApp();
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+
 export const db = getDatabase(app);
-export const auth =
-  getAuth.length == 0
-    ? initializeAuth(app, {
-        persistence: getReactNativePersistence(ReactNativeAsyncStorage),
-      })
-    : getAuth();
+
+export const auth = !getAuth.length
+  ? initializeAuth(app, {
+      persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+    })
+  : getAuth();
 
 /*
 Google LLC, 2024. Authenticate with Firebase Using Email Link in JavaScript. [Online] 
@@ -90,66 +92,38 @@ Available at: https://firebase.google.com/docs/auth/android/email-link-auth
 [Accessed 16 March 2024].
 */
 
-export const sendEmail = (emailValue: string) => {
-  sendSignInLinkToEmail(auth, emailValue, actionCodeSettings)
-    .then(() => {
-      // sessionStorage.setItem("emailForSignIn", emailValue);
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode, errorMessage);
-    });
-};
+// export const sendEmail = (emailValue: string) => {
+//   sendSignInLinkToEmail(auth, emailValue, actionCodeSettings)
+//     .then(() => {
+//       // sessionStorage.setItem("emailForSignIn", emailValue);
+//     })
+//     .catch((error) => {
+//       const errorCode = error.code;
+//       const errorMessage = error.message;
+//       console.log(errorCode, errorMessage);
+//     });
+// };
 
-export const verifyEmail = async (emailValue: string) => {
-  const emailLink = (await Linking.getInitialURL()) ?? "";
-  if (isSignInWithEmailLink(auth, emailLink)) {
-    signInWithEmailLink(auth, emailValue, emailLink)
-      .then(() => {
-        // sessionStorage.setItem("emailForSignIn", emailValue);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-      });
-  }
-};
+// export const verifyEmail = async (emailValue: string) => {
+//   const emailLink = (await Linking.getInitialURL()) ?? "";
+//   if (isSignInWithEmailLink(auth, emailLink)) {
+//     signInWithEmailLink(auth, emailValue, emailLink)
+//       .then(() => {
+//         // sessionStorage.setItem("emailForSignIn", emailValue);
+//       })
+//       .catch((error) => {
+//         const errorCode = error.code;
+//         const errorMessage = error.message;
+//         console.log(errorCode, errorMessage);
+//       });
+//   }
+// };
 
 /*
 Google LLC, 2024. Read and Write Data on the Web. [Online] 
 Available at: https://firebase.google.com/docs/database/web/read-and-write
 [Accessed 14 March 2024].
 */
-
-export const fetchEvents = () => {
-  let eventsList: Event[] = [];
-
-  const dbRef = ref(getDatabase());
-  get(child(dbRef, `events`))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-
-        for (let i = 0; i < Object.keys(data).length; i++) {
-          let id = [Object.keys(data)[i]][0];
-          eventsList.push(data[Object.keys(data)[i]] as Event);
-          eventsList[i].id = id;
-        }
-        return eventsList;
-      } else {
-        errorToast();
-        return eventsList;
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      errorToast();
-      return eventsList;
-    });
-  return eventsList;
-};
 
 export const createEventInfo = (accountId: string, event: Event) => {
   set(ref(db, "events/" + event.id), {
@@ -187,3 +161,5 @@ export const deleteEventInfo = () => {};
 
 export const updateAccountInfo = () => {};
 export const deleteAccountInfo = () => {};
+
+export const bookEvent = () => {};

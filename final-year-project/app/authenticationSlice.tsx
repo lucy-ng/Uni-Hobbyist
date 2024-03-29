@@ -6,7 +6,6 @@ Available at: https://redux-toolkit.js.org/tutorials/quick-start
 */
 
 import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface AuthenticationState {
   isLoggedIn: boolean
