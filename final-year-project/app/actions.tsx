@@ -16,3 +16,6 @@ export const updateEventAction = () => {
   router.push("/(screens)/UpdateEventScreen");
 };
 
+export const eventInfoAction = (eventId: string) => {
+  router.push({ pathname: "/(screens)/BookEventScreen", params: { eventId: eventId } });
+}

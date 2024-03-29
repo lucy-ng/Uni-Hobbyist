@@ -5,9 +5,12 @@ import { Text } from "../Themed";
 import { useEffect, useState } from "react";
 import Button from "../Button";
 import { auth, updateUser } from "@/app/database";
-import { deleteUser } from "firebase/auth";
+import { deleteUser, signOut } from "firebase/auth";
 import { ref, getDatabase, get, child } from "firebase/database";
 import { errorToast } from "../Toast";
+import { logout } from "@/app/authenticationSlice";
+import { router } from "expo-router";
+import { useDispatch } from "react-redux";
 
 export default function AccountScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
@@ -37,6 +40,25 @@ export default function AccountScreenInfo({ path }: { path: string }) {
       });
   }, []);
 
+  const dispatch = useDispatch();
+
+  /*
+  Google LLC, 2024. Authenticate with Firebase using Password-Based Accounts using Javascript. [Online] 
+  Available at: https://firebase.google.com/docs/auth/web/password-auth
+  [Accessed 27 March 2024].
+  */
+
+  const logoutAction = () => {
+    signOut(auth)
+      .then(() => {
+        dispatch(logout());
+        router.replace("/(screens)/LoginScreen");
+      })
+      .catch((error: any) => {
+        console.log(error.code, error.message);
+      });
+  };
+
   return (
     <>
       <KeyboardAwareScrollView>
@@ -64,6 +86,7 @@ export default function AccountScreenInfo({ path }: { path: string }) {
           </Text>
           <Button title="Update" onPress={updateUser} />
           <Button title="Delete" onPress={deleteUser} />
+          <Button title={"Logout"} onPress={logoutAction}></Button>
         </View>
       </KeyboardAwareScrollView>
     </>

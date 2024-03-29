@@ -25,6 +25,7 @@ export const styles = StyleSheet.create({
     color: "#2e78b7",
   },
   container: {
+    marginTop: 20,
     alignItems: "center",
   },
   text: {

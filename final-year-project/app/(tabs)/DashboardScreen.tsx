@@ -7,13 +7,7 @@ import Toast from "react-native-toast-message";
 export default function DashboardScreen() {
   return (
     <>
-      <View style={styles.screenContainer}>
-        <Text style={styles.title}>Dashboard</Text>
-        <View
-          style={styles.separator}
-          lightColor="#eee"
-          darkColor="rgba(255,255,255,0.1)"
-        />
+      <View style={styles.container}>
         <DashboardScreenInfo path="app/(tabs)/DashboardScreen.tsx" />
       </View>
       <Toast />

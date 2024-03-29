@@ -15,24 +15,6 @@ import { auth } from "@/app/database";
 import { signOut } from "@firebase/auth";
 
 export default function HomeScreenInfo({ path }: { path: string }) {
-  const dispatch = useDispatch();
-
-  /*
-  Google LLC, 2024. Authenticate with Firebase using Password-Based Accounts using Javascript. [Online] 
-  Available at: https://firebase.google.com/docs/auth/web/password-auth
-  [Accessed 27 March 2024].
-  */
-
-  const logoutAction = () => {
-    signOut(auth)
-      .then(() => {
-        dispatch(logout());
-        router.replace("/(screens)/LoginScreen");
-      })
-      .catch((error: any) => {
-        console.log(error.code, error.message)
-      });
-  };
 
   return (
     <>
@@ -51,9 +33,9 @@ export default function HomeScreenInfo({ path }: { path: string }) {
             <Card.Title>Host</Card.Title>
             <Card.Divider />
             <Button title={"Create Event"} onPress={createEventAction}></Button>
-            <Button title={"Update Event"} onPress={updateEventAction}></Button>
+            <Button title={"Manage Events"} onPress={updateEventAction}></Button>
           </Card>
-          <Button title={"Logout"} onPress={logoutAction}></Button>
+          
         </View>
       </SafeAreaView>
     </>

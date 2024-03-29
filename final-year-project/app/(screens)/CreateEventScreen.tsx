@@ -7,13 +7,7 @@ import Toast from "react-native-toast-message";
 export default function CreateEventScreen() {
   return (
     <>
-      <View style={styles.screenContainer}>
-        <Text style={styles.title}>Create Event</Text>
-        <View
-          style={styles.separator}
-          lightColor="#eee"
-          darkColor="rgba(255,255,255,0.1)"
-        />
+      <View style={styles.container}>
         <CreateEventScreenInfo path="app/(tabs)/CreateEventScreen.tsx" />
       </View>
       <Toast />

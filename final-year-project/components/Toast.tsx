@@ -13,6 +13,13 @@ export const createEventSucessToast = () => {
   });
 };
 
+export const noSearchResultsToast = () => {
+  Toast.show({
+    type: "error",
+    text1: "No relevant results could be found.",
+  });
+};
+
 export const invalidDateToast = () => {
   Toast.show({
     type: "error",
@@ -58,7 +65,7 @@ export const emailSentToast = () => {
 export const errorToast = () => {
   Toast.show({
     type: "error",
-    text1: "Please try again.",
+    text1: "An error has occurred.",
   });
 };
 
