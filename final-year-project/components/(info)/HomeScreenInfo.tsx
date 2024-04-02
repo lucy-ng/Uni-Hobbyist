@@ -2,11 +2,11 @@ import React from "react";
 import { View, SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
 import { styles } from "../Styles";
 import { useState } from "react";
-import { ref, getDatabase, child, get } from "firebase/database";
+import { child, get } from "firebase/database";
 import { errorToast, noSearchResultsToast } from "../Toast";
 import { Text } from "../Themed";
 import { Card } from "@rneui/base";
-import { fetchEvents, type Event, dbRef } from "@/app/database";
+import { fetchEvents, type Event, dbRef, auth } from "@/app/database";
 import { eventInfoAction } from "@/app/actions";
 import { SearchBar } from "@rneui/themed";
 
@@ -19,9 +19,29 @@ Available at: https://reactnativeelements.com/docs/components/searchbar
 export default function HomeScreenInfo({ path }: { path: string }) {
   const [searchValue, setSearchValue] = useState("");
   const [events, setEvents] = useState<Event[]>(fetchEvents() || []);
+  const userId = auth.currentUser ? auth.currentUser.uid : "";
 
   const searchEvent = () => {
     const eventsList: Event[] = [];
+    const hostedEvents: String[] = [];
+
+    get(child(dbRef, "bookings"))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          for (let i = 0; i < Object.keys(data).length; i++) {
+            const accountId = data[Object.keys(data)[i]].account_id;
+            const eventId = data[Object.keys(data)[i]].event_id;
+            if (userId == accountId) {
+              hostedEvents.push(eventId);
+            }
+          }
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        errorToast();
+      });
 
     get(child(dbRef, "events"))
       .then((snapshot) => {
@@ -43,15 +63,15 @@ export default function HomeScreenInfo({ path }: { path: string }) {
               max_tickets: event.max_tickets,
               time_updated: event.time_updated,
               description: event.description,
-              tags: event.tags,
             };
 
-            if (searchValue == "") {
+            if (searchValue == "" && !hostedEvents.includes(eventId)) {
               eventsList.push(eventData);
             } else if (
-              title.includes(searchValue) ||
-              searchValue.includes(title) ||
-              searchValue == title
+              (title.includes(searchValue) ||
+                searchValue.includes(title) ||
+                searchValue == title) &&
+              !hostedEvents.includes(eventId)
             ) {
               eventsList.push(eventData);
             }

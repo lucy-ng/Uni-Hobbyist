@@ -39,23 +39,6 @@ export const manageEventAction = (event: Event) => {
       location: event.location,
       max_tickets: event.max_tickets,
       title: event.title,
-      tags: event.tags || [],
-    },
-  });
-};
-
-export const manageBookingAction = (event: Event) => {
-  router.push({
-    pathname: "/(screens)/ManageBookingScreen",
-    params: {
-      id: event.id,
-      booked_tickets: event.booked_tickets,
-      date_time: event.date_time,
-      description: event.description || "",
-      location: event.location,
-      max_tickets: event.max_tickets,
-      title: event.title,
-      tags: event.tags || [],
     },
   });
 };

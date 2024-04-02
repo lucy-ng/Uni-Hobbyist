@@ -50,16 +50,12 @@ export default function RootNavigation() {
             options={{ headerShown: true, title: "Manage Account" }}
           />
           <Stack.Screen
-            name="(screens)/ManageBookingScreen"
-            options={{ headerShown: true, title: "Book Event" }}
-          />
-          <Stack.Screen
             name="(screens)/EventsScreen"
             options={{ headerShown: true, title: "Events" }}
           />
           <Stack.Screen
             name="(screens)/BookingsScreen"
-            options={{ headerShown: true, title: "Book Event" }}
+            options={{ headerShown: true, title: "Bookings" }}
           />
         </Stack>
       )}

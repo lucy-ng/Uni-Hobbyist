@@ -40,7 +40,7 @@ export const styles = StyleSheet.create({
     margin: 20,
   },
   modalView: {
-    marginTop: 250,
+    marginTop: 300,
     borderRadius: 20,
     padding: 10,
   },
@@ -57,6 +57,10 @@ export const styles = StyleSheet.create({
   },
   dateTimeBox: {
     marginBottom: 20
+  },
+  deleteButton: {
+    alignItems: "center",
+    marginTop: 20
   },
   
   /* 

@@ -11,7 +11,7 @@ import { styles } from "../Styles";
 import { auth } from "@/app/database";
 
 export default function DashboardScreenInfo({ path }: { path: string }) {
-  const id = auth.currentUser ? auth.currentUser.uid : "";
+  const userId = auth.currentUser ? auth.currentUser.uid : "";
 
   return (
     <>
@@ -22,7 +22,7 @@ export default function DashboardScreenInfo({ path }: { path: string }) {
             <Card.Divider />
             <Button
               title={"Manage Bookings"}
-              onPress={() => bookingsAction(id)}
+              onPress={() => bookingsAction(userId)}
             ></Button>
           </Card>
           <Card>

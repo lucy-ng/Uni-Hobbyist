@@ -9,11 +9,11 @@ import {
   loginErrorToast,
   loginSuccessToast,
 } from "../Toast";
-import { auth } from "@/app/database";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useAppDispatch } from "@/app/hooks";
 import { login } from "@/app/authenticationSlice";
 import { homeAction } from "@/app/actions";
+import { getAuth } from "@firebase/auth";
 
 export default function LoginScreenInfo({ path }: { path: string }) {
   const [emailValue, setEmail] = useState("");
@@ -27,6 +27,7 @@ export default function LoginScreenInfo({ path }: { path: string }) {
   */
 
   const handleSubmit = () => {
+    const auth = getAuth();
     signInWithEmailAndPassword(auth, emailValue, password)
       .then((userCredential) => {
         dispatch(login());

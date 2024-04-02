@@ -20,6 +20,34 @@ export const updateAccountSuccessToast = () => {
   });
 };
 
+export const bookEventSuccessToast = () => {
+  Toast.show({
+    type: "success",
+    text1: "Successfully booked!",
+  });
+};
+
+export const bookEventErrorToast = () => {
+  Toast.show({
+    type: "error",
+    text1: "Booking error, please try again.",
+  });
+};
+
+export const deleteBookingSuccessToast = () => {
+  Toast.show({
+    type: "success",
+    text1: "Successfully deleted!",
+  });
+};
+
+export const deleteBookingErrorToast = () => {
+  Toast.show({
+    type: "success",
+    text1: "Successfully deleted!",
+  });
+};
+
 export const createEventSuccessToast = () => {
   Toast.show({
     type: "success",
@@ -116,6 +144,13 @@ export const errorToast = () => {
   Toast.show({
     type: "error",
     text1: "An error has occurred.",
+  });
+};
+
+export const accountDetailsErrorToast = () => {
+  Toast.show({
+    type: "error",
+    text1: "Account details cannot be found.",
   });
 };
 

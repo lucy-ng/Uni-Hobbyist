@@ -4,9 +4,9 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { styles } from "../Styles";
 import { Text, TextInput } from "../Themed";
 import { useState } from "react";
-import { db, deleteEventInfo, Event } from "@/app/database";
+import { db, deleteEventInfo } from "@/app/database";
 import { useLocalSearchParams } from "expo-router";
-import { child, get, getDatabase, ref, set } from "firebase/database";
+import { ref, set } from "firebase/database";
 import { emptyValueToast, errorToast, invalidDateToast, updateEventSuccessToast } from "../Toast";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import Button from "../Button";
@@ -66,7 +66,6 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
       time_updated: hours + ":" + minutes,
       title: title,
       description: description,
-      tags: params.tags,
     })
       .then(() => {
         updateEventSuccessToast()

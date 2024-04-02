@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { styles } from "../Styles";
 import { Text, TextInput } from "../Themed";
 import Button from "../Button";
-import { Event, auth, createEventInfo } from "@/app/database";
+import { Event, createEventInfo } from "@/app/database";
 import {
   emptyValueToast,
   invalidDateToast,
@@ -26,8 +26,6 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
   const [description, setDescription] = useState("");
   const [maxTickets, setMaxTickets] = useState("");
   const dateToday = new Date();
-
-  let tags: string[] = [];
 
   const validateForm = () => {
     const positiveNumberRegex = new RegExp(/^[1-9][0-9]*$/);
@@ -65,8 +63,6 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
     const hours = String(dateToday.getHours());
     const minutes = String(dateToday.getMinutes()).padStart(2, "0");
 
-    const id = auth.currentUser ? auth.currentUser.uid : "";
-
     const event: Event = {
       id: uuid(),
       booked_tickets: 0,
@@ -77,9 +73,8 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
       time_updated: hours + ":" + minutes,
       title: title,
       description: description,
-      tags: tags,
     };
-    createEventInfo(id, event);
+    createEventInfo(event);
   };
 
   return (

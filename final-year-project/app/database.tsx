@@ -1,27 +1,18 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import {
-  child,
-  get,
-  getDatabase,
-  onValue,
-  ref,
-  remove,
-  set,
-  update,
-} from "firebase/database";
+import { child, get, getDatabase, ref, remove, set } from "firebase/database";
 import { v4 as uuid } from "uuid";
 import {
   initializeAuth,
   getReactNativePersistence,
   getAuth,
-  sendSignInLinkToEmail,
-  isSignInWithEmailLink,
-  signInWithEmailLink,
 } from "firebase/auth";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
-import { Linking } from "react-native";
 import {
+  bookEventErrorToast,
+  bookEventSuccessToast,
   createEventSuccessToast,
+  deleteBookingErrorToast,
+  deleteBookingSuccessToast,
   deleteEventSuccessToast,
   errorToast,
 } from "@/components/Toast";
@@ -40,7 +31,6 @@ export type Event = {
   date_time: string;
   location: string;
   description?: string;
-  tags?: string[];
   time_updated: string;
   date_updated: string;
   max_tickets: number;
@@ -48,11 +38,16 @@ export type Event = {
 };
 
 export type Booking = {
-  id: string;
-  account_id: string;
-  time_booked: string;
-  date_booked: string;
   event_id: string;
+  title: string;
+  date_time: string;
+  location: string;
+  description?: string;
+  time_updated: string;
+  date_updated: string;
+  max_tickets: number;
+  booked_tickets: number;
+  booking_id: string;
 };
 
 const firebaseConfig = {
@@ -132,13 +127,14 @@ Available at: https://firebase.google.com/docs/database/web/read-and-write
 [Accessed 14 March 2024].
 */
 
-export const createEventInfo = (accountId: string, event: Event) => {
+export const createEventInfo = (event: Event) => {
+  const userId = auth.currentUser ? auth.currentUser.uid : "";
+
   set(ref(db, "events/" + event.id), {
     title: event.title,
     date_time: event.date_time,
     location: event.location,
     description: event.description || "",
-    tags: event.tags || [],
     time_updated: event.time_updated,
     date_updated: event.date_updated,
     max_tickets: event.max_tickets,
@@ -149,7 +145,7 @@ export const createEventInfo = (accountId: string, event: Event) => {
   });
 
   set(ref(db, "bookings/" + uuid()), {
-    account_id: accountId,
+    account_id: userId,
     event_id: event.id,
     date_booked: "",
     time_booked: "",
@@ -164,7 +160,28 @@ export const createEventInfo = (accountId: string, event: Event) => {
 };
 
 export const fetchEvents = () => {
+  const userId = auth.currentUser ? auth.currentUser.uid : "";
+
   let eventsList: Event[] = [];
+  const hostedEvents: String[] = [];
+
+  get(child(dbRef, "bookings"))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        for (let i = 0; i < Object.keys(data).length; i++) {
+          const accountId = data[Object.keys(data)[i]].account_id;
+          const eventId = data[Object.keys(data)[i]].event_id;
+          if (userId == accountId) {
+            hostedEvents.push(eventId);
+          }
+        }
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      errorToast();
+    });
 
   get(child(dbRef, `events`))
     .then((snapshot) => {
@@ -205,7 +222,7 @@ export const fetchBookings = (accountId: string) => {
               .then((snapshot) => {
                 if (snapshot.exists()) {
                   const data = snapshot.val();
-                  bookingsList.push(data as Event)
+                  bookingsList.push(data as Event);
                 } else {
                   errorToast();
                 }
@@ -261,7 +278,107 @@ export const deleteEventInfo = (eventId: string) => {
     });
 };
 
-export const updateAccountInfo = () => {};
-export const deleteAccountInfo = () => {};
+export const bookEvent = (eventId: string) => {
+  const userId = auth.currentUser ? auth.currentUser.uid : "";
+  const dateToday = new Date();
 
-export const bookEvent = () => {};
+  /*
+  Meddows, Samuel; mohshbool, 2019. How do I get the current date in JavaScript?. [Online] 
+  Available at: https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript
+  [Accessed 27 March 2024].
+  */
+  const dd = String(dateToday.getDate()).padStart(2, "0");
+  const mm = String(dateToday.getMonth() + 1).padStart(2, "0");
+  const yyyy = dateToday.getFullYear();
+
+  const hours = String(dateToday.getHours());
+  const minutes = String(dateToday.getMinutes()).padStart(2, "0");
+
+  set(ref(db, "bookings/" + uuid()), {
+    account_id: userId,
+    event_id: eventId,
+    date_booked: dd + "/" + mm + "/" + yyyy,
+    time_booked: hours + ":" + minutes,
+  })
+    .then(() => {
+      get(child(dbRef, `events/${eventId}`))
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            const event = snapshot.val();
+            set(ref(db, `events/${eventId}`), {
+              title: event.title,
+              booked_tickets: event.booked_tickets + 1,
+              date_time: event.date_time,
+              date_updated: dd + "/" + mm + "/" + yyyy,
+              description: event.description,
+              location: event.location,
+              max_tickets: event.max_tickets,
+              time_updated: hours + ":" + minutes,
+            })
+              .then(() => {
+                bookEventSuccessToast();
+              })
+              .catch((error: any) => {
+                console.error(error);
+                bookEventErrorToast();
+              });
+          } else {
+            errorToast();
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          errorToast();
+        });
+    })
+    .catch((error: any) => {
+      console.error(error);
+      bookEventErrorToast();
+    });
+};
+
+export const deleteBooking = (bookingId: string, eventId: string) => {
+  const dateToday = new Date();
+  const dd = String(dateToday.getDate()).padStart(2, "0");
+  const mm = String(dateToday.getMonth() + 1).padStart(2, "0");
+  const yyyy = dateToday.getFullYear();
+
+  const hours = String(dateToday.getHours());
+  const minutes = String(dateToday.getMinutes()).padStart(2, "0");
+
+  remove(ref(db, "bookings/" + bookingId))
+    .then(() => {
+      get(child(dbRef, `events/${eventId}`))
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            const event = snapshot.val();
+            set(ref(db, `events/${eventId}`), {
+              title: event.title,
+              booked_tickets: event.booked_tickets - 1,
+              date_time: event.date_time,
+              date_updated: dd + "/" + mm + "/" + yyyy,
+              description: event.description,
+              location: event.location,
+              max_tickets: event.max_tickets,
+              time_updated: hours + ":" + minutes,
+            })
+              .then(() => {
+                deleteBookingSuccessToast();
+              })
+              .catch((error: any) => {
+                console.error(error);
+                deleteBookingErrorToast();
+              });
+          } else {
+            deleteBookingErrorToast();
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          errorToast();
+        });
+    })
+    .catch((error) => {
+      errorToast();
+    });
+};

@@ -6,13 +6,14 @@ import { useEffect, useState } from "react";
 import Button from "../Button";
 import { auth, dbRef } from "@/app/database";
 import { signOut } from "firebase/auth";
-import { ref, getDatabase, get, child } from "firebase/database";
+import { get, child } from "firebase/database";
 import { errorToast } from "../Toast";
 import { logout } from "@/app/authenticationSlice";
 import { Card } from "@rneui/base";
 import { logoutAction, manageAccountAction } from "@/app/actions";
 import { useAppDispatch } from "@/app/hooks";
 import React from "react";
+import { getAuth } from "@firebase/auth";
 
 export default function AccountScreenInfo({ path }: { path: string }) {
   const [accountId, setAccountId] = useState("");
@@ -23,10 +24,10 @@ export default function AccountScreenInfo({ path }: { path: string }) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const id = auth.currentUser ? auth.currentUser.uid : "";
-    setAccountId(id);
+    const userId = auth.currentUser ? auth.currentUser.uid : "";
+    setAccountId(userId);
 
-    get(child(dbRef, `accounts/${id}`))
+    get(child(dbRef, `accounts/${userId}`))
       .then((snapshot) => {
         if (snapshot.exists()) {
           const data = snapshot.val();
@@ -51,6 +52,7 @@ export default function AccountScreenInfo({ path }: { path: string }) {
   */
 
   const logoutFunction = () => {
+    const auth = getAuth();
     signOut(auth)
       .then(() => {
         dispatch(logout());

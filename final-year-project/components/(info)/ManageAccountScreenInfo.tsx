@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, TextInput } from "../Themed";
 import { styles } from "../Styles";
 import Button from "../Button";
 import {
+  accountDetailsErrorToast,
   emptyValueToast,
   errorToast,
   passwordLengthErrorToast,
@@ -13,18 +14,35 @@ import {
   passwordUpperErrorToast,
   updateAccountSuccessToast,
 } from "../Toast";
-import { getDatabase, ref, set } from "firebase/database";
+import { child, get, ref, set } from "firebase/database";
 import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native";
 import { updatePassword } from "firebase/auth";
-import { getAuth } from "@firebase/auth";
-import { auth, db } from "@/app/database";
+import { auth, db, dbRef } from "@/app/database";
 
 export default function ManageAccountScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const params = useLocalSearchParams();
+  const userId = auth.currentUser ? auth.currentUser.uid : "";
+
+  useEffect(() => {
+    get(child(dbRef, `accounts/${userId}`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          setFirstName(data.first_name);
+          setLastName(data.last_name);
+        } else {
+          accountDetailsErrorToast();
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        errorToast();
+      });
+  }, []);
 
   const validateForm = () => {
     /*
@@ -79,8 +97,8 @@ export default function ManageAccountScreenInfo({ path }: { path: string }) {
               updateAccountSuccessToast();
             })
             .catch((error) => {
-              console.log(error)
-              errorToast()
+              console.log(error);
+              errorToast();
             });
         }
       })
