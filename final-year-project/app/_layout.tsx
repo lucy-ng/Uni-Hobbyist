@@ -20,6 +20,7 @@ Available at: https://redux-toolkit.js.org/tutorials/quick-start
 import { Provider } from "react-redux";
 import { store } from "./store";
 import RootNavigation from "./RootNavigation";
+import React from "react";
 
 export {
   // Catch any errors thrown by the Layout component.

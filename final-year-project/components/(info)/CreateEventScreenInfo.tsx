@@ -5,7 +5,11 @@ import { styles } from "../Styles";
 import { Text, TextInput } from "../Themed";
 import Button from "../Button";
 import { Event, auth, createEventInfo } from "@/app/database";
-import { emptyValueToast, invalidDateToast } from "../Toast";
+import {
+  emptyValueToast,
+  invalidDateToast,
+  invalidMaxTicketsToast,
+} from "../Toast";
 import { v4 as uuid } from "uuid";
 
 /*
@@ -26,15 +30,23 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
   let tags: string[] = [];
 
   const validateForm = () => {
+    const positiveNumberRegex = new RegExp(/^[1-9][0-9]*$/);
+
     if (
       title === "" ||
       dateTime == null ||
       location === "" ||
-      description === ""
+      description === "" ||
+      maxTickets === ""
     ) {
       emptyValueToast();
     } else if (dateTime <= dateToday) {
       invalidDateToast();
+    } else if (
+      Number(maxTickets) == 0 ||
+      !positiveNumberRegex.test(maxTickets)
+    ) {
+      invalidMaxTicketsToast();
     } else {
       handleSubmit();
     }
@@ -57,13 +69,12 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
 
     const event: Event = {
       id: uuid(),
-      bookedTickets: 0,
-      date: dateTime.toDateString(),
-      dateCreated: dd + "/" + mm + "/" + yyyy,
+      booked_tickets: 0,
+      date_time: String(dateTime),
+      date_updated: dd + "/" + mm + "/" + yyyy,
       location: location,
-      maxTickets: Number(maxTickets),
-      time: dateTime.toTimeString(),
-      timeCreated: hours + ":" + minutes,
+      max_tickets: Number(maxTickets),
+      time_updated: hours + ":" + minutes,
       title: title,
       description: description,
       tags: tags,
@@ -102,7 +113,9 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
             <RNDateTimePicker
               mode={"datetime"}
               value={dateTime}
-              onChange={dateTime => setDateTime(new Date(dateTime.nativeEvent.timestamp))}
+              onChange={(dateTime) =>
+                setDateTime(new Date(dateTime.nativeEvent.timestamp))
+              }
             />
           </View>
           <Text

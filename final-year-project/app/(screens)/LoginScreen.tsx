@@ -1,3 +1,4 @@
+import React from "react";
 import { Text, View } from "@/components/Themed";
 import LoginScreenInfo from "@/components/(info)/LoginScreenInfo";
 import { styles } from "@/components/Styles";

@@ -4,15 +4,15 @@ import { styles } from "../Styles";
 import { Text } from "../Themed";
 import { useEffect, useState } from "react";
 import Button from "../Button";
-import { auth } from "@/app/database";
+import { auth, dbRef } from "@/app/database";
 import { signOut } from "firebase/auth";
 import { ref, getDatabase, get, child } from "firebase/database";
 import { errorToast } from "../Toast";
 import { logout } from "@/app/authenticationSlice";
-import { router } from "expo-router";
 import { Card } from "@rneui/base";
 import { logoutAction, manageAccountAction } from "@/app/actions";
 import { useAppDispatch } from "@/app/hooks";
+import React from "react";
 
 export default function AccountScreenInfo({ path }: { path: string }) {
   const [accountId, setAccountId] = useState("");
@@ -20,9 +20,9 @@ export default function AccountScreenInfo({ path }: { path: string }) {
   const [lastName, setLastName] = useState("");
   const [university, setUniversity] = useState("");
   const [emailValue, setEmail] = useState("");
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const dbRef = ref(getDatabase());
     const id = auth.currentUser ? auth.currentUser.uid : "";
     setAccountId(id);
 
@@ -43,8 +43,6 @@ export default function AccountScreenInfo({ path }: { path: string }) {
         errorToast();
       });
   }, []);
-
-  const dispatch = useAppDispatch();
 
   /*
   Google LLC, 2024. Authenticate with Firebase using Password-Based Accounts using Javascript. [Online] 

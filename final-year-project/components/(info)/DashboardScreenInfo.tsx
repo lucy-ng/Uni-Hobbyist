@@ -1,15 +1,18 @@
+import React from "react";
 import {
-  dashboardAction,
   createEventAction,
-  manageEventAction,
   eventsAction,
+  bookingsAction,
 } from "@/app/actions";
 import { SafeAreaView, View } from "react-native";
 import { Card } from "@rneui/themed";
 import Button from "../Button";
 import { styles } from "../Styles";
+import { auth } from "@/app/database";
 
 export default function DashboardScreenInfo({ path }: { path: string }) {
+  const id = auth.currentUser ? auth.currentUser.uid : "";
+
   return (
     <>
       <SafeAreaView>
@@ -19,7 +22,7 @@ export default function DashboardScreenInfo({ path }: { path: string }) {
             <Card.Divider />
             <Button
               title={"Manage Bookings"}
-              onPress={eventsAction}
+              onPress={() => bookingsAction(id)}
             ></Button>
           </Card>
           <Card>
@@ -28,7 +31,7 @@ export default function DashboardScreenInfo({ path }: { path: string }) {
             <Button title={"Create Event"} onPress={createEventAction}></Button>
             <Button
               title={"Manage Events"}
-              onPress={manageEventAction}
+              onPress={eventsAction}
             ></Button>
           </Card>
         </View>

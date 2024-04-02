@@ -1,3 +1,4 @@
+import React from "react";
 import { View } from "@/components/Themed";
 import RegisterScreenInfo from "@/components/(info)/RegisterScreenInfo";
 import { styles } from "@/components/Styles";

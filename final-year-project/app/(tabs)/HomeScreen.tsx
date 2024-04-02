@@ -1,3 +1,4 @@
+import React from "react";
 import HomeScreenInfo from "@/components/(info)/HomeScreenInfo";
 import { styles } from "@/components/Styles";
 import { Text, View } from "@/components/Themed";

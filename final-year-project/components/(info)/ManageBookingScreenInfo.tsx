@@ -11,7 +11,7 @@ import { emptyValueToast, errorToast, invalidDateToast, updateEventSuccessToast 
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import Button from "../Button";
 
-export default function ManageEventScreenInfo({ path }: { path: string }) {
+export default function ManageBookingScreenInfo({ path }: { path: string }) {
   const [title, setTitle] = useState("");
   const [dateTime, setDateTime] = useState(new Date());
   const [location, setLocation] = useState("");

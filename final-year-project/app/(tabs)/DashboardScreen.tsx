@@ -1,3 +1,4 @@
+import React from "react";
 import DashboardScreenInfo from "@/components/(info)/DashboardScreenInfo";
 import { styles } from "@/components/Styles";
 import { Text, View } from "@/components/Themed";

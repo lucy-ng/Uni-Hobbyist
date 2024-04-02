@@ -18,7 +18,7 @@ import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native";
 import { updatePassword } from "firebase/auth";
 import { getAuth } from "@firebase/auth";
-import { auth } from "@/app/database";
+import { auth, db } from "@/app/database";
 
 export default function ManageAccountScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
@@ -66,8 +66,6 @@ export default function ManageAccountScreenInfo({ path }: { path: string }) {
   */
 
   const handleSubmit = () => {
-    const db = getDatabase();
-
     set(ref(db, "accounts/" + params.accountId), {
       first_name: firstName,
       last_name: lastName,

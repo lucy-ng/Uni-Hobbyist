@@ -1,3 +1,4 @@
+import React from "react";
 import AccountScreenInfo from "@/components/(info)/AccountScreenInfo";
 import { styles } from "@/components/Styles";
 import { Text, View } from "@/components/Themed";

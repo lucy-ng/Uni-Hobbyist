@@ -20,10 +20,25 @@ export const updateAccountSuccessToast = () => {
   });
 };
 
-export const createEventSucessToast = () => {
+export const createEventSuccessToast = () => {
   Toast.show({
     type: "success",
     text1: "Successfully created!",
+  });
+};
+
+export const updateEventSuccessToast = () => {
+  Toast.show({
+    type: "success",
+    text1: "Successfully updated!",
+  });
+};
+
+
+export const deleteEventSuccessToast = () => {
+  Toast.show({
+    type: "success",
+    text1: "Successfully deleted!",
   });
 };
 
@@ -31,6 +46,27 @@ export const noSearchResultsToast = () => {
   Toast.show({
     type: "error",
     text1: "No relevant results could be found.",
+  });
+};
+
+export const invalidMaxTicketsToast = () => {
+  Toast.show({
+    type: "error",
+    text1: "Invalid number of tickets.",
+  });
+};
+
+export const noEventsResultsToast = () => {
+  Toast.show({
+    type: "error",
+    text1: "No events could be found.",
+  });
+};
+
+export const noBookingsResultsToast = () => {
+  Toast.show({
+    type: "error",
+    text1: "No bookings could be found.",
   });
 };
 

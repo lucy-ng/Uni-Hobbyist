@@ -1,15 +1,15 @@
 import React from "react";
-import CreateEventScreenInfo from "@/components/(info)/CreateEventScreenInfo";
 import { styles } from "@/components/Styles";
 import { View } from "@/components/Themed";
 
 import Toast from "react-native-toast-message";
+import BookingsScreenInfo from "@/components/(info)/BookingsScreenInfo";
 
-export default function CreateEventScreen() {
+export default function BookingsScreen() {
   return (
     <>
       <View style={styles.container}>
-        <CreateEventScreenInfo path="app/(screens)/CreateEventScreen.tsx" />
+        <BookingsScreenInfo path="app/(screens)/BookingsScreen.tsx" />
       </View>
       <Toast />
     </>
