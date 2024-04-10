@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, View, TextInput } from "../Themed";
 import { styles } from "../Styles";
 import Button from "../Button";

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Text, View, TextInput, Pressable } from "../Themed";
 import { styles } from "../Styles";
 import Button from "../Button";

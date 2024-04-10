@@ -1,4 +1,3 @@
-import React from "react";
 import { View, SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
 import { styles } from "../Styles";
 import { useState } from "react";
@@ -18,7 +17,7 @@ Available at: https://reactnativeelements.com/docs/components/searchbar
 
 export default function HomeScreenInfo({ path }: { path: string }) {
   const [searchValue, setSearchValue] = useState("");
-  const [events, setEvents] = useState<Event[]>(fetchEvents() || []);
+  const [events, setEvents] = useState<Event[]>(fetchEvents());
   const userId = auth.currentUser ? auth.currentUser.uid : "";
 
   const searchEvent = () => {
@@ -36,54 +35,53 @@ export default function HomeScreenInfo({ path }: { path: string }) {
               hostedEvents.push(eventId);
             }
           }
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        errorToast();
-      });
 
-    get(child(dbRef, "events"))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          const data = snapshot.val();
+          get(child(dbRef, "events"))
+            .then((snapshot) => {
+              if (snapshot.exists()) {
+                const data = snapshot.val();
 
-          for (let i = 0; i < Object.keys(data).length; i++) {
-            const event = data[Object.keys(data)[i]];
-            const title = event.title;
-            const eventId = String(Object.keys(data)[i]);
+                for (let i = 0; i < Object.keys(data).length; i++) {
+                  const event = data[Object.keys(data)[i]];
+                  const title = event.title;
+                  const eventId = String(Object.keys(data)[i]);
 
-            const eventData: Event = {
-              id: eventId,
-              title: event.title,
-              booked_tickets: event.booked_tickets,
-              date_time: event.date_time,
-              date_updated: event.date_updated,
-              location: event.location,
-              max_tickets: event.max_tickets,
-              time_updated: event.time_updated,
-              description: event.description,
-            };
+                  const eventData: Event = {
+                    id: eventId,
+                    title: event.title,
+                    booked_tickets: event.booked_tickets,
+                    date_time: event.date_time,
+                    date_time_updated: event.date_time_updated,
+                    location: event.location,
+                    max_tickets: event.max_tickets,
+                    description: event.description,
+                    tags: event.tags,
+                  };
 
-            if (searchValue == "" && !hostedEvents.includes(eventId)) {
-              eventsList.push(eventData);
-            } else if (
-              (title.includes(searchValue) ||
-                searchValue.includes(title) ||
-                searchValue == title) &&
-              !hostedEvents.includes(eventId)
-            ) {
-              eventsList.push(eventData);
-            }
-          }
+                  if (searchValue == "" && !hostedEvents.includes(eventId)) {
+                    eventsList.push(eventData);
+                  } else if (
+                    (title.includes(searchValue) ||
+                      searchValue.includes(title) ||
+                      searchValue == title) &&
+                    !hostedEvents.includes(eventId)
+                  ) {
+                    eventsList.push(eventData);
+                  }
+                }
+                setEvents(eventsList);
+              } else {
+                noSearchResultsToast();
+              }
 
-          if (eventsList.length === 0) {
-            noSearchResultsToast();
-          }
-
-          setEvents(eventsList);
-        } else {
-          noSearchResultsToast();
+              if (!eventsList.length) {
+                noSearchResultsToast();
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+              errorToast();
+            });
         }
       })
       .catch((error) => {
@@ -102,6 +100,8 @@ export default function HomeScreenInfo({ path }: { path: string }) {
               onChangeText={setSearchValue}
               value={searchValue}
               onSubmitEditing={searchEvent}
+              cancelIcon={true}
+              showCancel={true}
             />
           </View>
           <ScrollView>

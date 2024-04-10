@@ -39,6 +39,7 @@ export const manageEventAction = (event: Event) => {
       location: event.location,
       max_tickets: event.max_tickets,
       title: event.title,
+      tags: event.tags,
     },
   });
 };

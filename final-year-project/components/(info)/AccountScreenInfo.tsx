@@ -12,7 +12,7 @@ import { logout } from "@/app/authenticationSlice";
 import { Card } from "@rneui/base";
 import { logoutAction, manageAccountAction } from "@/app/actions";
 import { useAppDispatch } from "@/app/hooks";
-import React from "react";
+ 
 import { getAuth } from "@firebase/auth";
 
 export default function AccountScreenInfo({ path }: { path: string }) {

@@ -31,10 +31,10 @@ export type Event = {
   date_time: string;
   location: string;
   description?: string;
-  time_updated: string;
-  date_updated: string;
+  date_time_updated: string;
   max_tickets: number;
   booked_tickets: number;
+  tags: string[];
 };
 
 export type Booking = {
@@ -43,8 +43,7 @@ export type Booking = {
   date_time: string;
   location: string;
   description?: string;
-  time_updated: string;
-  date_updated: string;
+  date_time_updated: string;
   max_tickets: number;
   booked_tickets: number;
   booking_id: string;
@@ -135,10 +134,10 @@ export const createEventInfo = (event: Event) => {
     date_time: event.date_time,
     location: event.location,
     description: event.description || "",
-    time_updated: event.time_updated,
-    date_updated: event.date_updated,
+    date_time_updated: event.date_time_updated,
     max_tickets: event.max_tickets,
     booked_tickets: event.booked_tickets,
+    tags: event.tags,
   }).catch((error: any) => {
     console.error(error);
     errorToast();
@@ -309,11 +308,11 @@ export const bookEvent = (eventId: string) => {
               title: event.title,
               booked_tickets: event.booked_tickets + 1,
               date_time: event.date_time,
-              date_updated: dd + "/" + mm + "/" + yyyy,
+              date_time_updated: event.date_time_updated,
               description: event.description,
               location: event.location,
               max_tickets: event.max_tickets,
-              time_updated: hours + ":" + minutes,
+              tags: event.tags,
             })
               .then(() => {
                 bookEventSuccessToast();
@@ -338,14 +337,6 @@ export const bookEvent = (eventId: string) => {
 };
 
 export const deleteBooking = (bookingId: string, eventId: string) => {
-  const dateToday = new Date();
-  const dd = String(dateToday.getDate()).padStart(2, "0");
-  const mm = String(dateToday.getMonth() + 1).padStart(2, "0");
-  const yyyy = dateToday.getFullYear();
-
-  const hours = String(dateToday.getHours());
-  const minutes = String(dateToday.getMinutes()).padStart(2, "0");
-
   remove(ref(db, "bookings/" + bookingId))
     .then(() => {
       get(child(dbRef, `events/${eventId}`))
@@ -356,11 +347,11 @@ export const deleteBooking = (bookingId: string, eventId: string) => {
               title: event.title,
               booked_tickets: event.booked_tickets - 1,
               date_time: event.date_time,
-              date_updated: dd + "/" + mm + "/" + yyyy,
+              date_time_updated: event.date_time_updated,
               description: event.description,
               location: event.location,
               max_tickets: event.max_tickets,
-              time_updated: hours + ":" + minutes,
+              tags: event.tags
             })
               .then(() => {
                 deleteBookingSuccessToast();

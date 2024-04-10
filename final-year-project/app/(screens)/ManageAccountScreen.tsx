@@ -1,4 +1,3 @@
-import React from "react";
 import ManageAccountScreenInfo from "@/components/(info)/ManageAccountScreenInfo";
 import { styles } from "@/components/Styles";
 import { View } from "@/components/Themed";

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { styles } from "../Styles";
@@ -45,25 +45,12 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
   };
 
   const handleSubmit = () => {
-    /*
-    Meddows, Samuel; mohshbool, 2019. How do I get the current date in JavaScript?. [Online] 
-    Available at: https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript
-    [Accessed 27 March 2024].
-    */
-    const dd = String(dateToday.getDate()).padStart(2, "0");
-    const mm = String(dateToday.getMonth() + 1).padStart(2, "0");
-    const yyyy = dateToday.getFullYear();
-
-    const hours = String(dateToday.getHours());
-    const minutes = String(dateToday.getMinutes()).padStart(2, "0");
-
     set(ref(db, "events/" + params.id), {
       booked_tickets: params.booked_tickets,
       date_time: String(dateTime),
-      date_updated: dd + "/" + mm + "/" + yyyy,
+      date_time_updated: String(new Date()),
       location: location,
       max_tickets: Number(maxTickets),
-      time_updated: hours + ":" + minutes,
       title: title,
       description: description,
     })

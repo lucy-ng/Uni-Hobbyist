@@ -62,6 +62,19 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20
   },
+  searchBarBox: {
+    width: "100%",
+    marginLeft: 130,
+    marginRight: 130
+  },
+  tagsList: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    alignContent: "center",
+    marginBottom: 20,
+    marginLeft: 10,
+    maxWidth: "80%"
+  },
   
   /* 
   650 Industries, Inc., 2024. Styling a React Native button. [Online] 
@@ -77,10 +90,5 @@ export const styles = StyleSheet.create({
   buttonText: {
     padding: 10,
     textAlign: "center",
-  },
-  searchBarBox: {
-    width: "100%",
-    marginLeft: 100,
-    marginRight: 100
   },
 });

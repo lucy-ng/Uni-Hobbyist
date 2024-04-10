@@ -4,7 +4,7 @@ Available at: https://docs.expo.dev/ui-programming/react-native-styling-buttons/
 [Accessed 14 March 2024].
  */
 
-import React from "react";
+ 
 import { styles } from "./Styles";
 import { Pressable, Text } from "./Themed";
 

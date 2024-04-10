@@ -7,7 +7,6 @@ import { type Event, dbRef, auth } from "@/app/database";
 import { manageEventAction } from "@/app/actions";
 import { get, child } from "firebase/database";
 import { errorToast, noEventsResultsToast } from "../Toast";
-import React from "react";
 
 export default function EventsScreenInfo({ path }: { path: string }) {
   const [events, setEvents] = useState<Event[]>([]);
@@ -27,11 +26,7 @@ export default function EventsScreenInfo({ path }: { path: string }) {
             let dateBooked = data[Object.keys(data)[i]].date_booked;
             let timeBooked = data[Object.keys(data)[i]].time_booked;
 
-            if (
-              userId == accountId &&
-              dateBooked == null &&
-              timeBooked == null
-            ) {
+            if (userId == accountId && dateBooked == "" && timeBooked == "") {
               hostedEvents.push(eventId);
             }
           }
@@ -55,16 +50,15 @@ export default function EventsScreenInfo({ path }: { path: string }) {
                 } else {
                   noEventsResultsToast();
                 }
-
-                if (eventsList.length == 0) {
-                  noEventsResultsToast();
-                }
               })
               .catch((error) => {
                 console.error(error);
                 errorToast();
               });
           }
+        }
+        if (!eventsList.length && !hostedEvents.length) {
+          noEventsResultsToast();
         }
       })
       .catch((error) => {

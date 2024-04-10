@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { View } from "react-native";
 import { styles } from "../Styles";
@@ -19,12 +19,22 @@ Available at: https://github.com/react-native-datetimepicker/datetimepicker?tab=
 */
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 
+/*
+React Native Elements Community, 2024. Chip. [Online]
+Available at: https://reactnativeelements.com/docs/components/chip
+[Accessed 9 April 2024].
+*/
+
+import { Chip } from "@rneui/themed";
+
 export default function CreateEventScreenInfo({ path }: { path: string }) {
   const [title, setTitle] = useState("");
   const [dateTime, setDateTime] = useState(new Date());
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [maxTickets, setMaxTickets] = useState("");
+  const [tags, setTags] = useState<Array<string>>([]);
+  const [tag, setTag] = useState("");
   const dateToday = new Date();
 
   const validateForm = () => {
@@ -51,30 +61,31 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
   };
 
   const handleSubmit = () => {
-    /*
-    Meddows, Samuel; mohshbool, 2019. How do I get the current date in JavaScript?. [Online] 
-    Available at: https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript
-    [Accessed 27 March 2024].
-    */
-    const dd = String(dateToday.getDate()).padStart(2, "0");
-    const mm = String(dateToday.getMonth() + 1).padStart(2, "0");
-    const yyyy = dateToday.getFullYear();
-
-    const hours = String(dateToday.getHours());
-    const minutes = String(dateToday.getMinutes()).padStart(2, "0");
-
     const event: Event = {
       id: uuid(),
       booked_tickets: 0,
       date_time: String(dateTime),
-      date_updated: dd + "/" + mm + "/" + yyyy,
+      date_time_updated: String(new Date()),
       location: location,
       max_tickets: Number(maxTickets),
-      time_updated: hours + ":" + minutes,
       title: title,
       description: description,
+      tags: tags
     };
     createEventInfo(event);
+  };
+
+  const addTag = () => {
+    if (tag != "") {
+      setTags([...tags, tag]);
+      setTag("");
+    }
+  };
+
+  const deleteTag = (index: number) => {
+    const newTags = [...tags];
+    newTags.splice(index, 1);
+    setTags(newTags);
   };
 
   return (
@@ -162,6 +173,38 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
             darkBorderColor="rgba(255,255,255,0.8)"
             keyboardType="numeric"
           />
+          <Text
+            style={styles.text}
+            lightColor="rgba(0,0,0,0.8)"
+            darkColor="rgba(255,255,255,0.8)"
+          >
+            Tags
+          </Text>
+          <TextInput
+            style={styles.input}
+            value={tag}
+            onChangeText={setTag}
+            onSubmitEditing={addTag}
+            lightColor="rgba(0,0,0,0.8)"
+            darkColor="rgba(255,255,255,0.8)"
+            lightBorderColor="rgba(0,0,0,0.8)"
+            darkBorderColor="rgba(255,255,255,0.8)"
+          />
+          <View style={styles.tagsList}>
+            {tags.map((tag, index) => (
+              <Chip
+                key={index}
+                title={tag}
+                icon={{
+                  name: "close",
+                  type: "AntDesign",
+                  size: 10,
+                  color: "purple",
+                }}
+                onPress={() => deleteTag(index)}
+              />
+            ))}
+          </View>
           <Button title="Create" onPress={validateForm} />
         </View>
       </KeyboardAwareScrollView>

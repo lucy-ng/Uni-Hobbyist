@@ -6,7 +6,7 @@ import { Card } from "@rneui/base";
 import { dbRef, deleteBooking, Booking } from "@/app/database";
 import { get, child } from "firebase/database";
 import { errorToast, noBookingsResultsToast } from "../Toast";
-import React from "react";
+ 
 import { useLocalSearchParams } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import Button from "../Button";
@@ -33,7 +33,7 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
               let timeBooked = data[Object.keys(data)[i]].time_booked;
               let bookingId = Object.keys(data)[i];
 
-              if (dateBooked != null && timeBooked != null) {
+              if (dateBooked != "" && timeBooked != "") {
                 get(child(dbRef, `events/${eventId}`))
                   .then((snapshot) => {
                     if (snapshot.exists()) {
@@ -42,6 +42,9 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
                       bookingsList[i].booking_id = bookingId;
                       bookingsList[i].event_id = eventId;
                       setBookings(bookingsList);
+                    }
+                    else {
+                      noBookingsResultsToast()
                     }
                   })
                   .catch((error) => {
@@ -52,6 +55,10 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
             }
           }
         } else {
+          noBookingsResultsToast();
+        }
+        
+        if (!bookingsList.length) {
           noBookingsResultsToast();
         }
       })

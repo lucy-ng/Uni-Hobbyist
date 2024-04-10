@@ -1,4 +1,3 @@
-import React from "react";
 import EventsScreenInfo from "@/components/(info)/EventsScreenInfo";
 import { styles } from "@/components/Styles";
 import { View } from "@/components/Themed";
