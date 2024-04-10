@@ -112,5 +112,5 @@ export function Pressable(props: CustomPressableProps) {
     "background"
   );
 
-  return <DefaultPressable style={[{ backgroundColor }]} {...otherProps} />;
+  return <DefaultPressable style={[{ backgroundColor, marginTop: 20, marginBottom: 20 }]} {...otherProps} />;
 }

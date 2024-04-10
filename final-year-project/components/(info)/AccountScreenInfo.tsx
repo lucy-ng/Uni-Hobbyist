@@ -1,7 +1,6 @@
-import { View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { styles } from "../Styles";
-import { Text } from "../Themed";
+import { Text, View } from "../Themed";
 import { useEffect, useState } from "react";
 import Button from "../Button";
 import { auth, dbRef } from "@/app/database";

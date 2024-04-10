@@ -19,6 +19,7 @@ import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native";
 import { updatePassword } from "firebase/auth";
 import { auth, db, dbRef } from "@/app/database";
+import { accountAction } from "@/app/actions";
 
 export default function ManageAccountScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
@@ -94,10 +95,11 @@ export default function ManageAccountScreenInfo({ path }: { path: string }) {
         if (auth.currentUser) {
           updatePassword(auth.currentUser, password)
             .then(() => {
+              accountAction();
               updateAccountSuccessToast();
             })
-            .catch((error) => {
-              console.log(error);
+            .catch((error: any) => {
+              console.log(error.code, error.message);
               errorToast();
             });
         }

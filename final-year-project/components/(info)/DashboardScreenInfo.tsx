@@ -1,9 +1,6 @@
-import {
-  createEventAction,
-  eventsAction,
-  bookingsAction,
-} from "@/app/actions";
-import { SafeAreaView, View } from "react-native";
+import { createEventAction, eventsAction, bookingsAction } from "@/app/actions";
+import { SafeAreaView } from "react-native";
+import { View } from "../Themed";
 import { Card } from "@rneui/themed";
 import Button from "../Button";
 import { styles } from "../Styles";
@@ -28,10 +25,7 @@ export default function DashboardScreenInfo({ path }: { path: string }) {
             <Card.Title>Host</Card.Title>
             <Card.Divider />
             <Button title={"Create Event"} onPress={createEventAction}></Button>
-            <Button
-              title={"Manage Events"}
-              onPress={eventsAction}
-            ></Button>
+            <Button title={"Manage Events"} onPress={eventsAction}></Button>
           </Card>
         </View>
       </SafeAreaView>

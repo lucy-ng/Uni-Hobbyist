@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { View } from "react-native";
 import { styles } from "../Styles";
-import { Text, TextInput } from "../Themed";
+import { Text, TextInput, View } from "../Themed";
 import Button from "../Button";
-import { Event, createEventInfo } from "@/app/database";
+import { Event, Tag, createEventInfo } from "@/app/database";
 import {
   emptyValueToast,
   invalidDateToast,
@@ -27,14 +26,24 @@ Available at: https://reactnativeelements.com/docs/components/chip
 
 import { Chip } from "@rneui/themed";
 
+let tagsList: Tag[] = [
+  { name: "Media & Entertainment", type: "outline" },
+  { name: "Sport", type: "outline" },
+  { name: "Music", type: "outline" },
+  { name: "Special Interest", type: "outline" },
+  { name: "Academic", type: "outline" },
+  { name: "Language & Culture", type: "outline" },
+  { name: "Adventure", type: "outline" },
+  { name: "Art", type: "outline" },
+];
+
 export default function CreateEventScreenInfo({ path }: { path: string }) {
   const [title, setTitle] = useState("");
   const [dateTime, setDateTime] = useState(new Date());
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [maxTickets, setMaxTickets] = useState("");
-  const [tags, setTags] = useState<Array<string>>([]);
-  const [tag, setTag] = useState("");
+  const [tags, setTags] = useState<Array<Tag>>(tagsList);
   const dateToday = new Date();
 
   const validateForm = () => {
@@ -61,6 +70,13 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
   };
 
   const handleSubmit = () => {
+    let selectedTags: string[] = [];
+    tags.forEach((tag) => {
+      if (tag.type == "solid") {
+        selectedTags.push(tag.name);
+      }
+    });
+
     const event: Event = {
       id: uuid(),
       booked_tickets: 0,
@@ -70,22 +86,19 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
       max_tickets: Number(maxTickets),
       title: title,
       description: description,
-      tags: tags
+      tags: selectedTags,
     };
     createEventInfo(event);
   };
 
-  const addTag = () => {
-    if (tag != "") {
-      setTags([...tags, tag]);
-      setTag("");
+  const modifyTag = (tag: Tag, index: number) => {
+    if (tag.type == "outline") {
+      setTags([...tagsList]);
+      tagsList[index].type = "solid";
+    } else {
+      setTags([...tagsList]);
+      tagsList[index].type = "outline";
     }
-  };
-
-  const deleteTag = (index: number) => {
-    const newTags = [...tags];
-    newTags.splice(index, 1);
-    setTags(newTags);
   };
 
   return (
@@ -148,7 +161,8 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
             Description
           </Text>
           <TextInput
-            style={styles.input}
+            multiline={true}
+            style={styles.descriptionInput}
             value={description}
             onChangeText={setDescription}
             lightColor="rgba(0,0,0,0.8)"
@@ -180,28 +194,13 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
           >
             Tags
           </Text>
-          <TextInput
-            style={styles.input}
-            value={tag}
-            onChangeText={setTag}
-            onSubmitEditing={addTag}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-            lightBorderColor="rgba(0,0,0,0.8)"
-            darkBorderColor="rgba(255,255,255,0.8)"
-          />
           <View style={styles.tagsList}>
-            {tags.map((tag, index) => (
+            {tagsList.map((tag, index) => (
               <Chip
-                key={index}
-                title={tag}
-                icon={{
-                  name: "close",
-                  type: "AntDesign",
-                  size: 10,
-                  color: "purple",
-                }}
-                onPress={() => deleteTag(index)}
+                key={tag.name}
+                title={tag.name}
+                type={tag.type}
+                onPress={() => modifyTag(tag, index)}
               />
             ))}
           </View>

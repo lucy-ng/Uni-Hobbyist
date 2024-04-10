@@ -41,12 +41,27 @@ export default function EventsScreenInfo({ path }: { path: string }) {
 
                   for (let i = 0; i < Object.keys(data).length; i++) {
                     let id = [Object.keys(data)[i]][0];
+                    const event = data[Object.keys(data)[i]] as Event;
                     if (hostedEvents.includes(id)) {
-                      eventsList.push(data[Object.keys(data)[i]] as Event);
-                      eventsList[i].id = id;
+                      const eventData: Event = {
+                        id: id,
+                        title: event.title,
+                        booked_tickets: event.booked_tickets,
+                        date_time: event.date_time,
+                        date_time_updated: event.date_time_updated,
+                        location: event.location,
+                        max_tickets: event.max_tickets,
+                        description: event.description,
+                        tags: event.tags,
+                      };
+                      eventsList.push(eventData);
                     }
                   }
-                  setEvents(eventsList);
+                  setEvents(
+                    eventsList.filter(
+                      (event, index) => eventsList.indexOf(event) == index
+                    )
+                  );
                 } else {
                   noEventsResultsToast();
                 }
@@ -113,6 +128,14 @@ export default function EventsScreenInfo({ path }: { path: string }) {
                     lightColor="rgba(255,255,255,0.8)"
                   >
                     Location: {event.location}
+                  </Text>
+                  <Text
+                    style={styles.text}
+                    darkColor="rgba(0,0,0,0.8)"
+                    lightColor="rgba(255,255,255,0.8)"
+                  >
+                    Tickets Booked:{" "}
+                    {String(event.booked_tickets).replace(/^0+/, "")}
                   </Text>
                 </Card>
               </TouchableOpacity>

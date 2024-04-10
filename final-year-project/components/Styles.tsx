@@ -27,6 +27,7 @@ export const styles = StyleSheet.create({
   container: {
     marginTop: 20,
     alignItems: "center",
+    marginBottom: 20,
   },
   text: {
     fontSize: 17,
@@ -38,6 +39,14 @@ export const styles = StyleSheet.create({
     width: 200,
     padding: 5,
     margin: 20,
+  },
+  descriptionInput: {
+    borderWidth: 1,
+    width: 200,
+    margin: 20,
+    padding: 10,
+    paddingBottom: 100,
+    alignItems: "stretch"
   },
   modalView: {
     marginTop: 300,
@@ -71,9 +80,18 @@ export const styles = StyleSheet.create({
     flexWrap: "wrap",
     flexDirection: "row",
     alignContent: "center",
+    marginTop: 20,
     marginBottom: 20,
     marginLeft: 10,
     maxWidth: "80%"
+  },
+  searchTagsList: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    alignContent: "center",
+    maxWidth: "90%",
+    maxHeight: "10%",
+    marginTop: 10
   },
   
   /* 
@@ -84,11 +102,15 @@ export const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 4,
+    borderRadius: 5,
     elevation: 3,
   },
   buttonText: {
     padding: 10,
     textAlign: "center",
+    letterSpacing: 0.25,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    color: "purple"
   },
 });

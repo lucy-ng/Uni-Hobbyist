@@ -17,6 +17,14 @@ import {
   errorToast,
 } from "@/components/Toast";
 
+import { ChipProps } from "@rneui/themed";
+import { dashboardAction, homeAction } from "./actions";
+
+export type Tag = {
+  name: string;
+  type: ChipProps["type"];
+};
+
 export type Account = {
   id: string;
   first_name: string;
@@ -150,6 +158,7 @@ export const createEventInfo = (event: Event) => {
     time_booked: "",
   })
     .then(() => {
+      dashboardAction();
       createEventSuccessToast();
     })
     .catch((error: any) => {
@@ -158,52 +167,7 @@ export const createEventInfo = (event: Event) => {
     });
 };
 
-export const fetchEvents = () => {
-  const userId = auth.currentUser ? auth.currentUser.uid : "";
 
-  let eventsList: Event[] = [];
-  const hostedEvents: String[] = [];
-
-  get(child(dbRef, "bookings"))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        for (let i = 0; i < Object.keys(data).length; i++) {
-          const accountId = data[Object.keys(data)[i]].account_id;
-          const eventId = data[Object.keys(data)[i]].event_id;
-          if (userId == accountId) {
-            hostedEvents.push(eventId);
-          }
-        }
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      errorToast();
-    });
-
-  get(child(dbRef, `events`))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-
-        for (let i = 0; i < Object.keys(data).length; i++) {
-          let id = [Object.keys(data)[i]][0];
-          eventsList.push(data[Object.keys(data)[i]] as Event);
-          eventsList[i].id = id;
-        }
-        return eventsList;
-      } else {
-        return eventsList;
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      errorToast();
-      return eventsList;
-    });
-  return eventsList;
-};
 
 export const fetchBookings = (accountId: string) => {
   let bookingsList: Event[] = [];
@@ -258,6 +222,7 @@ export const deleteEventInfo = (eventId: string) => {
               .then(() => {
                 remove(ref(db, "events/" + eventId))
                   .then(() => {
+                    dashboardAction();
                     deleteEventSuccessToast();
                   })
                   .catch((error) => {
@@ -315,6 +280,7 @@ export const bookEvent = (eventId: string) => {
               tags: event.tags,
             })
               .then(() => {
+                homeAction();
                 bookEventSuccessToast();
               })
               .catch((error: any) => {
@@ -351,9 +317,10 @@ export const deleteBooking = (bookingId: string, eventId: string) => {
               description: event.description,
               location: event.location,
               max_tickets: event.max_tickets,
-              tags: event.tags
+              tags: event.tags,
             })
               .then(() => {
+                homeAction();
                 deleteBookingSuccessToast();
               })
               .catch((error: any) => {
@@ -370,6 +337,7 @@ export const deleteBooking = (bookingId: string, eventId: string) => {
         });
     })
     .catch((error) => {
+      console.error(error);
       errorToast();
     });
 };

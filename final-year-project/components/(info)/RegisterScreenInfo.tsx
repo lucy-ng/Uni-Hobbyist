@@ -18,6 +18,7 @@ import {
 } from "../Toast";
 import { ref, set } from "firebase/database";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { loginScreenAction } from "@/app/actions";
 
 export default function RegisterScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
@@ -46,13 +47,11 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
           email: emailValue,
           university: university,
         });
-
+        loginScreenAction();
         registerSuccessToast();
       })
       .catch((error: any) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
+        console.log(error.code, error.message);
         registerErrorToast();
       });
   };
@@ -163,6 +162,7 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             Email
           </Text>
           <TextInput
+            keyboardType={"email-address"}
             style={styles.input}
             value={emailValue}
             onChangeText={setEmail}

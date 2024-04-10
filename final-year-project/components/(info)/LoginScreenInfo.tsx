@@ -87,6 +87,7 @@ export default function LoginScreenInfo({ path }: { path: string }) {
         style={styles.input}
         value={emailValue}
         onChangeText={setEmail}
+        keyboardType={"email-address"}
         lightColor="rgba(0,0,0,0.8)"
         darkColor="rgba(255,255,255,0.8)"
         lightBorderColor="rgba(0,0,0,0.8)"

@@ -13,6 +13,14 @@ export const dashboardAction = () => {
   router.replace("/(tabs)/DashboardScreen");
 };
 
+export const accountAction = () => {
+  router.replace("/(tabs)/AccountScreen");
+};
+
+export const loginScreenAction = () => {
+  router.replace("/(screens)/LoginScreen");
+};
+
 export const bookingsAction = (accountId: string) => {
   router.push({
     pathname: "/(screens)/BookingsScreen",
