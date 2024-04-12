@@ -17,6 +17,10 @@ export const accountAction = () => {
   router.replace("/(tabs)/AccountScreen");
 };
 
+export const registerAction = () => {
+  router.replace("/(screens)/RegisterScreen");
+};
+
 export const loginScreenAction = () => {
   router.replace("/(screens)/LoginScreen");
 };

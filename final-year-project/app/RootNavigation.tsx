@@ -16,10 +16,20 @@ export default function RootNavigation() {
   return (
     <>
       {!isLoggedIn ? (
-        <Stack>
+        <Stack
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: "purple",
+            },
+            headerTintColor: "white",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        >
           <Stack.Screen
             name="(screens)/LoginScreen"
-            options={{ headerShown: true, title: "Login" }}
+            options={{ headerShown: false, title: "Login" }}
           />
           <Stack.Screen
             name="(screens)/RegisterScreen"
@@ -27,7 +37,17 @@ export default function RootNavigation() {
           />
         </Stack>
       ) : (
-        <Stack>
+        <Stack
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: "purple",
+            },
+            headerTintColor: "white",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        >
           <Stack.Screen
             name="(tabs)"
             options={{ headerShown: false, title: "Home" }}

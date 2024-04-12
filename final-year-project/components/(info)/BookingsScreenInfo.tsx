@@ -1,18 +1,22 @@
-import { SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native";
 import { styles } from "../Styles";
 import { useEffect, useState } from "react";
-import { Modal, Text, View } from "../Themed";
+import { Text, View } from "../Themed";
 import { Card } from "@rneui/base";
 import { dbRef, deleteBooking, Booking, auth } from "@/app/database";
 import { get, child } from "firebase/database";
 import { errorToast, noBookingsResultsToast } from "../Toast";
-
-import { useLocalSearchParams } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import Button from "../Button";
 
+/*
+React Native Community, 2022. react-native-modal. [Online]
+Available at: https://github.com/react-native-modal/react-native-modal
+[Accessed 12 April 2024].
+*/
+import Modal from "react-native-modal";
+
 export default function BookingsScreenInfo({ path }: { path: string }) {
-  const params = useLocalSearchParams();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [deleteModal, setDeleteModal] = useState(false);
   const [bookingId, setBookingId] = useState("");
@@ -95,104 +99,85 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
   const handleSubmit = (bookingId: string, eventId: string) => {
     setBookingId(bookingId);
     setEventId(eventId);
-    console.log(bookingId);
-    console.log(eventId);
     setDeleteModal(true);
   };
 
   return (
     <>
-      <SafeAreaView>
-        <View style={styles.container}>
-          <Modal visible={deleteModal} animationType="slide" transparent={true}>
-            <View
-              style={styles.modalView}
-              lightColor="rgba(0,0,0,0.8)"
-              darkColor="rgba(255,255,255,0.8)"
+      <View style={styles.bodyContainer}>
+        <Modal isVisible={deleteModal} hasBackdrop={true} backdropOpacity={0.8}>
+          <View
+            darkColor="darkgrey"
+            lightColor="lightgrey"
+            style={styles.modalInfoView}
+          >
+            <AntDesign
+              name="closecircle"
+              size={24}
+              color="purple"
+              onPress={() => setDeleteModal(false)}
+              style={styles.closeIcon}
+            />
+            <Text style={styles.altText} lightColor="black" darkColor="black">
+              Are you sure that you want to delete this booking?
+            </Text>
+            <Button
+              title="Delete"
+              onPress={() => deleteBooking(bookingId, eventId)}
+            />
+          </View>
+        </Modal>
+        <ScrollView>
+          {bookings.map((booking) => (
+            <Card
+              key={booking.event_id}
+              containerStyle={{
+                shadowColor: "grey",
+                shadowRadius: 3,
+                shadowOpacity: 0.5,
+              }}
             >
-              <View
-                style={styles.modalInfoView}
-                darkColor="rgba(0,0,0,0.8)"
-                lightColor="rgba(255,255,255,0.8)"
-              >
-                <AntDesign
-                  name="closecircle"
-                  size={24}
-                  color="purple"
-                  onPress={() => setDeleteModal(false)}
-                  style={styles.closeIcon}
-                />
-                <Text
-                  style={styles.text}
-                  lightColor="rgba(0,0,0,0.8)"
-                  darkColor="rgba(255,255,255,0.8)"
-                >
-                  Are you sure that you want to delete this booking?
-                </Text>
-                <Button
-                  title="Delete"
-                  onPress={() => deleteBooking(bookingId, eventId)}
-                />
-              </View>
-            </View>
-          </Modal>
-          <ScrollView>
-            {bookings.map((booking) => (
-              <Card key={booking.event_id}>
-                <Card.Title style={styles.title}>{booking.title}</Card.Title>
-                <Card.Divider />
-                <Text
-                  style={styles.text}
-                  darkColor="rgba(0,0,0,0.8)"
-                  lightColor="rgba(255,255,255,0.8)"
-                >
-                  Date and Time:{" "}
-                  {String(new Date(booking.date_time).getDate()).padStart(
+              <Card.Title style={styles.title}>{booking.title}</Card.Title>
+              <Card.Divider />
+              <Text style={styles.text} darkColor="black" lightColor="black">
+                Date and Time:{" "}
+                {String(new Date(booking.date_time).getDate()).padStart(
+                  2,
+                  "0"
+                ) +
+                  "/" +
+                  String(new Date(booking.date_time).getMonth() + 1).padStart(
                     2,
                     "0"
                   ) +
-                    "/" +
-                    String(new Date(booking.date_time).getMonth() + 1).padStart(
-                      2,
-                      "0"
-                    ) +
-                    "/" +
-                    new Date(booking.date_time).getFullYear() +
-                    " " +
-                    String(new Date(booking.date_time).getHours()) +
-                    ":" +
-                    String(new Date(booking.date_time).getMinutes()).padStart(
-                      2,
-                      "0"
-                    )}
-                </Text>
-                <Text
-                  style={styles.text}
-                  darkColor="rgba(0,0,0,0.8)"
-                  lightColor="rgba(255,255,255,0.8)"
-                >
-                  Location: {booking.location}
-                </Text>
-                <Text
-                  style={styles.text}
-                  darkColor="rgba(0,0,0,0.8)"
-                  lightColor="rgba(255,255,255,0.8)"
-                >
-                  Description: {booking.description}
-                </Text>
-                <TouchableOpacity
-                  style={styles.deleteButton}
-                  onPress={() =>
-                    handleSubmit(booking.booking_id, booking.event_id)
-                  }
-                >
-                  <AntDesign name="delete" size={24} color="purple" />
-                </TouchableOpacity>
-              </Card>
-            ))}
-          </ScrollView>
-        </View>
-      </SafeAreaView>
+                  "/" +
+                  new Date(booking.date_time).getFullYear() +
+                  " " +
+                  String(new Date(booking.date_time).getHours()) +
+                  ":" +
+                  String(new Date(booking.date_time).getMinutes()).padStart(
+                    2,
+                    "0"
+                  )}
+              </Text>
+              <Text style={styles.text} darkColor="black" lightColor="black">
+                Location: {booking.location}
+              </Text>
+              <Text style={styles.text} darkColor="black" lightColor="black">
+                Description: {booking.description}
+              </Text>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() =>
+                  handleSubmit(booking.booking_id, booking.event_id)
+                }
+              >
+                <AntDesign name="delete" size={24} color="purple" />
+              </TouchableOpacity>
+            </Card>
+          ))}
+        </ScrollView>
+      </View>
     </>
   );
 }

@@ -2,7 +2,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { styles } from "../Styles";
 import { Text, View } from "../Themed";
 import { useEffect, useState } from "react";
-import Button from "../Button";
+import { CardButton } from "../Button";
 import { auth, dbRef } from "@/app/database";
 import { signOut } from "firebase/auth";
 import { get, child } from "firebase/database";
@@ -11,7 +11,7 @@ import { logout } from "@/app/authenticationSlice";
 import { Card } from "@rneui/base";
 import { logoutAction, manageAccountAction } from "@/app/actions";
 import { useAppDispatch } from "@/app/hooks";
- 
+
 import { getAuth } from "@firebase/auth";
 
 export default function AccountScreenInfo({ path }: { path: string }) {
@@ -64,38 +64,34 @@ export default function AccountScreenInfo({ path }: { path: string }) {
 
   return (
     <>
-      <KeyboardAwareScrollView>
-        <View style={styles.container}>
-          <Card>
-            <Card.Title style={styles.title}>
-              {firstName} {lastName}
-            </Card.Title>
-            <Card.Divider />
-            <Text
-              style={styles.text}
-              darkColor="rgba(0,0,0,0.8)"
-              lightColor="rgba(255,255,255,0.8)"
-            >
-              {university}
-            </Text>
-            <Text
-              style={styles.text}
-              darkColor="rgba(0,0,0,0.8)"
-              lightColor="rgba(255,255,255,0.8)"
-            >
-              {emailValue}
-            </Text>
-          </Card>
-          <Card>
-            <Button
-              title="Manage Account"
-              onPress={() => manageAccountAction(accountId, emailValue, university)}
-            ></Button>
-            <Card.Divider />
-            <Button title="Logout" onPress={logoutFunction}></Button>
-          </Card>
-        </View>
-      </KeyboardAwareScrollView>
+      <View style={styles.bodyHeaderContainer}>
+        <Card
+          containerStyle={{
+            minWidth: "80%",
+            shadowColor: "grey",
+            shadowRadius: 3,
+            shadowOpacity: 0.5,
+          }}
+        >
+          <Card.Title style={styles.cardTitle}>
+            {firstName} {lastName}
+          </Card.Title>
+          <Text style={styles.text} darkColor="black" lightColor="black">
+            {university}
+          </Text>
+          <Text style={styles.text} darkColor="black" lightColor="black">
+            {emailValue}
+          </Text>
+          <Card.Divider style={{ marginVertical: 30 }} />
+          <CardButton
+            title="Manage Account"
+            onPress={() =>
+              manageAccountAction(accountId, emailValue, university)
+            }
+          ></CardButton>
+          <CardButton title="Logout" onPress={logoutFunction}></CardButton>
+        </Card>
+      </View>
     </>
   );
 }

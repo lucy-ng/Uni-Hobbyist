@@ -17,7 +17,7 @@ Icon details - "account" from MaterialCommunityIcons. [Online]
 Available at: https://icons.expo.fyi/Index/MaterialCommunityIcons/account
 [Accessed 24 March 2024]. 
 */
-import { AntDesign, MaterialCommunityIcons  } from "@expo/vector-icons";
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 
@@ -31,6 +31,13 @@ export default function TabLayout() {
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
+        headerStyle: {
+          backgroundColor: "purple",
+        },
+        headerTintColor: "white",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
       }}
     >
       <Tabs.Screen
@@ -59,7 +66,11 @@ export default function TabLayout() {
           title: "Dashboard",
           unmountOnBlur: true,
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="view-dashboard" size={24} color="purple" />
+            <MaterialCommunityIcons
+              name="view-dashboard"
+              size={24}
+              color="purple"
+            />
           ),
         }}
       />

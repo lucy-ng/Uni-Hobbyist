@@ -28,7 +28,7 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "(screens)/LoginScreen",
+  initialRouteName: "/",
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -37,6 +37,7 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    Quicksand: require("../assets/fonts/Quicksand-VariableFont_wght.ttf"),
     ...FontAwesome.font,
   });
 
@@ -55,6 +56,10 @@ export default function RootLayout() {
     return null;
   }
 
+  return <RootLayoutNav />;
+}
+
+function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (

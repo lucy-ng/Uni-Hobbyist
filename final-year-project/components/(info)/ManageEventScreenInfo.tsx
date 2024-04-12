@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { styles } from "../Styles";
-import { Modal, Text, TextInput, View } from "../Themed";
+import { Text, TextInput, View } from "../Themed";
 import { useState } from "react";
 import { Tag, db, deleteEventInfo } from "@/app/database";
 import { useLocalSearchParams } from "expo-router";
@@ -17,6 +17,13 @@ import Button from "../Button";
 import { AntDesign } from "@expo/vector-icons";
 import { Chip } from "@rneui/themed";
 import { dashboardAction } from "@/app/actions";
+
+/*
+React Native Community, 2022. react-native-modal. [Online]
+Available at: https://github.com/react-native-modal/react-native-modal
+[Accessed 12 April 2024].
+*/
+import Modal from "react-native-modal";
 
 let tagsList: Tag[] = [
   { name: "Media & Entertainment", type: "outline" },
@@ -119,37 +126,27 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
 
   return (
     <>
-      <KeyboardAwareScrollView>
-        <Modal visible={deleteModal} animationType="slide" transparent={true}>
+      <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+        <Modal isVisible={deleteModal} hasBackdrop={true} backdropOpacity={0.8}>
           <View
-            style={styles.modalView}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
+            style={styles.modalInfoView}
+            darkColor="darkgrey"
+            lightColor="lightgrey"
           >
-            <View
-              style={styles.modalInfoView}
-              darkColor="rgba(0,0,0,0.8)"
-              lightColor="rgba(255,255,255,0.8)"
-            >
-              <AntDesign
-                name="closecircle"
-                size={24}
-                color="purple"
-                onPress={() => setDeleteModal(false)}
-                style={styles.closeIcon}
-              />
-              <Text
-                style={styles.text}
-                lightColor="rgba(0,0,0,0.8)"
-                darkColor="rgba(255,255,255,0.8)"
-              >
-                Are you sure that you want to delete this event?
-              </Text>
-              <Button title="Delete" onPress={deleteEvent} />
-            </View>
+            <AntDesign
+              name="closecircle"
+              size={24}
+              color="purple"
+              onPress={() => setDeleteModal(false)}
+              style={styles.closeIcon}
+            />
+            <Text style={styles.altText} lightColor="black" darkColor="black">
+              Are you sure that you want to delete this event?
+            </Text>
+            <Button title="Delete" onPress={deleteEvent} />
           </View>
         </Modal>
-        <View style={styles.container}>
+        <View style={styles.keyboardContainer}>
           <Text
             style={styles.text}
             lightColor="rgba(0,0,0,0.8)"
@@ -242,6 +239,7 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
           <View style={styles.tagsList}>
             {tagsList.map((tag, index) => (
               <Chip
+                style={{ backgroundColor: "lightgrey" }}
                 key={tag.name}
                 title={tag.name}
                 type={tag.type}

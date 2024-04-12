@@ -1,18 +1,19 @@
-import { View, SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
+import { View, ScrollView, TouchableOpacity } from "react-native";
 import { styles } from "../Styles";
 import { useEffect, useState } from "react";
 import { child, get } from "firebase/database";
 import { errorToast, noSearchResultsToast } from "../Toast";
-import { Text } from "../Themed";
+import { Pressable, Text, TextInput } from "../Themed";
 import { Card } from "@rneui/base";
 import { type Event, dbRef, auth, Tag } from "@/app/database";
 import { eventInfoAction } from "@/app/actions";
-import { Chip, SearchBar } from "@rneui/themed";
+import { Chip } from "@rneui/themed";
+import { AntDesign } from "@expo/vector-icons";
 
 /*
-React Native Elements Community, 2024. SearchBar. [Online]
-Available at: https://reactnativeelements.com/docs/components/searchbar
-[Accessed 29 March 2024].
+React Native Elements Community, 2024. Chip. [Online]
+Available at: https://reactnativeelements.com/docs/components/chip
+[Accessed 12 April 2024].
 */
 
 let tagsList: Tag[] = [
@@ -198,21 +199,37 @@ export default function HomeScreenInfo({ path }: { path: string }) {
 
   return (
     <>
-      <SafeAreaView>
-        <View style={styles.container}>
-          <View style={styles.searchBarBox}>
-            <SearchBar
+      <View style={styles.bodyHeaderContainer}>
+        <Card containerStyle={{ minWidth: "80%", maxHeight: "20%" }}>
+          <View style={styles.searchBox}>
+            <TextInput
+              style={styles.searchBar}
               placeholder="Search for events..."
               onChangeText={setSearchValue}
               value={searchValue}
               onSubmitEditing={searchEvent}
-              cancelIcon={true}
-              showCancel={true}
+              darkColor="purple"
+              lightColor="purple"
+              darkBorderColor="purple"
+              lightBorderColor="purple"
             />
+            <Pressable onPress={searchEvent}>
+              <AntDesign
+                name="search1"
+                size={24}
+                color="purple"
+                backgroundColor={"white"}
+              />
+            </Pressable>
           </View>
-          <ScrollView style={styles.searchTagsList} horizontal={true}>
+          <ScrollView
+            style={styles.searchTagsList}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+          >
             {tagsList.map((tag, index) => (
               <Chip
+                style={{ backgroundColor: "lightgrey" }}
                 key={tag.name}
                 title={tag.name}
                 type={tag.type}
@@ -220,55 +237,55 @@ export default function HomeScreenInfo({ path }: { path: string }) {
               />
             ))}
           </ScrollView>
-          <ScrollView>
-            {events.map((event) => (
-              <TouchableOpacity
-                onPress={() => {
-                  eventInfoAction(event.id);
-                }}
+        </Card>
+
+        <ScrollView>
+          {events.map((event) => (
+            <TouchableOpacity
+              onPress={() => {
+                eventInfoAction(event.id);
+              }}
+              key={event.id}
+            >
+              <Card
                 key={event.id}
+                containerStyle={{
+                  shadowColor: "grey",
+                  shadowRadius: 3,
+                  shadowOpacity: 0.5,
+                }}
               >
-                <Card key={event.id}>
-                  <Card.Title style={styles.title}>{event.title}</Card.Title>
-                  <Card.Divider />
-                  <Text
-                    style={styles.text}
-                    darkColor="rgba(0,0,0,0.8)"
-                    lightColor="rgba(255,255,255,0.8)"
-                  >
-                    Date and Time:{" "}
-                    {String(new Date(event.date_time).getDate()).padStart(
+                <Card.Title style={styles.title}>{event.title}</Card.Title>
+                <Card.Divider />
+                <Text style={styles.text} lightColor="black" darkColor="black">
+                  Date and Time:{" "}
+                  {String(new Date(event.date_time).getDate()).padStart(
+                    2,
+                    "0"
+                  ) +
+                    "/" +
+                    String(new Date(event.date_time).getMonth() + 1).padStart(
                       2,
                       "0"
                     ) +
-                      "/" +
-                      String(new Date(event.date_time).getMonth() + 1).padStart(
-                        2,
-                        "0"
-                      ) +
-                      "/" +
-                      new Date(event.date_time).getFullYear() +
-                      " " +
-                      String(new Date(event.date_time).getHours()) +
-                      ":" +
-                      String(new Date(event.date_time).getMinutes()).padStart(
-                        2,
-                        "0"
-                      )}
-                  </Text>
-                  <Text
-                    style={styles.text}
-                    darkColor="rgba(0,0,0,0.8)"
-                    lightColor="rgba(255,255,255,0.8)"
-                  >
-                    Location: {event.location}
-                  </Text>
-                </Card>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      </SafeAreaView>
+                    "/" +
+                    new Date(event.date_time).getFullYear() +
+                    " " +
+                    String(new Date(event.date_time).getHours()) +
+                    ":" +
+                    String(new Date(event.date_time).getMinutes()).padStart(
+                      2,
+                      "0"
+                    )}
+                </Text>
+                <Text style={styles.text} lightColor="black" darkColor="black">
+                  Location: {event.location}
+                </Text>
+              </Card>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
     </>
   );
 }

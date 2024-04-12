@@ -75,9 +75,9 @@ export default function LoginScreenInfo({ path }: { path: string }) {
   */
 
   return (
-    <View style={styles.container}>
+    <View>
       <Text
-        style={styles.text}
+        style={styles.inputText}
         lightColor="rgba(0,0,0,0.8)"
         darkColor="rgba(255,255,255,0.8)"
       >
@@ -94,7 +94,7 @@ export default function LoginScreenInfo({ path }: { path: string }) {
         darkBorderColor="rgba(255,255,255,0.8)"
       />
       <Text
-        style={styles.text}
+        style={styles.inputText}
         lightColor="rgba(0,0,0,0.8)"
         darkColor="rgba(255,255,255,0.8)"
       >
@@ -111,30 +111,33 @@ export default function LoginScreenInfo({ path }: { path: string }) {
         darkBorderColor="rgba(255,255,255,0.8)"
       />
       <Button title="Login" onPress={validateForm} />
-      <View style={styles.container}>
-        <Text
-          style={styles.text}
-          lightColor="rgba(0,0,0,0.8)"
+      <View
+        style={styles.separator}
+        lightColor="#eee"
+        darkColor="rgba(255,255,255,0.1)"
+      />
+      <Text
+        style={styles.altText}
+        lightColor="rgba(0,0,0,0.8)"
+        darkColor="rgba(255,255,255,0.8)"
+      >
+        Don't have an account?
+      </Text>
+      <Link href="/RegisterScreen" asChild>
+        <Pressable
+          style={styles.button}
+          lightColor="darkgrey"
           darkColor="rgba(255,255,255,0.8)"
         >
-          Don't have an account?
-        </Text>
-        <Link href="/RegisterScreen" asChild>
-          <Pressable
-            style={styles.button}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
+          <Text
+            style={styles.buttonText}
+            darkColor="darkgrey"
+            lightColor="rgba(255,255,255,0.8)"
           >
-            <Text
-              style={styles.buttonText}
-              darkColor="rgba(0,0,0,0.8)"
-              lightColor="rgba(255,255,255,0.8)"
-            >
-              Register
-            </Text>
-          </Pressable>
-        </Link>
-      </View>
+            Register
+          </Text>
+        </Pressable>
+      </Link>
     </View>
   );
 }

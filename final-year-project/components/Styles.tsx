@@ -1,15 +1,25 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  screenContainer: {
-    flex: 1,
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 30,
+  mainTitle: {
+    fontSize: 50,
     fontWeight: "bold",
     marginTop: 10,
     color: "purple",
+    fontFamily: "Quicksand",
+  },
+  cardTitle: {
+    fontSize: 40,
+    fontWeight: "bold",
+    color: "purple",
+    fontFamily: "Quicksand",
+  },
+  title: {
+    fontSize: 40,
+    fontWeight: "bold",
+    marginTop: 10,
+    color: "purple",
+    fontFamily: "Quicksand",
   },
   separator: {
     marginVertical: 30,
@@ -25,75 +35,98 @@ export const styles = StyleSheet.create({
     color: "#2e78b7",
   },
   container: {
-    marginTop: 20,
     alignItems: "center",
-    marginBottom: 20,
+    minHeight: "100%",
+    justifyContent: "center",
+  },
+  keyboardContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 30,
+  },
+  bodyHeaderContainer: {
+    alignItems: "center",
+    minHeight: "90%",
+  },
+  bodyContainer: {
+    alignItems: "center",
+    minHeight: "80%",
+    justifyContent: "center",
   },
   text: {
     fontSize: 17,
     lineHeight: 24,
     textAlign: "center",
   },
+  altText: {
+    fontSize: 17,
+    lineHeight: 24,
+    textAlign: "center",
+    fontWeight: "200",
+  },
   input: {
-    borderWidth: 1,
+    borderWidth: 2,
     width: 200,
-    padding: 5,
+    padding: 6,
     margin: 20,
+    fontSize: 16,
+  },
+  inputText: {
+    fontSize: 20,
+    lineHeight: 24,
+    textAlign: "center",
   },
   descriptionInput: {
-    borderWidth: 1,
+    borderWidth: 2,
     width: 200,
     margin: 20,
     padding: 10,
     paddingBottom: 100,
-    alignItems: "stretch"
-  },
-  modalView: {
-    marginTop: 300,
-    borderRadius: 20,
-    padding: 10,
+    alignItems: "stretch",
   },
   modalInfoView: {
     borderRadius: 20,
-    padding: 50,
+    padding: 20,
   },
   closeIcon: {
     marginBottom: 20,
     alignSelf: "flex-end",
   },
   homeButtonsList: {
-    padding: 10
+    padding: 10,
   },
   dateTimeBox: {
-    marginBottom: 20
+    marginBottom: 20,
   },
   deleteButton: {
     alignItems: "center",
-    marginTop: 20
+    marginTop: 20,
   },
-  searchBarBox: {
-    width: "100%",
-    marginLeft: 130,
-    marginRight: 130
+  searchBox: {
+    alignItems: "center",
+    flexWrap: "wrap",
+    flexDirection: "row",
+  },
+  searchBar: {
+    borderWidth: 2,
+    width: 280,
+    padding: 8,
+    marginRight: 20,
+    fontSize: 16,
+    backgroundColor: "#BABABA",
   },
   tagsList: {
     flexWrap: "wrap",
     flexDirection: "row",
     alignContent: "center",
-    marginTop: 20,
-    marginBottom: 20,
-    marginLeft: 10,
-    maxWidth: "80%"
+    maxWidth: "80%",
   },
   searchTagsList: {
     flexWrap: "wrap",
     flexDirection: "row",
     alignContent: "center",
-    maxWidth: "90%",
-    maxHeight: "10%",
-    marginTop: 10
   },
-  
+
   /* 
   650 Industries, Inc., 2024. Styling a React Native button. [Online] 
   Available at: https://docs.expo.dev/ui-programming/react-native-styling-buttons/
@@ -110,7 +143,7 @@ export const styles = StyleSheet.create({
     textAlign: "center",
     letterSpacing: 0.25,
     lineHeight: 21,
-    fontWeight: 'bold',
-    color: "purple"
+    fontWeight: "bold",
+    color: "purple",
   },
 });

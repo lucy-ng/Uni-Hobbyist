@@ -103,8 +103,8 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
 
   return (
     <>
-      <KeyboardAwareScrollView>
-        <View style={styles.container}>
+      <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.keyboardContainer}>
           <Text
             style={styles.text}
             lightColor="rgba(0,0,0,0.8)"
@@ -197,6 +197,7 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
           <View style={styles.tagsList}>
             {tagsList.map((tag, index) => (
               <Chip
+                style={{ backgroundColor: "lightgrey" }}
                 key={tag.name}
                 title={tag.name}
                 type={tag.type}

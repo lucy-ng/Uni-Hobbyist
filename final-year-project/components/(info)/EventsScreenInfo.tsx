@@ -1,4 +1,4 @@
-import { View, SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native";
 import { styles } from "../Styles";
 import { useEffect, useState } from "react";
 import { Text } from "../Themed";
@@ -84,65 +84,53 @@ export default function EventsScreenInfo({ path }: { path: string }) {
 
   return (
     <>
-      <SafeAreaView>
-        <View style={styles.container}>
-          <ScrollView>
-            {events.map((event) => (
-              <TouchableOpacity
-                onPress={() => {
-                  manageEventAction(event);
-                }}
-                key={event.id}
-              >
-                <Card key={event.id}>
-                  <Card.Title style={styles.title}>{event.title}</Card.Title>
-                  <Card.Divider />
-                  <Text
-                    style={styles.text}
-                    darkColor="rgba(0,0,0,0.8)"
-                    lightColor="rgba(255,255,255,0.8)"
-                  >
-                    Date and Time:{" "}
-                    {String(new Date(event.date_time).getDate()).padStart(
-                      2,
-                      "0"
-                    ) +
-                      "/" +
-                      String(new Date(event.date_time).getMonth() + 1).padStart(
-                        2,
-                        "0"
-                      ) +
-                      "/" +
-                      new Date(event.date_time).getFullYear() +
-                      " " +
-                      String(new Date(event.date_time).getHours()) +
-                      ":" +
-                      String(new Date(event.date_time).getMinutes()).padStart(
-                        2,
-                        "0"
-                      )}
-                  </Text>
-                  <Text
-                    style={styles.text}
-                    darkColor="rgba(0,0,0,0.8)"
-                    lightColor="rgba(255,255,255,0.8)"
-                  >
-                    Location: {event.location}
-                  </Text>
-                  <Text
-                    style={styles.text}
-                    darkColor="rgba(0,0,0,0.8)"
-                    lightColor="rgba(255,255,255,0.8)"
-                  >
-                    Tickets Booked:{" "}
-                    {String(event.booked_tickets).replace(/^0+/, "")}
-                  </Text>
-                </Card>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      </SafeAreaView>
+      <ScrollView>
+        {events.map((event) => (
+          <TouchableOpacity
+            onPress={() => {
+              manageEventAction(event);
+            }}
+            key={event.id}
+          >
+            <Card
+              key={event.id}
+              containerStyle={{
+                shadowColor: "grey",
+                shadowRadius: 3,
+                shadowOpacity: 0.5,
+              }}
+            >
+              <Card.Title style={styles.title}>{event.title}</Card.Title>
+              <Card.Divider />
+              <Text style={styles.text} darkColor="black" lightColor="black">
+                Date and Time:{" "}
+                {String(new Date(event.date_time).getDate()).padStart(2, "0") +
+                  "/" +
+                  String(new Date(event.date_time).getMonth() + 1).padStart(
+                    2,
+                    "0"
+                  ) +
+                  "/" +
+                  new Date(event.date_time).getFullYear() +
+                  " " +
+                  String(new Date(event.date_time).getHours()) +
+                  ":" +
+                  String(new Date(event.date_time).getMinutes()).padStart(
+                    2,
+                    "0"
+                  )}
+              </Text>
+              <Text style={styles.text} darkColor="black" lightColor="black">
+                Location: {event.location}
+              </Text>
+              <Text style={styles.text} darkColor="black" lightColor="black">
+                Tickets Booked:{" "}
+                {String(event.booked_tickets).replace(/^0+/, "")}
+              </Text>
+            </Card>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     </>
   );
 }

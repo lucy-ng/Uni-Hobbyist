@@ -42,16 +42,21 @@ export default function BookEventScreenInfo({ path }: { path: string }) {
 
   return (
     <>
-      <KeyboardAwareScrollView>
-        <View style={styles.container}>
-          <Card key={String(params.event_id)}>
+      <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.bodyHeaderContainer}>
+          <Card
+            key={String(params.event_id)}
+            containerStyle={{
+              minWidth: "80%",
+              minHeight: "80%",
+              shadowColor: "grey",
+              shadowRadius: 3,
+              shadowOpacity: 0.5,
+            }}
+          >
             <Card.Title style={styles.title}>{title}</Card.Title>
             <Card.Divider />
-            <Text
-              style={styles.text}
-              darkColor="rgba(0,0,0,0.8)"
-              lightColor="rgba(255,255,255,0.8)"
-            >
+            <Text style={styles.text} lightColor="black" darkColor="black">
               Date and Time:{" "}
               {String(new Date(dateTime).getDate()).padStart(2, "0") +
                 "/" +
@@ -63,24 +68,19 @@ export default function BookEventScreenInfo({ path }: { path: string }) {
                 ":" +
                 String(new Date(dateTime).getMinutes()).padStart(2, "0")}
             </Text>
-            <Text
-              style={styles.text}
-              darkColor="rgba(0,0,0,0.8)"
-              lightColor="rgba(255,255,255,0.8)"
-            >
+            <Text style={styles.text} lightColor="black" darkColor="black">
               Location: {location}
             </Text>
-            <Text
-              style={styles.text}
-              darkColor="rgba(0,0,0,0.8)"
-              lightColor="rgba(255,255,255,0.8)"
-            >
+            <Text style={styles.text} lightColor="black" darkColor="black">
               Description: {description}
             </Text>
           </Card>
 
           {bookedTickets != maxTickets ? (
-            <Button title="Book" onPress={() => bookEvent(String(params.eventId))} />
+            <Button
+              title="Book"
+              onPress={() => bookEvent(String(params.eventId))}
+            />
           ) : (
             <Text style={styles.title}>SOLD OUT</Text>
           )}

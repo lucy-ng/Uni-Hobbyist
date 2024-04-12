@@ -1,8 +1,7 @@
 import { createEventAction, eventsAction, bookingsAction } from "@/app/actions";
-import { SafeAreaView } from "react-native";
 import { View } from "../Themed";
 import { Card } from "@rneui/themed";
-import Button from "../Button";
+import { CardButton } from "../Button";
 import { styles } from "../Styles";
 import { auth } from "@/app/database";
 
@@ -11,24 +10,42 @@ export default function DashboardScreenInfo({ path }: { path: string }) {
 
   return (
     <>
-      <SafeAreaView>
-        <View style={styles.container}>
-          <Card>
-            <Card.Title>Book</Card.Title>
-            <Card.Divider />
-            <Button
-              title={"Manage Bookings"}
-              onPress={() => bookingsAction(userId)}
-            ></Button>
-          </Card>
-          <Card>
-            <Card.Title>Host</Card.Title>
-            <Card.Divider />
-            <Button title={"Create Event"} onPress={createEventAction}></Button>
-            <Button title={"Manage Events"} onPress={eventsAction}></Button>
-          </Card>
-        </View>
-      </SafeAreaView>
+      <View style={styles.bodyHeaderContainer}>
+        <Card
+          containerStyle={{
+            minWidth: "80%",
+            shadowColor: "grey",
+            shadowRadius: 3,
+            shadowOpacity: 0.5,
+          }}
+        >
+          <Card.Title style={styles.cardTitle}>Book</Card.Title>
+          <Card.Divider style={{ marginVertical: 10 }} />
+          <CardButton
+            title={"Manage Bookings"}
+            onPress={() => bookingsAction(userId)}
+          ></CardButton>
+        </Card>
+        <Card
+          containerStyle={{
+            minWidth: "80%",
+            shadowColor: "grey",
+            shadowRadius: 3,
+            shadowOpacity: 0.5,
+          }}
+        >
+          <Card.Title style={styles.cardTitle}>Host</Card.Title>
+          <Card.Divider style={{ marginVertical: 10 }} />
+          <CardButton
+            title={"Create Event"}
+            onPress={createEventAction}
+          ></CardButton>
+          <CardButton
+            title={"Manage Events"}
+            onPress={eventsAction}
+          ></CardButton>
+        </Card>
+      </View>
     </>
   );
 }

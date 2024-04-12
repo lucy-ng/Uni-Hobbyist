@@ -13,7 +13,7 @@ export default function LoginScreen() {
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.title}>Uni Hobbyist</Text>
+        <Text style={styles.mainTitle}>Uni Hobbyist</Text>
         <View
           style={styles.separator}
           lightColor="#eee"

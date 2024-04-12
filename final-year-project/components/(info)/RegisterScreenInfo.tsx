@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { Text, View, TextInput, Modal } from "../Themed";
+import { Text, View, TextInput } from "../Themed";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { styles } from "../Styles";
 import { auth, db } from "@/app/database";
-import "react-native-get-random-values";
 import Button from "../Button";
 import {
   emailErrorToast,
@@ -31,8 +30,7 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
   Google LLC, 2024. Read and Write Data on the Web. [Online] 
   Available at: https://firebase.google.com/docs/database/web/read-and-write
   [Accessed 14 March 2024].
-  */
-  /*
+
   Google LLC, 2024. Authenticate with Firebase using Password-Based Accounts using Javascript. [Online] 
   Available at: https://firebase.google.com/docs/auth/web/password-auth
   [Accessed 27 March 2024].
@@ -104,10 +102,10 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
 
   return (
     <>
-      <KeyboardAwareScrollView>
-        <View style={styles.container}>
+      <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.bodyContainer}>
           <Text
-            style={styles.text}
+            style={styles.inputText}
             lightColor="rgba(0,0,0,0.8)"
             darkColor="rgba(255,255,255,0.8)"
           >
@@ -123,7 +121,7 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             darkBorderColor="rgba(255,255,255,0.8)"
           />
           <Text
-            style={styles.text}
+            style={styles.inputText}
             lightColor="rgba(0,0,0,0.8)"
             darkColor="rgba(255,255,255,0.8)"
           >
@@ -139,7 +137,7 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             darkBorderColor="rgba(255,255,255,0.8)"
           />
           <Text
-            style={styles.text}
+            style={styles.inputText}
             lightColor="rgba(0,0,0,0.8)"
             darkColor="rgba(255,255,255,0.8)"
           >
@@ -155,7 +153,7 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             darkBorderColor="rgba(255,255,255,0.8)"
           />
           <Text
-            style={styles.text}
+            style={styles.inputText}
             lightColor="rgba(0,0,0,0.8)"
             darkColor="rgba(255,255,255,0.8)"
           >
@@ -172,7 +170,7 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             darkBorderColor="rgba(255,255,255,0.8)"
           />
           <Text
-            style={styles.text}
+            style={styles.inputText}
             lightColor="rgba(0,0,0,0.8)"
             darkColor="rgba(255,255,255,0.8)"
           >

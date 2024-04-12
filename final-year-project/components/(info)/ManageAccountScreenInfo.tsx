@@ -112,7 +112,7 @@ export default function ManageAccountScreenInfo({ path }: { path: string }) {
   return (
     <>
       <SafeAreaView>
-        <View style={styles.container}>
+        <View style={styles.bodyContainer}>
           <Text
             style={styles.text}
             lightColor="rgba(0,0,0,0.8)"
