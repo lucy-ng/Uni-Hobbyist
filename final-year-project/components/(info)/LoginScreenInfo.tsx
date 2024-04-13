@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Text, View, TextInput, Pressable } from "../Themed";
 import { styles } from "../Styles";
-import Button from "../Button";
+import Button, { RegisterButton } from "../Button";
 import { Link } from "expo-router";
 import {
   emailErrorToast,
@@ -76,11 +76,7 @@ export default function LoginScreenInfo({ path }: { path: string }) {
 
   return (
     <View>
-      <Text
-        style={styles.inputText}
-        lightColor="rgba(0,0,0,0.8)"
-        darkColor="rgba(255,255,255,0.8)"
-      >
+      <Text style={styles.inputText} lightColor="black" darkColor="white">
         Email
       </Text>
       <TextInput
@@ -88,16 +84,12 @@ export default function LoginScreenInfo({ path }: { path: string }) {
         value={emailValue}
         onChangeText={setEmail}
         keyboardType={"email-address"}
-        lightColor="rgba(0,0,0,0.8)"
-        darkColor="rgba(255,255,255,0.8)"
-        lightBorderColor="rgba(0,0,0,0.8)"
-        darkBorderColor="rgba(255,255,255,0.8)"
+        lightColor="black"
+        darkColor="white"
+        lightBorderColor="#CAC4CE"
+        darkBorderColor="#CAC4CE"
       />
-      <Text
-        style={styles.inputText}
-        lightColor="rgba(0,0,0,0.8)"
-        darkColor="rgba(255,255,255,0.8)"
-      >
+      <Text style={styles.inputText} lightColor="black" darkColor="white">
         Password
       </Text>
       <TextInput
@@ -105,39 +97,23 @@ export default function LoginScreenInfo({ path }: { path: string }) {
         secureTextEntry={true}
         value={password}
         onChangeText={setPassword}
-        lightColor="rgba(0,0,0,0.8)"
-        darkColor="rgba(255,255,255,0.8)"
-        lightBorderColor="rgba(0,0,0,0.8)"
-        darkBorderColor="rgba(255,255,255,0.8)"
+        lightColor="black"
+        darkColor="white"
+        lightBorderColor="#CAC4CE"
+        darkBorderColor="#CAC4CE"
       />
-      <Button title="Login" onPress={validateForm} />
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-      <Text
-        style={styles.altText}
-        lightColor="rgba(0,0,0,0.8)"
-        darkColor="rgba(255,255,255,0.8)"
-      >
-        Don't have an account?
-      </Text>
-      <Link href="/RegisterScreen" asChild>
-        <Pressable
-          style={styles.button}
-          lightColor="darkgrey"
-          darkColor="rgba(255,255,255,0.8)"
-        >
-          <Text
-            style={styles.buttonText}
-            darkColor="darkgrey"
-            lightColor="rgba(255,255,255,0.8)"
-          >
-            Register
-          </Text>
-        </Pressable>
-      </Link>
+      <View style={{ alignItems: "center"}}>
+        <Button title="Login" onPress={validateForm} />
+        <View
+          style={styles.separator}
+          darkColor="#242038"
+          lightColor="#F7ECE1"
+        />
+        <Text style={styles.altText} lightColor="black" darkColor="white">
+          Don't have an account?
+        </Text>
+        <RegisterButton />
+      </View>
     </View>
   );
 }

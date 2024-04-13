@@ -19,7 +19,7 @@ export default function RootNavigation() {
         <Stack
           screenOptions={{
             headerStyle: {
-              backgroundColor: "purple",
+              backgroundColor: "#8D86C9",
             },
             headerTintColor: "white",
             headerTitleStyle: {
@@ -40,7 +40,7 @@ export default function RootNavigation() {
         <Stack
           screenOptions={{
             headerStyle: {
-              backgroundColor: "purple",
+              backgroundColor: "#8D86C9",
             },
             headerTintColor: "white",
             headerTitleStyle: {

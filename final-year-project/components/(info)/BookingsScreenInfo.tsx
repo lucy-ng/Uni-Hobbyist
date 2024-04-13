@@ -8,12 +8,6 @@ import { get, child } from "firebase/database";
 import { errorToast, noBookingsResultsToast } from "../Toast";
 import { AntDesign } from "@expo/vector-icons";
 import Button from "../Button";
-
-/*
-React Native Community, 2022. react-native-modal. [Online]
-Available at: https://github.com/react-native-modal/react-native-modal
-[Accessed 12 April 2024].
-*/
 import Modal from "react-native-modal";
 
 export default function BookingsScreenInfo({ path }: { path: string }) {
@@ -67,6 +61,7 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
                         date_time_updated: searchedBooking.date_time_updated,
                         max_tickets: searchedBooking.max_tickets,
                         booking_id: bookingId,
+                        description: searchedBooking.description,
                       };
                       bookingsList.push(booking);
                     }
@@ -105,16 +100,21 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
   return (
     <>
       <View style={styles.bodyContainer}>
+        {/*
+        React Native Community, 2022. react-native-modal. [Online]
+        Available at: https://github.com/react-native-modal/react-native-modal
+        [Accessed 12 April 2024].
+        */}
         <Modal isVisible={deleteModal} hasBackdrop={true} backdropOpacity={0.8}>
           <View
-            darkColor="darkgrey"
-            lightColor="lightgrey"
+            darkColor="#CAC4CE"
+            lightColor="#CAC4CE"
             style={styles.modalInfoView}
           >
             <AntDesign
               name="closecircle"
               size={24}
-              color="purple"
+              color="#8D86C9"
               onPress={() => setDeleteModal(false)}
               style={styles.closeIcon}
             />
@@ -127,20 +127,27 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
             />
           </View>
         </Modal>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           {bookings.map((booking) => (
             <Card
               key={booking.event_id}
               containerStyle={{
-                shadowColor: "grey",
+                shadowColor: "#CAC4CE",
                 shadowRadius: 3,
                 shadowOpacity: 0.5,
+                minWidth: "83%",
               }}
             >
               <Card.Title style={styles.title}>{booking.title}</Card.Title>
               <Card.Divider />
-              <Text style={styles.text} darkColor="black" lightColor="black">
+              <Text
+                style={styles.cardText}
+                lightColor="black"
+                darkColor="black"
+              >
                 Date and Time:{" "}
+              </Text>
+              <Text style={styles.text} darkColor="black" lightColor="black">
                 {String(new Date(booking.date_time).getDate()).padStart(
                   2,
                   "0"
@@ -160,11 +167,23 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
                     "0"
                   )}
               </Text>
-              <Text style={styles.text} darkColor="black" lightColor="black">
-                Location: {booking.location}
+              <Text>{"\n"}</Text>
+              <Text
+                style={styles.cardText}
+                lightColor="black"
+                darkColor="black"
+              >
+                Location:
               </Text>
               <Text style={styles.text} darkColor="black" lightColor="black">
-                Description: {booking.description}
+                 {booking.location}
+              </Text>
+              <Text>{"\n"}</Text>
+              <Text style={styles.cardText} darkColor="black" lightColor="black">
+                 Description:
+              </Text>
+              <Text style={styles.text} darkColor="black" lightColor="black">
+                {booking.description}
               </Text>
               <TouchableOpacity
                 style={styles.deleteButton}
@@ -172,7 +191,7 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
                   handleSubmit(booking.booking_id, booking.event_id)
                 }
               >
-                <AntDesign name="delete" size={24} color="purple" />
+                <AntDesign name="delete" size={24} color="#8D86C9" />
               </TouchableOpacity>
             </Card>
           ))}

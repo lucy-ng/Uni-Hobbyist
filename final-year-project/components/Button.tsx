@@ -4,6 +4,7 @@ Available at: https://docs.expo.dev/ui-programming/react-native-styling-buttons/
 [Accessed 14 March 2024].
  */
 
+import { Link } from "expo-router";
 import { styles } from "./Styles";
 import { Pressable, Text } from "./Themed";
 
@@ -13,36 +14,24 @@ export default function Button(props: { onPress: any; title: string }) {
     <Pressable
       style={styles.button}
       onPress={onPress}
-      lightColor="darkgrey"
-      darkColor="rgba(255,255,255,0.8)"
+      lightColor="#8D86C9"
+      darkColor="#8D86C9"
     >
-      <Text
-        style={styles.buttonText}
-        darkColor="darkgrey"
-        lightColor="rgba(255,255,255,0.8)"
-      >
+      <Text style={styles.buttonText} darkColor="white" lightColor="white">
         {title}
       </Text>
     </Pressable>
   );
 }
 
-export function CardButton(props: { onPress: any; title: string }) {
-  const { onPress, title } = props;
+export function RegisterButton() {
   return (
-    <Pressable
-      style={styles.button}
-      onPress={onPress}
-      darkColor="darkgrey"
-      lightColor="darkgrey"
-    >
-      <Text
-        style={styles.buttonText}
-        darkColor="darkgrey"
-        lightColor="darkgrey"
-      >
-        {title}
-      </Text>
-    </Pressable>
+    <Link href="/RegisterScreen" asChild>
+      <Pressable style={styles.button} lightColor="#8D86C9" darkColor="#8D86C9">
+        <Text style={styles.buttonText} darkColor="white" lightColor="white">
+          Register
+        </Text>
+      </Pressable>
+    </Link>
   );
 }

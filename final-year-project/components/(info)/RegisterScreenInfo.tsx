@@ -106,8 +106,8 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
         <View style={styles.bodyContainer}>
           <Text
             style={styles.inputText}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
           >
             First Name
           </Text>
@@ -115,15 +115,15 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             style={styles.input}
             value={firstName}
             onChangeText={setFirstName}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-            lightBorderColor="rgba(0,0,0,0.8)"
-            darkBorderColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
+            lightBorderColor="#CAC4CE"
+            darkBorderColor="#CAC4CE"
           />
           <Text
             style={styles.inputText}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
           >
             Last Name
           </Text>
@@ -131,15 +131,15 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             style={styles.input}
             value={lastName}
             onChangeText={setLastName}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-            lightBorderColor="rgba(0,0,0,0.8)"
-            darkBorderColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
+            lightBorderColor="#CAC4CE"
+            darkBorderColor="#CAC4CE"
           />
           <Text
             style={styles.inputText}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
           >
             University
           </Text>
@@ -147,15 +147,15 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             style={styles.input}
             value={university}
             onChangeText={setUniversity}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-            lightBorderColor="rgba(0,0,0,0.8)"
-            darkBorderColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
+            lightBorderColor="#CAC4CE"
+            darkBorderColor="#CAC4CE"
           />
           <Text
             style={styles.inputText}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
           >
             Email
           </Text>
@@ -164,15 +164,15 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             style={styles.input}
             value={emailValue}
             onChangeText={setEmail}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-            lightBorderColor="rgba(0,0,0,0.8)"
-            darkBorderColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
+            lightBorderColor="#CAC4CE"
+            darkBorderColor="#CAC4CE"
           />
           <Text
             style={styles.inputText}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
           >
             Password
           </Text>
@@ -181,10 +181,10 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             secureTextEntry={true}
             value={password}
             onChangeText={setPassword}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-            lightBorderColor="rgba(0,0,0,0.8)"
-            darkBorderColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
+            lightBorderColor="#CAC4CE"
+            darkBorderColor="#CAC4CE"
           />
           <Button title="Register" onPress={validateForm} />
         </View>

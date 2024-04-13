@@ -2,7 +2,6 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { styles } from "../Styles";
 import { Text, View } from "../Themed";
 import { useEffect, useState } from "react";
-import { CardButton } from "../Button";
 import { auth, dbRef } from "@/app/database";
 import { signOut } from "firebase/auth";
 import { get, child } from "firebase/database";
@@ -13,6 +12,7 @@ import { logoutAction, manageAccountAction } from "@/app/actions";
 import { useAppDispatch } from "@/app/hooks";
 
 import { getAuth } from "@firebase/auth";
+import Button from "../Button";
 
 export default function AccountScreenInfo({ path }: { path: string }) {
   const [accountId, setAccountId] = useState("");
@@ -67,8 +67,8 @@ export default function AccountScreenInfo({ path }: { path: string }) {
       <View style={styles.bodyHeaderContainer}>
         <Card
           containerStyle={{
-            minWidth: "80%",
-            shadowColor: "grey",
+            minWidth: "83%",
+            shadowColor: "#CAC4CE",
             shadowRadius: 3,
             shadowOpacity: 0.5,
           }}
@@ -83,13 +83,13 @@ export default function AccountScreenInfo({ path }: { path: string }) {
             {emailValue}
           </Text>
           <Card.Divider style={{ marginVertical: 30 }} />
-          <CardButton
+          <Button
             title="Manage Account"
             onPress={() =>
               manageAccountAction(accountId, emailValue, university)
             }
-          ></CardButton>
-          <CardButton title="Logout" onPress={logoutFunction}></CardButton>
+          ></Button>
+          <Button title="Logout" onPress={logoutFunction}></Button>
         </Card>
       </View>
     </>

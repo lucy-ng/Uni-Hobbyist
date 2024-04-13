@@ -1,7 +1,7 @@
 import { ScrollView, TouchableOpacity } from "react-native";
 import { styles } from "../Styles";
 import { useEffect, useState } from "react";
-import { Text } from "../Themed";
+import { Text, View } from "../Themed";
 import { Card } from "@rneui/base";
 import { type Event, dbRef, auth } from "@/app/database";
 import { manageEventAction } from "@/app/actions";
@@ -84,52 +84,87 @@ export default function EventsScreenInfo({ path }: { path: string }) {
 
   return (
     <>
-      <ScrollView>
-        {events.map((event) => (
-          <TouchableOpacity
-            onPress={() => {
-              manageEventAction(event);
-            }}
-            key={event.id}
-          >
-            <Card
-              key={event.id}
-              containerStyle={{
-                shadowColor: "grey",
-                shadowRadius: 3,
-                shadowOpacity: 0.5,
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.bodyHeaderContainer}>
+          {events.map((event) => (
+            <TouchableOpacity
+              onPress={() => {
+                manageEventAction(event);
               }}
+              key={event.id}
             >
-              <Card.Title style={styles.title}>{event.title}</Card.Title>
-              <Card.Divider />
-              <Text style={styles.text} darkColor="black" lightColor="black">
-                Date and Time:{" "}
-                {String(new Date(event.date_time).getDate()).padStart(2, "0") +
-                  "/" +
-                  String(new Date(event.date_time).getMonth() + 1).padStart(
+              <Card
+                key={event.id}
+                containerStyle={{
+                  shadowColor: "#CAC4CE",
+                  shadowRadius: 3,
+                  shadowOpacity: 0.5,
+                  minWidth: "83%",
+                }}
+              >
+                <Card.Title style={styles.title}>{event.title}</Card.Title>
+                <Card.Divider />
+                <Text
+                  style={styles.cardText}
+                  lightColor="black"
+                  darkColor="black"
+                >
+                  Date and Time:{" "}
+                </Text>
+                <Text style={styles.text} darkColor="black" lightColor="black">
+                  {String(new Date(event.date_time).getDate()).padStart(
                     2,
                     "0"
                   ) +
-                  "/" +
-                  new Date(event.date_time).getFullYear() +
-                  " " +
-                  String(new Date(event.date_time).getHours()) +
-                  ":" +
-                  String(new Date(event.date_time).getMinutes()).padStart(
-                    2,
-                    "0"
+                    "/" +
+                    String(new Date(event.date_time).getMonth() + 1).padStart(
+                      2,
+                      "0"
+                    ) +
+                    "/" +
+                    new Date(event.date_time).getFullYear() +
+                    " " +
+                    String(new Date(event.date_time).getHours()) +
+                    ":" +
+                    String(new Date(event.date_time).getMinutes()).padStart(
+                      2,
+                      "0"
+                    )}
+                </Text>
+                <Text>{"\n"}</Text>
+                <Text
+                  style={styles.cardText}
+                  lightColor="black"
+                  darkColor="black"
+                >
+                  Location:
+                </Text>
+                <Text style={styles.text} darkColor="black" lightColor="black">
+                  {event.location}
+                </Text>
+                <Text>{"\n"}</Text>
+                <Text
+                  style={styles.cardText}
+                  lightColor="black"
+                  darkColor="black"
+                >
+                  Tickets Booked:{" "}
+                </Text>
+                {/*    
+                anubhava, 2020. regex: remove leading zeros, but keep single zero. [Online] 
+                Available at: https://stackoverflow.com/questions/60509557/regex-remove-leading-zeros-but-keep-single-zero
+                [Accessed 14 April 2024].
+                */}
+                <Text style={styles.text} darkColor="black" lightColor="black">
+                  {String(event.booked_tickets).replace(
+                    /^(?:0+(?=[1-9])|0+(?=0$))/gm,
+                    ""
                   )}
-              </Text>
-              <Text style={styles.text} darkColor="black" lightColor="black">
-                Location: {event.location}
-              </Text>
-              <Text style={styles.text} darkColor="black" lightColor="black">
-                Tickets Booked:{" "}
-                {String(event.booked_tickets).replace(/^0+/, "")}
-              </Text>
-            </Card>
-          </TouchableOpacity>
-        ))}
+                </Text>
+              </Card>
+            </TouchableOpacity>
+          ))}
+        </View>
       </ScrollView>
     </>
   );

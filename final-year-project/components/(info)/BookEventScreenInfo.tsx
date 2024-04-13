@@ -49,15 +49,17 @@ export default function BookEventScreenInfo({ path }: { path: string }) {
             containerStyle={{
               minWidth: "80%",
               minHeight: "80%",
-              shadowColor: "grey",
+              shadowColor: "#CAC4CE",
               shadowRadius: 3,
               shadowOpacity: 0.5,
             }}
           >
             <Card.Title style={styles.title}>{title}</Card.Title>
             <Card.Divider />
-            <Text style={styles.text} lightColor="black" darkColor="black">
+            <Text style={styles.cardText} lightColor="black" darkColor="black">
               Date and Time:{" "}
+            </Text>
+            <Text style={styles.text} lightColor="black" darkColor="black">
               {String(new Date(dateTime).getDate()).padStart(2, "0") +
                 "/" +
                 String(new Date(dateTime).getMonth() + 1).padStart(2, "0") +
@@ -68,11 +70,19 @@ export default function BookEventScreenInfo({ path }: { path: string }) {
                 ":" +
                 String(new Date(dateTime).getMinutes()).padStart(2, "0")}
             </Text>
-            <Text style={styles.text} lightColor="black" darkColor="black">
-              Location: {location}
+            <Text>{"\n"}</Text>
+            <Text style={styles.cardText} lightColor="black" darkColor="black">
+              Location:{" "}
             </Text>
             <Text style={styles.text} lightColor="black" darkColor="black">
-              Description: {description}
+              {location}
+            </Text>
+            <Text>{"\n"}</Text>
+            <Text style={styles.cardText} lightColor="black" darkColor="black">
+              Description:{" "}
+            </Text>
+            <Text style={styles.text} lightColor="black" darkColor="black">
+              {description}
             </Text>
           </Card>
 

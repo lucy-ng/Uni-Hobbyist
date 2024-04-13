@@ -10,21 +10,25 @@ import {
   Pressable as DefaultPressable,
   PressableProps,
 } from "react-native";
+import { Card as DefaultCard } from "@rneui/themed";
+import { CardProps } from "@rneui/base";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "./useColorScheme";
- 
 
 type ThemeProps = {
   lightColor?: string;
   darkColor?: string;
   lightBorderColor?: string;
   darkBorderColor?: string;
+  lightBackgroundColor?: string;
+  darkBackgroundColor?: string;
 };
 
 export type TextProps = ThemeProps & DefaultText["props"];
 export type TextInputProps = ThemeProps & DefaultTextInput["props"];
 export type ViewProps = ThemeProps & DefaultView["props"];
 export type CustomPressableProps = ThemeProps & PressableProps;
+export type CustomCardProps = ThemeProps & CardProps;
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
@@ -54,6 +58,8 @@ export function TextInput(props: TextInputProps) {
     darkColor,
     lightBorderColor,
     darkBorderColor,
+    lightBackgroundColor,
+    darkBackgroundColor,
     ...otherProps
   } = props;
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
@@ -61,9 +67,16 @@ export function TextInput(props: TextInputProps) {
     { light: lightBorderColor, dark: darkBorderColor },
     "borderColor"
   );
+  const backgroundColor = useThemeColor(
+    { light: lightBackgroundColor, dark: darkBackgroundColor },
+    "background"
+  );
 
   return (
-    <DefaultTextInput style={[{ color, borderColor, borderRadius: 5 }, style]} {...otherProps} />
+    <DefaultTextInput
+      style={[{ color, borderColor, backgroundColor, borderRadius: 5}, style]}
+      {...otherProps}
+    />
   );
 }
 
@@ -84,5 +97,38 @@ export function Pressable(props: CustomPressableProps) {
     "background"
   );
 
-  return <DefaultPressable style={[{ backgroundColor, marginTop: 20, marginBottom: 20 }]} {...otherProps} />;
+  return (
+    <DefaultPressable
+      style={[{ backgroundColor, marginTop: 20, marginBottom: 20 }]}
+      {...otherProps}
+    />
+  );
+}
+
+export function Card(props: CustomCardProps) {
+  const {
+    containerStyle,
+    wrapperStyle,
+    lightBorderColor,
+    darkBorderColor,
+    lightBackgroundColor,
+    darkBackgroundColor,
+    ...otherProps
+  } = props;
+  const backgroundColor = useThemeColor(
+    { light: lightBackgroundColor, dark: darkBackgroundColor },
+    "background"
+  );
+  const borderColor = useThemeColor(
+    { light: lightBorderColor, dark: darkBorderColor },
+    "borderColor"
+  );
+
+  return (
+    <DefaultCard
+      wrapperStyle={[{ backgroundColor, borderColor }]}
+      containerStyle={[{ backgroundColor, borderColor }]}
+      {...otherProps}
+    />
+  );
 }

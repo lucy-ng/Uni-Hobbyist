@@ -113,44 +113,32 @@ export default function ManageAccountScreenInfo({ path }: { path: string }) {
     <>
       <SafeAreaView>
         <View style={styles.bodyContainer}>
-          <Text
-            style={styles.text}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-          >
+          <Text style={styles.text} lightColor="black" darkColor="white">
             First Name
           </Text>
           <TextInput
             style={styles.input}
             value={firstName}
             onChangeText={setFirstName}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-            lightBorderColor="rgba(0,0,0,0.8)"
-            darkBorderColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
+            lightBorderColor="#CAC4CE"
+            darkBorderColor="#CAC4CE"
           />
-          <Text
-            style={styles.text}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-          >
+          <Text style={styles.text} lightColor="black" darkColor="white">
             Last Name
           </Text>
           <TextInput
             style={styles.input}
             value={lastName}
             onChangeText={setLastName}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-            lightBorderColor="rgba(0,0,0,0.8)"
-            darkBorderColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
+            lightBorderColor="#CAC4CE"
+            darkBorderColor="#CAC4CE"
           />
 
-          <Text
-            style={styles.text}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-          >
+          <Text style={styles.text} lightColor="black" darkColor="white">
             Password
           </Text>
           <TextInput
@@ -158,10 +146,10 @@ export default function ManageAccountScreenInfo({ path }: { path: string }) {
             secureTextEntry={true}
             value={password}
             onChangeText={setPassword}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-            lightBorderColor="rgba(0,0,0,0.8)"
-            darkBorderColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
+            lightBorderColor="#CAC4CE"
+            darkBorderColor="#CAC4CE"
           />
           <Button title="Update" onPress={validateForm} />
         </View>

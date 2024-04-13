@@ -5,20 +5,20 @@ export const styles = StyleSheet.create({
     fontSize: 50,
     fontWeight: "bold",
     marginTop: 10,
-    color: "purple",
+    color: "#9067C6",
     fontFamily: "Quicksand",
   },
   cardTitle: {
     fontSize: 40,
     fontWeight: "bold",
-    color: "purple",
+    color: "#9067C6",
     fontFamily: "Quicksand",
   },
   title: {
     fontSize: 40,
     fontWeight: "bold",
     marginTop: 10,
-    color: "purple",
+    color: "#9067C6",
     fontFamily: "Quicksand",
   },
   separator: {
@@ -46,12 +46,21 @@ export const styles = StyleSheet.create({
   },
   bodyHeaderContainer: {
     alignItems: "center",
+    marginVertical: 25,
     minHeight: "90%",
   },
   bodyContainer: {
     alignItems: "center",
     minHeight: "80%",
     justifyContent: "center",
+  },
+  cardText: {
+    fontSize: 24,
+    lineHeight: 24,
+    textAlign: "center",
+    color: "#9067C6",
+    fontFamily: "Quicksand",
+    fontWeight: "200",
   },
   text: {
     fontSize: 17,
@@ -66,7 +75,7 @@ export const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 2,
-    width: 200,
+    width: 250,
     padding: 6,
     margin: 20,
     fontSize: 16,
@@ -78,11 +87,13 @@ export const styles = StyleSheet.create({
   },
   descriptionInput: {
     borderWidth: 2,
+    fontSize: 16,
     width: 200,
     margin: 20,
     padding: 10,
     paddingBottom: 100,
     alignItems: "stretch",
+    minWidth: "65%"
   },
   modalInfoView: {
     borderRadius: 20,
@@ -102,6 +113,11 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
   },
+  searchFilterBox: {
+    maxWidth: "83%",
+    maxHeight: "20%",
+    padding: 10
+  },
   searchBox: {
     alignItems: "center",
     flexWrap: "wrap",
@@ -109,13 +125,15 @@ export const styles = StyleSheet.create({
   },
   searchBar: {
     borderWidth: 2,
-    width: 280,
+    width: 250,
     padding: 8,
-    marginRight: 20,
+    marginLeft: 10,
+    marginRight: 10,
     fontSize: 16,
-    backgroundColor: "#BABABA",
+    backgroundColor: "#CAC4CE"
   },
   tagsList: {
+    marginVertical: 20,
     flexWrap: "wrap",
     flexDirection: "row",
     alignContent: "center",
@@ -144,6 +162,5 @@ export const styles = StyleSheet.create({
     letterSpacing: 0.25,
     lineHeight: 21,
     fontWeight: "bold",
-    color: "purple",
   },
 });

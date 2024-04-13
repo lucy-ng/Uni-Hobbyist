@@ -17,12 +17,6 @@ import Button from "../Button";
 import { AntDesign } from "@expo/vector-icons";
 import { Chip } from "@rneui/themed";
 import { dashboardAction } from "@/app/actions";
-
-/*
-React Native Community, 2022. react-native-modal. [Online]
-Available at: https://github.com/react-native-modal/react-native-modal
-[Accessed 12 April 2024].
-*/
 import Modal from "react-native-modal";
 
 let tagsList: Tag[] = [
@@ -127,16 +121,21 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
   return (
     <>
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+        {/*
+        React Native Community, 2022. react-native-modal. [Online]
+        Available at: https://github.com/react-native-modal/react-native-modal
+        [Accessed 12 April 2024].
+        */}
         <Modal isVisible={deleteModal} hasBackdrop={true} backdropOpacity={0.8}>
           <View
             style={styles.modalInfoView}
-            darkColor="darkgrey"
-            lightColor="lightgrey"
+            darkColor="#CAC4CE"
+            lightColor="#CAC4CE"
           >
             <AntDesign
               name="closecircle"
               size={24}
-              color="purple"
+              color="#8D86C9"
               onPress={() => setDeleteModal(false)}
               style={styles.closeIcon}
             />
@@ -147,28 +146,20 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
           </View>
         </Modal>
         <View style={styles.keyboardContainer}>
-          <Text
-            style={styles.text}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-          >
+          <Text style={styles.text} lightColor="black" darkColor="white">
             Title
           </Text>
           <TextInput
             style={styles.input}
             value={title}
             onChangeText={setTitle}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-            lightBorderColor="rgba(0,0,0,0.8)"
-            darkBorderColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
+            lightBorderColor="#CAC4CE"
+            darkBorderColor="#CAC4CE"
           />
           <View style={styles.dateTimeBox}>
-            <Text
-              style={styles.text}
-              lightColor="rgba(0,0,0,0.8)"
-              darkColor="rgba(255,255,255,0.8)"
-            >
+            <Text style={styles.text} lightColor="black" darkColor="white">
               Date and Time
             </Text>
             <RNDateTimePicker
@@ -179,27 +170,19 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
               }
             />
           </View>
-          <Text
-            style={styles.text}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-          >
+          <Text style={styles.text} lightColor="black" darkColor="white">
             Location
           </Text>
           <TextInput
             style={styles.input}
             value={location}
             onChangeText={setLocation}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-            lightBorderColor="rgba(0,0,0,0.8)"
-            darkBorderColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
+            lightBorderColor="#CAC4CE"
+            darkBorderColor="#CAC4CE"
           />
-          <Text
-            style={styles.text}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-          >
+          <Text style={styles.text} lightColor="black" darkColor="white">
             Description
           </Text>
           <TextInput
@@ -207,39 +190,31 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
             style={styles.descriptionInput}
             value={description}
             onChangeText={setDescription}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-            lightBorderColor="rgba(0,0,0,0.8)"
-            darkBorderColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
+            lightBorderColor="#CAC4CE"
+            darkBorderColor="#CAC4CE"
           />
-          <Text
-            style={styles.text}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-          >
+          <Text style={styles.text} lightColor="black" darkColor="white">
             Number of Tickets
           </Text>
           <TextInput
             style={styles.input}
             value={maxTickets}
             onChangeText={setMaxTickets}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-            lightBorderColor="rgba(0,0,0,0.8)"
-            darkBorderColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
+            lightBorderColor="#CAC4CE"
+            darkBorderColor="#CAC4CE"
             keyboardType="numeric"
           />
-          <Text
-            style={styles.text}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-          >
+          <Text style={styles.text} lightColor="black" darkColor="white">
             Tags
           </Text>
           <View style={styles.tagsList}>
             {tagsList.map((tag, index) => (
               <Chip
-                style={{ backgroundColor: "lightgrey" }}
+                style={{ backgroundColor: "#CAC4CE" }}
                 key={tag.name}
                 title={tag.name}
                 type={tag.type}
@@ -248,6 +223,14 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
             ))}
           </View>
           <Button title="Update" onPress={validateForm} />
+          <View
+            style={styles.separator}
+            lightColor="#F7ECE1"
+            darkColor="#242038"
+          />
+          <Text style={styles.altText} lightColor="black" darkColor="white">
+            Want to delete this event?
+          </Text>
           <Button title="Delete" onPress={() => setDeleteModal(true)} />
         </View>
       </KeyboardAwareScrollView>

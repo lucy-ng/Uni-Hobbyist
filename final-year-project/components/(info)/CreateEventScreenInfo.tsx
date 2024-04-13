@@ -10,20 +10,8 @@ import {
   invalidMaxTicketsToast,
 } from "../Toast";
 import { v4 as uuid } from "uuid";
-
-/*
-React Native Community, 2024. react-native-datetimepicker. [Online] 
-Available at: https://github.com/react-native-datetimepicker/datetimepicker?tab=readme-ov-file#getting-started
-[Accessed 28 March 2024].
-*/
+import "react-native-get-random-values";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-
-/*
-React Native Elements Community, 2024. Chip. [Online]
-Available at: https://reactnativeelements.com/docs/components/chip
-[Accessed 9 April 2024].
-*/
-
 import { Chip } from "@rneui/themed";
 
 let tagsList: Tag[] = [
@@ -105,30 +93,29 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
     <>
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.keyboardContainer}>
-          <Text
-            style={styles.text}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-          >
+          <Text style={styles.text} lightColor="black" darkColor="white">
             Title
           </Text>
           <TextInput
             style={styles.input}
             value={title}
             onChangeText={setTitle}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-            lightBorderColor="rgba(0,0,0,0.8)"
-            darkBorderColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
+            lightBorderColor="#CAC4CE"
+            darkBorderColor="#CAC4CE"
           />
           <View style={styles.dateTimeBox}>
-            <Text
-              style={styles.text}
-              lightColor="rgba(0,0,0,0.8)"
-              darkColor="rgba(255,255,255,0.8)"
-            >
+            <Text style={styles.text} lightColor="black" darkColor="white">
               Date and Time
             </Text>
+            {
+              /*
+              React Native Community, 2024. react-native-datetimepicker. [Online] 
+              Available at: https://github.com/react-native-datetimepicker/datetimepicker?tab=readme-ov-file#getting-started
+              [Accessed 28 March 2024].
+              */
+            }
             <RNDateTimePicker
               mode={"datetime"}
               value={dateTime}
@@ -137,27 +124,19 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
               }
             />
           </View>
-          <Text
-            style={styles.text}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-          >
+          <Text style={styles.text} lightColor="black" darkColor="white">
             Location
           </Text>
           <TextInput
             style={styles.input}
             value={location}
             onChangeText={setLocation}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-            lightBorderColor="rgba(0,0,0,0.8)"
-            darkBorderColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
+            lightBorderColor="#CAC4CE"
+            darkBorderColor="#CAC4CE"
           />
-          <Text
-            style={styles.text}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-          >
+          <Text style={styles.text} lightColor="black" darkColor="white">
             Description
           </Text>
           <TextInput
@@ -165,39 +144,38 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
             style={styles.descriptionInput}
             value={description}
             onChangeText={setDescription}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-            lightBorderColor="rgba(0,0,0,0.8)"
-            darkBorderColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
+            lightBorderColor="#CAC4CE"
+            darkBorderColor="#CAC4CE"
           />
-          <Text
-            style={styles.text}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-          >
+          <Text style={styles.text} lightColor="black" darkColor="white">
             Number of Tickets
           </Text>
           <TextInput
             style={styles.input}
             value={maxTickets}
             onChangeText={setMaxTickets}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-            lightBorderColor="rgba(0,0,0,0.8)"
-            darkBorderColor="rgba(255,255,255,0.8)"
+            lightColor="black"
+            darkColor="white"
+            lightBorderColor="#CAC4CE"
+            darkBorderColor="#CAC4CE"
             keyboardType="numeric"
           />
-          <Text
-            style={styles.text}
-            lightColor="rgba(0,0,0,0.8)"
-            darkColor="rgba(255,255,255,0.8)"
-          >
+          <Text style={styles.text} lightColor="black" darkColor="white">
             Tags
           </Text>
           <View style={styles.tagsList}>
+            {
+              /*
+              React Native Elements Community, 2024. Chip. [Online]
+              Available at: https://reactnativeelements.com/docs/components/chip
+              [Accessed 9 April 2024].
+              */
+            }
             {tagsList.map((tag, index) => (
               <Chip
-                style={{ backgroundColor: "lightgrey" }}
+                style={{ backgroundColor: "#CAC4CE" }}
                 key={tag.name}
                 title={tag.name}
                 type={tag.type}

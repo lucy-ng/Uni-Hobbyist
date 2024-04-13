@@ -1,20 +1,14 @@
-import { View, ScrollView, TouchableOpacity } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native";
 import { styles } from "../Styles";
 import { useEffect, useState } from "react";
 import { child, get } from "firebase/database";
 import { errorToast, noSearchResultsToast } from "../Toast";
-import { Pressable, Text, TextInput } from "../Themed";
+import { View, Pressable, Text, TextInput } from "../Themed";
 import { Card } from "@rneui/base";
 import { type Event, dbRef, auth, Tag } from "@/app/database";
 import { eventInfoAction } from "@/app/actions";
 import { Chip } from "@rneui/themed";
 import { AntDesign } from "@expo/vector-icons";
-
-/*
-React Native Elements Community, 2024. Chip. [Online]
-Available at: https://reactnativeelements.com/docs/components/chip
-[Accessed 12 April 2024].
-*/
 
 let tagsList: Tag[] = [
   { name: "Media & Entertainment", type: "outline" },
@@ -185,6 +179,9 @@ export default function HomeScreenInfo({ path }: { path: string }) {
         console.error(error);
         errorToast();
       });
+    if (!eventsList.length) {
+      noSearchResultsToast();
+    }
   };
 
   const modifyTag = (tag: Tag, index: number) => {
@@ -195,30 +192,38 @@ export default function HomeScreenInfo({ path }: { path: string }) {
       setTags([...tagsList]);
       tagsList[index].type = "outline";
     }
+
+    if (!events.length) {
+      noSearchResultsToast();
+    }
   };
 
   return (
     <>
       <View style={styles.bodyHeaderContainer}>
-        <Card containerStyle={{ minWidth: "80%", maxHeight: "20%" }}>
-          <View style={styles.searchBox}>
+        <View
+          style={styles.searchFilterBox}
+          lightColor="white"
+          darkColor="white"
+        >
+          <View style={styles.searchBox} lightColor="white" darkColor="white">
             <TextInput
               style={styles.searchBar}
               placeholder="Search for events..."
               onChangeText={setSearchValue}
               value={searchValue}
               onSubmitEditing={searchEvent}
-              darkColor="purple"
-              lightColor="purple"
-              darkBorderColor="purple"
-              lightBorderColor="purple"
+              lightColor="black"
+              darkColor="white"
+              lightBorderColor="#CAC4CE"
+              darkBorderColor="#CAC4CE"
             />
             <Pressable onPress={searchEvent}>
               <AntDesign
                 name="search1"
                 size={24}
-                color="purple"
-                backgroundColor={"white"}
+                color="#8D86C9"
+                backgroundColor="white"
               />
             </Pressable>
           </View>
@@ -227,9 +232,14 @@ export default function HomeScreenInfo({ path }: { path: string }) {
             horizontal={true}
             showsHorizontalScrollIndicator={false}
           >
+            {/*
+            React Native Elements Community, 2024. Chip. [Online]
+            Available at: https://reactnativeelements.com/docs/components/chip
+            [Accessed 12 April 2024].
+            */}
             {tagsList.map((tag, index) => (
               <Chip
-                style={{ backgroundColor: "lightgrey" }}
+                style={{ backgroundColor: "#CAC4CE" }}
                 key={tag.name}
                 title={tag.name}
                 type={tag.type}
@@ -237,7 +247,7 @@ export default function HomeScreenInfo({ path }: { path: string }) {
               />
             ))}
           </ScrollView>
-        </Card>
+        </View>
 
         <ScrollView>
           {events.map((event) => (
@@ -250,15 +260,22 @@ export default function HomeScreenInfo({ path }: { path: string }) {
               <Card
                 key={event.id}
                 containerStyle={{
-                  shadowColor: "grey",
+                  shadowColor: "#CAC4CE",
                   shadowRadius: 3,
                   shadowOpacity: 0.5,
+                  minWidth: "83%",
                 }}
               >
                 <Card.Title style={styles.title}>{event.title}</Card.Title>
                 <Card.Divider />
-                <Text style={styles.text} lightColor="black" darkColor="black">
+                <Text
+                  style={styles.cardText}
+                  lightColor="black"
+                  darkColor="black"
+                >
                   Date and Time:{" "}
+                </Text>
+                <Text style={styles.text} lightColor="black" darkColor="black">
                   {String(new Date(event.date_time).getDate()).padStart(
                     2,
                     "0"
@@ -278,8 +295,16 @@ export default function HomeScreenInfo({ path }: { path: string }) {
                       "0"
                     )}
                 </Text>
+                <Text>{"\n"}</Text>
+                <Text
+                  style={styles.cardText}
+                  lightColor="black"
+                  darkColor="black"
+                >
+                  Location:
+                </Text>
                 <Text style={styles.text} lightColor="black" darkColor="black">
-                  Location: {event.location}
+                  {event.location}
                 </Text>
               </Card>
             </TouchableOpacity>
