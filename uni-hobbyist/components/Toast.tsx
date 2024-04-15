@@ -6,6 +6,13 @@
 
 import Toast from "react-native-toast-message";
 
+export const emailSameToast = () => {
+  Toast.show({
+    type: "error",
+    text2: "This email is already registered to an account.",
+  });
+};
+
 export const passwordSameToast = () => {
   Toast.show({
     type: "error",

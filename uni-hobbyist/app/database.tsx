@@ -112,8 +112,6 @@ export const createEventInfo = (event: Event) => {
     });
 };
 
-
-
 export const fetchBookings = (accountId: string) => {
   let bookingsList: Event[] = [];
 

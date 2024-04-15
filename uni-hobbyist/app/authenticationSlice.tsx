@@ -7,6 +7,7 @@ Available at: https://redux-toolkit.js.org/tutorials/quick-start
 
 import { createSlice } from '@reduxjs/toolkit'
 
+// Global state for app to see if the user has logged in or not
 export interface AuthenticationState {
   isLoggedIn: boolean
 }
@@ -15,6 +16,7 @@ const initialState: AuthenticationState = {
   isLoggedIn: false,
 }
 
+// Processes action and updates state based on action
 export const authenticationSlice = createSlice({
   name: 'isLoggedIn',
   initialState,

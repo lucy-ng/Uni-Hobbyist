@@ -1,6 +1,6 @@
 import DashboardScreenInfo from "@/components/(info)/DashboardScreenInfo";
 import { styles } from "@/components/Styles";
-import { Text, View } from "@/components/Themed";
+import { View } from "@/components/Themed";
 
 import Toast from "react-native-toast-message";
 

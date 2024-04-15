@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Text, View, TextInput } from "../Themed";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { styles } from "../Styles";
-import { auth, db } from "@/app/database";
+import { auth, db, dbRef } from "@/app/database";
 import Button from "../Button";
 import {
   emailErrorToast,
+  emailSameToast,
   emptyValueToast,
   passwordLengthErrorToast,
   passwordLowerErrorToast,
@@ -15,7 +16,7 @@ import {
   registerErrorToast,
   registerSuccessToast,
 } from "../Toast";
-import { ref, set } from "firebase/database";
+import { child, get, ref, set } from "firebase/database";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { loginScreenAction } from "@/app/actions";
 
@@ -37,19 +38,36 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
   */
 
   const handleSubmit = () => {
-    createUserWithEmailAndPassword(auth, emailValue, password)
-      .then((userCredential) => {
-        set(ref(db, "accounts/" + userCredential.user.uid), {
-          first_name: firstName,
-          last_name: lastName,
-          email: emailValue,
-          university: university,
-        });
-        loginScreenAction();
-        registerSuccessToast();
+    get(child(dbRef, `accounts`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+
+          for (let i = 0; i < Object.keys(data).length; i++) {
+            let email = data[Object.keys(data)[i]].email;
+            if (email == emailValue) {
+              emailSameToast();
+            } else {
+              createUserWithEmailAndPassword(auth, emailValue, password)
+                .then((userCredential) => {
+                  set(ref(db, "accounts/" + userCredential.user.uid), {
+                    first_name: firstName,
+                    last_name: lastName,
+                    email: emailValue,
+                    university: university,
+                  });
+                  loginScreenAction();
+                  registerSuccessToast();
+                })
+                .catch((error: any) => {
+                  console.log(error.code, error.message);
+                });
+            }
+          }
+        }
       })
-      .catch((error: any) => {
-        console.log(error.code, error.message);
+      .catch((error) => {
+        console.error(error);
         registerErrorToast();
       });
   };
@@ -104,11 +122,7 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
     <>
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.bodyContainer}>
-          <Text
-            style={styles.inputText}
-            lightColor="black"
-            darkColor="white"
-          >
+          <Text style={styles.inputText} lightColor="black" darkColor="white">
             First Name
           </Text>
           <TextInput
@@ -120,11 +134,7 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             lightBorderColor="#CAC4CE"
             darkBorderColor="#CAC4CE"
           />
-          <Text
-            style={styles.inputText}
-            lightColor="black"
-            darkColor="white"
-          >
+          <Text style={styles.inputText} lightColor="black" darkColor="white">
             Last Name
           </Text>
           <TextInput
@@ -136,11 +146,7 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             lightBorderColor="#CAC4CE"
             darkBorderColor="#CAC4CE"
           />
-          <Text
-            style={styles.inputText}
-            lightColor="black"
-            darkColor="white"
-          >
+          <Text style={styles.inputText} lightColor="black" darkColor="white">
             University
           </Text>
           <TextInput
@@ -152,12 +158,8 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             lightBorderColor="#CAC4CE"
             darkBorderColor="#CAC4CE"
           />
-          <Text
-            style={styles.inputText}
-            lightColor="black"
-            darkColor="white"
-          >
-            Email
+          <Text style={styles.inputText} lightColor="black" darkColor="white">
+            University Email
           </Text>
           <TextInput
             keyboardType={"email-address"}
@@ -169,11 +171,7 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             lightBorderColor="#CAC4CE"
             darkBorderColor="#CAC4CE"
           />
-          <Text
-            style={styles.inputText}
-            lightColor="black"
-            darkColor="white"
-          >
+          <Text style={styles.inputText} lightColor="black" darkColor="white">
             Password
           </Text>
           <TextInput

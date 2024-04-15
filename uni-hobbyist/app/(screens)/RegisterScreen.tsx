@@ -9,11 +9,6 @@ export default function RegisterScreen() {
       <View style={styles.container}>
         <RegisterScreenInfo path="app/(screens)/RegisterScreen.tsx" />
       </View>
-      {/*
-      Almidan, H., 2022. Quick start. [Online] 
-      Available at: https://github.com/calintamas/react-native-toast-message/blob/HEAD/docs/quick-start.md
-      [Accessed 14 March 2024]. 
-      */}
       <Toast />
     </>
   );
