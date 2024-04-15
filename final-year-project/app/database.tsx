@@ -74,59 +74,6 @@ export const auth = !getAuth.length
   : getAuth();
 
 /*
-Google LLC, 2024. Authenticate with Firebase Using Email Link in JavaScript. [Online] 
-Available at: https://firebase.google.com/docs/auth/web/email-link-auth
-[Accessed 14 March 2024].
-*/
-
-const actionCodeSettings = {
-  url: process.env.EXPO_PUBLIC_ACTION_CODE_URL ?? "",
-  handleCodeInApp: true,
-  iOS: {
-    bundleId: process.env.EXPO_PUBLIC_IOS_BUNDLE_ID ?? "",
-  },
-  android: {
-    packageName: process.env.EXPO_PUBLIC_ANDROID_PACKAGE_NAME ?? "",
-    installApp: true,
-    minimumVersion: "12",
-  },
-  dynamicLinkDomain: process.env.EXPO_PUBLIC_DYNAMIC_LINK_DOMAIN ?? "",
-};
-
-/*
-Google LLC, 2024. Authenticate with Firebase Using Email Link in Android. [Online] 
-Available at: https://firebase.google.com/docs/auth/android/email-link-auth
-[Accessed 16 March 2024].
-*/
-
-// export const sendEmail = (emailValue: string) => {
-//   sendSignInLinkToEmail(auth, emailValue, actionCodeSettings)
-//     .then(() => {
-//       // sessionStorage.setItem("emailForSignIn", emailValue);
-//     })
-//     .catch((error) => {
-//       const errorCode = error.code;
-//       const errorMessage = error.message;
-//       console.log(errorCode, errorMessage);
-//     });
-// };
-
-// export const verifyEmail = async (emailValue: string) => {
-//   const emailLink = (await Linking.getInitialURL()) ?? "";
-//   if (isSignInWithEmailLink(auth, emailLink)) {
-//     signInWithEmailLink(auth, emailValue, emailLink)
-//       .then(() => {
-//         // sessionStorage.setItem("emailForSignIn", emailValue);
-//       })
-//       .catch((error) => {
-//         const errorCode = error.code;
-//         const errorMessage = error.message;
-//         console.log(errorCode, errorMessage);
-//       });
-//   }
-// };
-
-/*
 Google LLC, 2024. Read and Write Data on the Web. [Online] 
 Available at: https://firebase.google.com/docs/database/web/read-and-write
 [Accessed 14 March 2024].
