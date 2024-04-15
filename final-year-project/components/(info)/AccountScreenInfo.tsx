@@ -1,4 +1,3 @@
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { styles } from "../Styles";
 import { Text, View } from "../Themed";
 import { useEffect, useState } from "react";
@@ -67,7 +66,7 @@ export default function AccountScreenInfo({ path }: { path: string }) {
       <View style={styles.bodyHeaderContainer}>
         <Card
           containerStyle={{
-            minWidth: "83%",
+            minWidth: "80%",
             shadowColor: "#CAC4CE",
             shadowRadius: 3,
             shadowOpacity: 0.5,

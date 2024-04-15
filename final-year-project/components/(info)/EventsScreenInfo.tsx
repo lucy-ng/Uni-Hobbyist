@@ -52,7 +52,7 @@ export default function EventsScreenInfo({ path }: { path: string }) {
                         location: event.location,
                         max_tickets: event.max_tickets,
                         description: event.description,
-                        tags: event.tags,
+                        tags: event.tags ?? [],
                       };
                       eventsList.push(eventData);
                     }

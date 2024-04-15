@@ -8,8 +8,6 @@ import {
 } from "firebase/auth";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import {
-  bookEventErrorToast,
-  bookEventSuccessToast,
   createEventSuccessToast,
   deleteBookingErrorToast,
   deleteBookingSuccessToast,
@@ -18,7 +16,7 @@ import {
 } from "@/components/Toast";
 
 import { ChipProps } from "@rneui/themed";
-import { dashboardAction, homeAction } from "./actions";
+import { goBackAction } from "./actions";
 
 export type Tag = {
   name: string;
@@ -42,7 +40,7 @@ export type Event = {
   date_time_updated: string;
   max_tickets: number;
   booked_tickets: number;
-  tags: string[];
+  tags?: string[];
 };
 
 export type Booking = {
@@ -145,7 +143,7 @@ export const createEventInfo = (event: Event) => {
     date_time_updated: event.date_time_updated,
     max_tickets: event.max_tickets,
     booked_tickets: event.booked_tickets,
-    tags: event.tags,
+    tags: event.tags ?? [],
   }).catch((error: any) => {
     console.error(error);
     errorToast();
@@ -158,7 +156,7 @@ export const createEventInfo = (event: Event) => {
     time_booked: "",
   })
     .then(() => {
-      dashboardAction();
+      goBackAction();
       createEventSuccessToast();
     })
     .catch((error: any) => {
@@ -222,7 +220,7 @@ export const deleteEventInfo = (eventId: string) => {
               .then(() => {
                 remove(ref(db, "events/" + eventId))
                   .then(() => {
-                    dashboardAction();
+                    goBackAction();
                     deleteEventSuccessToast();
                   })
                   .catch((error) => {
@@ -242,66 +240,6 @@ export const deleteEventInfo = (eventId: string) => {
     });
 };
 
-export const bookEvent = (eventId: string) => {
-  const userId = auth.currentUser ? auth.currentUser.uid : "";
-  const dateToday = new Date();
-
-  /*
-  Meddows, Samuel; mohshbool, 2019. How do I get the current date in JavaScript?. [Online] 
-  Available at: https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript
-  [Accessed 27 March 2024].
-  */
-  const dd = String(dateToday.getDate()).padStart(2, "0");
-  const mm = String(dateToday.getMonth() + 1).padStart(2, "0");
-  const yyyy = dateToday.getFullYear();
-
-  const hours = String(dateToday.getHours());
-  const minutes = String(dateToday.getMinutes()).padStart(2, "0");
-
-  set(ref(db, "bookings/" + uuid()), {
-    account_id: userId,
-    event_id: eventId,
-    date_booked: dd + "/" + mm + "/" + yyyy,
-    time_booked: hours + ":" + minutes,
-  })
-    .then(() => {
-      get(child(dbRef, `events/${eventId}`))
-        .then((snapshot) => {
-          if (snapshot.exists()) {
-            const event = snapshot.val();
-            set(ref(db, `events/${eventId}`), {
-              title: event.title,
-              booked_tickets: event.booked_tickets + 1,
-              date_time: event.date_time,
-              date_time_updated: event.date_time_updated,
-              description: event.description,
-              location: event.location,
-              max_tickets: event.max_tickets,
-              tags: event.tags,
-            })
-              .then(() => {
-                homeAction();
-                bookEventSuccessToast();
-              })
-              .catch((error: any) => {
-                console.error(error);
-                bookEventErrorToast();
-              });
-          } else {
-            errorToast();
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          errorToast();
-        });
-    })
-    .catch((error: any) => {
-      console.error(error);
-      bookEventErrorToast();
-    });
-};
-
 export const deleteBooking = (bookingId: string, eventId: string) => {
   remove(ref(db, "bookings/" + bookingId))
     .then(() => {
@@ -317,10 +255,10 @@ export const deleteBooking = (bookingId: string, eventId: string) => {
               description: event.description,
               location: event.location,
               max_tickets: event.max_tickets,
-              tags: event.tags,
+              tags: event.tags ?? [],
             })
               .then(() => {
-                homeAction();
+                goBackAction();
                 deleteBookingSuccessToast();
               })
               .catch((error: any) => {

@@ -6,25 +6,17 @@ import {
   accountDetailsErrorToast,
   emptyValueToast,
   errorToast,
-  passwordLengthErrorToast,
-  passwordLowerErrorToast,
-  passwordNonAlphanumericErrorToast,
-  passwordNumberErrorToast,
-  passwordSameToast,
-  passwordUpperErrorToast,
   updateAccountSuccessToast,
 } from "../Toast";
 import { child, get, ref, set } from "firebase/database";
 import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native";
-import { updatePassword } from "firebase/auth";
 import { auth, db, dbRef } from "@/app/database";
-import { accountAction } from "@/app/actions";
+import { goBackAction } from "@/app/actions";
 
 export default function ManageAccountScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [password, setPassword] = useState("");
   const params = useLocalSearchParams();
   const userId = auth.currentUser ? auth.currentUser.uid : "";
 
@@ -46,28 +38,8 @@ export default function ManageAccountScreenInfo({ path }: { path: string }) {
   }, []);
 
   const validateForm = () => {
-    /*
-    Kiers, Bart, 2022. RegEx to make sure that the string contains at least one lower case char, upper case char, digit and symbol. [Online] 
-    Available at: https://stackoverflow.com/questions/1559751/regex-to-make-sure-that-the-string-contains-at-least-one-lower-case-char-upper
-    [Accessed 27 March 2024].
-    */
-    const passwordDigitReg = new RegExp(/(?=.*\d)/);
-    const passwordUpperReg = new RegExp(/(?=.*[A-Z])/);
-    const passwordLowerReg = new RegExp(/(?=.*[a-z])/);
-    const passwordNonAlphanumericReg = new RegExp(/[-+_!@#$%^&*.,?]/);
-
-    if (firstName === "" || lastName === "" || password === "") {
+    if (firstName === "" || lastName === "") {
       emptyValueToast();
-    } else if (password.length < 6) {
-      passwordLengthErrorToast();
-    } else if (!passwordDigitReg.test(password)) {
-      passwordNumberErrorToast();
-    } else if (!passwordLowerReg.test(password)) {
-      passwordLowerErrorToast();
-    } else if (!passwordUpperReg.test(password)) {
-      passwordUpperErrorToast();
-    } else if (!passwordNonAlphanumericReg.test(password)) {
-      passwordNonAlphanumericErrorToast();
     } else {
       handleSubmit();
     }
@@ -78,11 +50,6 @@ export default function ManageAccountScreenInfo({ path }: { path: string }) {
   Available at: https://firebase.google.com/docs/database/web/read-and-write
   [Accessed 14 March 2024].
   */
-  /*
-  Google LLC, 2024. Authenticate with Firebase using Password-Based Accounts using Javascript. [Online] 
-  Available at: https://firebase.google.com/docs/auth/web/password-auth
-  [Accessed 27 March 2024].
-  */
 
   const handleSubmit = () => {
     set(ref(db, "accounts/" + params.accountId), {
@@ -92,17 +59,8 @@ export default function ManageAccountScreenInfo({ path }: { path: string }) {
       university: params.university,
     })
       .then(() => {
-        if (auth.currentUser) {
-          updatePassword(auth.currentUser, password)
-            .then(() => {
-              accountAction();
-              updateAccountSuccessToast();
-            })
-            .catch((error: any) => {
-              console.log(error.code, error.message);
-              errorToast();
-            });
-        }
+        goBackAction();
+        updateAccountSuccessToast();
       })
       .catch((error) => {
         errorToast();
@@ -132,20 +90,6 @@ export default function ManageAccountScreenInfo({ path }: { path: string }) {
             style={styles.input}
             value={lastName}
             onChangeText={setLastName}
-            lightColor="black"
-            darkColor="white"
-            lightBorderColor="#CAC4CE"
-            darkBorderColor="#CAC4CE"
-          />
-
-          <Text style={styles.text} lightColor="black" darkColor="white">
-            Password
-          </Text>
-          <TextInput
-            style={styles.input}
-            secureTextEntry={true}
-            value={password}
-            onChangeText={setPassword}
             lightColor="black"
             darkColor="white"
             lightBorderColor="#CAC4CE"

@@ -16,7 +16,7 @@ import RNDateTimePicker from "@react-native-community/datetimepicker";
 import Button from "../Button";
 import { AntDesign } from "@expo/vector-icons";
 import { Chip } from "@rneui/themed";
-import { dashboardAction } from "@/app/actions";
+import { goBackAction } from "@/app/actions";
 import Modal from "react-native-modal";
 
 let tagsList: Tag[] = [
@@ -36,7 +36,7 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [maxTickets, setMaxTickets] = useState("");
-  const [tags, setTags] = useState<Array<Tag>>(tagsList);
+  const [tags, setTags] = useState<Array<Tag>>(tagsList ?? []);
   const [deleteModal, setDeleteModal] = useState(false);
 
   const dateToday = new Date();
@@ -49,14 +49,18 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
     setDescription(String(params.description));
     setMaxTickets(String(params.max_tickets));
 
-    let fetchedTags: string[] = params.tags as string[];
+    let fetchedTags: string[] = params.tags as string[] ?? [];
     let newTags = tagsList;
 
     newTags.forEach((tag) => {
       if (fetchedTags.includes(tag.name)) {
         tag.type = "solid";
       }
+      else {
+        tag.type = "outline";
+      }
     });
+
     setTags(newTags);
   }, []);
 
@@ -78,11 +82,13 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
 
   const handleSubmit = () => {
     let selectedTags: string[] = [];
-    tags.forEach((tag) => {
-      if (tag.type == "solid") {
-        selectedTags.push(tag.name);
-      }
-    });
+    if (tags.length > 0) {
+      tags.forEach((tag) => {
+        if (tag.type == "solid") {
+          selectedTags.push(tag.name);
+        }
+      });
+    }
 
     set(ref(db, "events/" + params.id), {
       booked_tickets: params.booked_tickets,
@@ -92,10 +98,10 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
       max_tickets: Number(maxTickets),
       title: title,
       description: description,
-      tags: selectedTags,
+      tags: selectedTags ?? [],
     })
       .then(() => {
-        dashboardAction();
+        goBackAction();
         updateEventSuccessToast();
       })
       .catch((error) => {

@@ -24,7 +24,7 @@ let tagsList: Tag[] = [
 export default function HomeScreenInfo({ path }: { path: string }) {
   const [searchValue, setSearchValue] = useState("");
   const [events, setEvents] = useState<Event[]>([]);
-  const [tags, setTags] = useState<Array<Tag>>(tagsList);
+  const [tags, setTags] = useState<Array<Tag>>(tagsList ?? []);
   const userId = auth.currentUser ? auth.currentUser.uid : "";
 
   useEffect(() => {
@@ -67,13 +67,13 @@ export default function HomeScreenInfo({ path }: { path: string }) {
               id: id,
               location: searchedEvent.location,
               max_tickets: searchedEvent.max_tickets,
-              tags: searchedEvent.tags,
+              tags: searchedEvent.tags ?? [],
               title: searchedEvent.title,
               description: searchedEvent.description,
             };
 
             tags.forEach((tag) => {
-              if (
+              if ( searchedEvent.tags &&
                 searchedEvent.tags.includes(tag.name) &&
                 tag.type == "solid" &&
                 !eventsList.includes(searchedEvent) &&
@@ -131,7 +131,7 @@ export default function HomeScreenInfo({ path }: { path: string }) {
                     location: event.location,
                     max_tickets: event.max_tickets,
                     description: event.description,
-                    tags: event.tags,
+                    tags: event.tags ?? [],
                   };
 
                   if (searchValue == "" && !hostedEvents.includes(eventId)) {
@@ -179,9 +179,6 @@ export default function HomeScreenInfo({ path }: { path: string }) {
         console.error(error);
         errorToast();
       });
-    if (!eventsList.length) {
-      noSearchResultsToast();
-    }
   };
 
   const modifyTag = (tag: Tag, index: number) => {
@@ -191,10 +188,6 @@ export default function HomeScreenInfo({ path }: { path: string }) {
     } else {
       setTags([...tagsList]);
       tagsList[index].type = "outline";
-    }
-
-    if (!events.length) {
-      noSearchResultsToast();
     }
   };
 

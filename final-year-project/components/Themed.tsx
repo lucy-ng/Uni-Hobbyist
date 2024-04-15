@@ -10,10 +10,9 @@ import {
   Pressable as DefaultPressable,
   PressableProps,
 } from "react-native";
-import { Card as DefaultCard } from "@rneui/themed";
-import { CardProps } from "@rneui/base";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "./useColorScheme";
+import { forwardRef } from 'react';
 
 type ThemeProps = {
   lightColor?: string;
@@ -28,7 +27,6 @@ export type TextProps = ThemeProps & DefaultText["props"];
 export type TextInputProps = ThemeProps & DefaultTextInput["props"];
 export type ViewProps = ThemeProps & DefaultView["props"];
 export type CustomPressableProps = ThemeProps & PressableProps;
-export type CustomCardProps = ThemeProps & CardProps;
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
@@ -90,7 +88,7 @@ export function View(props: ViewProps) {
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
 }
 
-export function Pressable(props: CustomPressableProps) {
+export const Pressable = forwardRef(function Pressable(props: CustomPressableProps, ref) {
   const { style, lightColor, darkColor, ...otherProps } = props;
   const backgroundColor = useThemeColor(
     { light: lightColor, dark: darkColor },
@@ -103,32 +101,5 @@ export function Pressable(props: CustomPressableProps) {
       {...otherProps}
     />
   );
-}
+});
 
-export function Card(props: CustomCardProps) {
-  const {
-    containerStyle,
-    wrapperStyle,
-    lightBorderColor,
-    darkBorderColor,
-    lightBackgroundColor,
-    darkBackgroundColor,
-    ...otherProps
-  } = props;
-  const backgroundColor = useThemeColor(
-    { light: lightBackgroundColor, dark: darkBackgroundColor },
-    "background"
-  );
-  const borderColor = useThemeColor(
-    { light: lightBorderColor, dark: darkBorderColor },
-    "borderColor"
-  );
-
-  return (
-    <DefaultCard
-      wrapperStyle={[{ backgroundColor, borderColor }]}
-      containerStyle={[{ backgroundColor, borderColor }]}
-      {...otherProps}
-    />
-  );
-}

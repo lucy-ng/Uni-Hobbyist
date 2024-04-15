@@ -1,24 +1,16 @@
 import { router } from "expo-router";
 import { Event } from "./database";
 
+export const goBackAction = () => {
+  router.back();
+};
+
 export const homeAction = () => {
   router.replace("/(tabs)/HomeScreen");
 };
 
 export const logoutAction = () => {
   router.replace("/(screens)/LoginScreen");
-};
-
-export const dashboardAction = () => {
-  router.replace("/(tabs)/DashboardScreen");
-};
-
-export const accountAction = () => {
-  router.replace("/(tabs)/AccountScreen");
-};
-
-export const registerAction = () => {
-  router.replace("/(screens)/RegisterScreen");
 };
 
 export const loginScreenAction = () => {
@@ -51,7 +43,7 @@ export const manageEventAction = (event: Event) => {
       location: event.location,
       max_tickets: event.max_tickets,
       title: event.title,
-      tags: event.tags,
+      tags: event.tags ?? [],
     },
   });
 };

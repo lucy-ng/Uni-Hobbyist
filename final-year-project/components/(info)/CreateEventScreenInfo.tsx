@@ -31,7 +31,7 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [maxTickets, setMaxTickets] = useState("");
-  const [tags, setTags] = useState<Array<Tag>>(tagsList);
+  const [tags, setTags] = useState<Array<Tag>>(tagsList ?? []);
   const dateToday = new Date();
 
   const validateForm = () => {
@@ -59,11 +59,13 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
 
   const handleSubmit = () => {
     let selectedTags: string[] = [];
-    tags.forEach((tag) => {
-      if (tag.type == "solid") {
-        selectedTags.push(tag.name);
-      }
-    });
+    if (tags.length > 0) {
+      tags.forEach((tag) => {
+        if (tag.type == "solid") {
+          selectedTags.push(tag.name);
+        }
+      });
+    }
 
     const event: Event = {
       id: uuid(),
@@ -74,7 +76,7 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
       max_tickets: Number(maxTickets),
       title: title,
       description: description,
-      tags: selectedTags,
+      tags: selectedTags ?? [],
     };
     createEventInfo(event);
   };
