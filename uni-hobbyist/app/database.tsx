@@ -186,38 +186,38 @@ export const deleteEventInfo = (eventId: string) => {
 };
 
 export const deleteBooking = (bookingId: string, eventId: string) => {
-  remove(ref(db, "bookings/" + bookingId))
-    .then(() => {
-      get(child(dbRef, `events/${eventId}`))
-        .then((snapshot) => {
-          if (snapshot.exists()) {
-            const event = snapshot.val();
-            set(ref(db, `events/${eventId}`), {
-              title: event.title,
-              booked_tickets: event.booked_tickets - 1,
-              date_time: event.date_time,
-              date_time_updated: event.date_time_updated,
-              description: event.description,
-              location: event.location,
-              max_tickets: event.max_tickets,
-              tags: event.tags ?? [],
-            })
+  get(child(dbRef, `events/${eventId}`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const event = snapshot.val();
+        set(ref(db, `events/${eventId}`), {
+          title: event.title,
+          booked_tickets: event.booked_tickets - 1,
+          date_time: event.date_time,
+          date_time_updated: event.date_time_updated,
+          description: event.description,
+          location: event.location,
+          max_tickets: event.max_tickets,
+          tags: event.tags ?? [],
+        })
+          .then(() => {
+            remove(ref(db, "bookings/" + bookingId))
               .then(() => {
                 goBackAction();
                 deleteBookingSuccessToast();
               })
-              .catch((error: any) => {
+              .catch((error) => {
                 console.error(error);
-                deleteBookingErrorToast();
+                errorToast();
               });
-          } else {
+          })
+          .catch((error: any) => {
+            console.error(error);
             deleteBookingErrorToast();
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          errorToast();
-        });
+          });
+      } else {
+        deleteBookingErrorToast();
+      }
     })
     .catch((error) => {
       console.error(error);

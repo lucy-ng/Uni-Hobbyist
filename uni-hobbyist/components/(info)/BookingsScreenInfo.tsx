@@ -19,70 +19,62 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
 
   useEffect(() => {
     const bookingsList: Booking[] = [];
-    const bookedEvents: String[] = [];
 
     get(child(dbRef, "bookings"))
       .then((snapshot) => {
         if (snapshot.exists()) {
           const data = snapshot.val();
-          let bookingId = "";
+
           for (let i = 0; i < Object.keys(data).length; i++) {
             const accountId = data[Object.keys(data)[i]].account_id;
-            bookingId = Object.keys(data)[i];
+            const fetchedBookingId = Object.keys(data)[i];
             const eventId = data[Object.keys(data)[i]].event_id;
             const dateBooked = data[Object.keys(data)[i]].date_booked;
             const timeBooked = data[Object.keys(data)[i]].time_booked;
 
             if (userId == accountId && dateBooked != "" && timeBooked != "") {
-              bookedEvents.push(eventId);
+              get(child(dbRef, `events`))
+                .then((snapshot) => {
+                  if (snapshot.exists()) {
+                    const data = snapshot.val();
+
+                    for (let i = 0; i < Object.keys(data).length; i++) {
+                      let id = [Object.keys(data)[i]][0];
+                      const searchedBooking = data[
+                        Object.keys(data)[i]
+                      ] as Booking;
+                      if (eventId == id) {
+                        const booking: Booking = {
+                          booked_tickets: searchedBooking.booked_tickets,
+                          event_id: id,
+                          title: searchedBooking.title,
+                          date_time: searchedBooking.date_time,
+                          location: searchedBooking.location,
+                          date_time_updated: searchedBooking.date_time_updated,
+                          max_tickets: searchedBooking.max_tickets,
+                          booking_id: fetchedBookingId,
+                          description: searchedBooking.description,
+                        };
+                        bookingsList.push(booking);
+                      }
+                    }
+                    setBookings(
+                      bookingsList.filter(
+                        (booking, index) =>
+                          bookingsList.indexOf(booking) == index
+                      )
+                    );
+                  }
+                  if (!bookingsList.length) {
+                    noBookingsResultsToast();
+                  }
+                })
+                .catch((error) => {
+                  console.error(error);
+                  errorToast();
+                });
             }
           }
-
-          if (bookedEvents.length == 0) {
-            noBookingsResultsToast();
-          } else {
-            get(child(dbRef, `events`))
-              .then((snapshot) => {
-                if (snapshot.exists()) {
-                  const data = snapshot.val();
-
-                  for (let i = 0; i < Object.keys(data).length; i++) {
-                    let id = [Object.keys(data)[i]][0];
-                    const searchedBooking = data[
-                      Object.keys(data)[i]
-                    ] as Booking;
-                    if (bookedEvents.includes(id)) {
-                      const booking: Booking = {
-                        booked_tickets: searchedBooking.booked_tickets,
-                        event_id: id,
-                        title: searchedBooking.title,
-                        date_time: searchedBooking.date_time,
-                        location: searchedBooking.location,
-                        date_time_updated: searchedBooking.date_time_updated,
-                        max_tickets: searchedBooking.max_tickets,
-                        booking_id: bookingId,
-                        description: searchedBooking.description,
-                      };
-                      bookingsList.push(booking);
-                    }
-                  }
-                  setBookings(
-                    bookingsList.filter(
-                      (booking, index) => bookingsList.indexOf(booking) == index
-                    )
-                  );
-                } else {
-                  noBookingsResultsToast();
-                }
-              })
-              .catch((error) => {
-                console.error(error);
-                errorToast();
-              });
-          }
-        }
-        if (!bookingsList.length && !bookedEvents.length) {
-          noBookingsResultsToast();
         }
       })
       .catch((error) => {
@@ -91,9 +83,9 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
       });
   }, []);
 
-  const handleSubmit = (bookingId: string, eventId: string) => {
-    setBookingId(bookingId);
-    setEventId(eventId);
+  const handleSubmit = (bookingIdValue: string, eventIdValue: string) => {
+    setBookingId(bookingIdValue);
+    setEventId(eventIdValue);
     setDeleteModal(true);
   };
 
@@ -127,7 +119,10 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
             />
           </View>
         </Modal>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ marginBottom: 30 }}
+        >
           {bookings.map((booking) => (
             <Card
               key={booking.event_id}
@@ -176,11 +171,15 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
                 Location:
               </Text>
               <Text style={styles.text} darkColor="black" lightColor="black">
-                 {booking.location}
+                {booking.location}
               </Text>
               <Text>{"\n"}</Text>
-              <Text style={styles.cardText} darkColor="black" lightColor="black">
-                 Description:
+              <Text
+                style={styles.cardText}
+                darkColor="black"
+                lightColor="black"
+              >
+                Description:
               </Text>
               <Text style={styles.text} darkColor="black" lightColor="black">
                 {booking.description}

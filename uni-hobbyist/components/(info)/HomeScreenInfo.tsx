@@ -73,7 +73,8 @@ export default function HomeScreenInfo({ path }: { path: string }) {
             };
 
             tags.forEach((tag) => {
-              if ( searchedEvent.tags &&
+              if (
+                searchedEvent.tags &&
                 searchedEvent.tags.includes(tag.name) &&
                 tag.type == "solid" &&
                 !eventsList.includes(searchedEvent) &&
@@ -242,7 +243,7 @@ export default function HomeScreenInfo({ path }: { path: string }) {
           </ScrollView>
         </View>
 
-        <ScrollView>
+        <ScrollView style={{ marginBottom: 80 }}>
           {events.map((event) => (
             <TouchableOpacity
               onPress={() => {
