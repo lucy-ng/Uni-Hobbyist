@@ -1,0 +1,127 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`button renders correctly 1`] = `
+<View
+  accessibilityState={
+    {
+      "busy": undefined,
+      "checked": undefined,
+      "disabled": undefined,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
+    }
+  }
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onBlur={[Function]}
+  onClick={[Function]}
+  onFocus={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    [
+      {
+        "backgroundColor": "#8D86C9",
+        "marginBottom": 20,
+        "marginTop": 20,
+      },
+    ]
+  }
+>
+  <Text
+    style={
+      [
+        {
+          "color": "white",
+        },
+        {
+          "fontWeight": "bold",
+          "letterSpacing": 0.25,
+          "lineHeight": 21,
+          "padding": 10,
+          "textAlign": "center",
+        },
+      ]
+    }
+  >
+    Action
+  </Text>
+</View>
+`;
+
+exports[`register button renders correctly 1`] = `
+<View
+  accessibilityState={
+    {
+      "busy": undefined,
+      "checked": undefined,
+      "disabled": undefined,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
+    }
+  }
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  href="/RegisterScreen"
+  onBlur={[Function]}
+  onClick={[Function]}
+  onFocus={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  role="link"
+  style={
+    [
+      {
+        "backgroundColor": "#8D86C9",
+        "marginBottom": 20,
+        "marginTop": 20,
+      },
+    ]
+  }
+>
+  <Text
+    style={
+      [
+        {
+          "color": "white",
+        },
+        {
+          "fontWeight": "bold",
+          "letterSpacing": 0.25,
+          "lineHeight": 21,
+          "padding": 10,
+          "textAlign": "center",
+        },
+      ]
+    }
+  >
+    Register
+  </Text>
+</View>
+`;
