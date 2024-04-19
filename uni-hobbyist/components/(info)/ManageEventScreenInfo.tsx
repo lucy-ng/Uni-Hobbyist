@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { SetStateAction, useEffect } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { styles } from "../Styles";
 import { Text, TextInput, View } from "../Themed";
@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Tag, db, deleteEventInfo } from "@/app/database";
 import { useLocalSearchParams } from "expo-router";
 import { ref, set } from "firebase/database";
+import { Platform, SafeAreaView } from "react-native";
 import {
   emptyValueToast,
   errorToast,
@@ -13,6 +14,7 @@ import {
   updateEventSuccessToast,
 } from "../Toast";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import Button from "../Button";
 import { AntDesign } from "@expo/vector-icons";
 import { Chip } from "@rneui/themed";
@@ -30,9 +32,15 @@ let tagsList: Tag[] = [
   { name: "Art", type: "outline" },
 ];
 
+type modeType = "date" | "time";
+
 export default function ManageEventScreenInfo({ path }: { path: string }) {
   const [title, setTitle] = useState("");
   const [dateTime, setDateTime] = useState(new Date());
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [maxTickets, setMaxTickets] = useState("");
@@ -45,18 +53,18 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
   useEffect(() => {
     setTitle(String(params.title));
     setDateTime(new Date(String(params.date_time)));
+    setDate(new Date(String(params.date_time)));
     setLocation(String(params.location));
     setDescription(String(params.description));
     setMaxTickets(String(params.max_tickets));
 
-    let fetchedTags: string[] = params.tags as string[] ?? [];
+    let fetchedTags: string[] = (params.tags as string[]) ?? [];
     let newTags = tagsList;
 
     newTags.forEach((tag) => {
       if (fetchedTags.includes(tag.name)) {
         tag.type = "solid";
-      }
-      else {
+      } else {
         tag.type = "outline";
       }
     });
@@ -65,15 +73,17 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
   }, []);
 
   const validateForm = () => {
+    const selectedDate = Platform.OS == "ios" ? dateTime : date
+
     if (
       title === "" ||
-      dateTime == null ||
+      selectedDate == null ||
       location === "" ||
       description === "" ||
       maxTickets === ""
     ) {
       emptyValueToast();
-    } else if (dateTime <= dateToday) {
+    } else if (selectedDate <= dateToday) {
       invalidDateToast();
     } else {
       handleSubmit();
@@ -90,9 +100,11 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
       });
     }
 
+    const selectedDate = Platform.OS == "ios" ? dateTime : date
+
     set(ref(db, "events/" + params.id), {
       booked_tickets: params.booked_tickets,
-      date_time: String(dateTime),
+      date_time: String(selectedDate),
       date_time_updated: String(new Date()),
       location: location,
       max_tickets: Number(maxTickets),
@@ -122,6 +134,25 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
       setTags([...tagsList]);
       tagsList[index].type = "outline";
     }
+  };
+
+  const onChange = (event: any, selectedDate: any) => {
+    const currentDate = selectedDate;
+    setShow(false);
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode: SetStateAction<string>) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatePicker = () => {
+    showMode("date");
+  };
+
+  const showTimePicker = () => {
+    showMode("time");
   };
 
   return (
@@ -168,13 +199,48 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
             <Text style={styles.text} lightColor="black" darkColor="white">
               Date and Time
             </Text>
-            <RNDateTimePicker
-              mode={"datetime"}
-              value={dateTime}
-              onChange={(dateTime) =>
-                setDateTime(new Date(dateTime.nativeEvent.timestamp))
-              }
-            />
+            {Platform.OS == "ios" ? (
+              <RNDateTimePicker
+                mode={"datetime"}
+                value={dateTime}
+                onChange={(dateTime) =>
+                  setDateTime(new Date(dateTime.nativeEvent.timestamp))
+                }
+              />
+            ) : (
+              <>
+                {/*
+                React Native Community, 2024. react-native-datetimepicker. [Online] 
+                Available at: https://github.com/react-native-datetimepicker/datetimepicker?tab=readme-ov-file#getting-started
+                [Accessed 28 March 2024].
+                */}
+                <SafeAreaView>
+                  <Button onPress={showDatePicker} title="Choose Date" />
+                  <Button onPress={showTimePicker} title="Choose Time" />
+                  <Text>
+                    Selected:{" "}
+                    {String(new Date(date).getDate()).padStart(2, "0") +
+                      "/" +
+                      String(new Date(date).getMonth() + 1).padStart(2, "0") +
+                      "/" +
+                      new Date(date).getFullYear() +
+                      " " +
+                      String(new Date(date).getHours()) +
+                      ":" +
+                      String(new Date(date).getMinutes()).padStart(2, "0")}
+                  </Text>
+                  {show && (
+                    <DateTimePicker
+                      testID="dateTimePicker"
+                      value={date}
+                      mode={mode as modeType}
+                      is24Hour={true}
+                      onChange={onChange}
+                    />
+                  )}
+                </SafeAreaView>
+              </>
+            )}
           </View>
           <Text style={styles.text} lightColor="black" darkColor="white">
             Location

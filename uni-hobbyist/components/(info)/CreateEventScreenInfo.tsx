@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { styles } from "../Styles";
 import { Text, TextInput, View } from "../Themed";
@@ -12,7 +12,9 @@ import {
 import { v4 as uuid } from "uuid";
 import "react-native-get-random-values";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { Chip } from "@rneui/themed";
+import { Platform, SafeAreaView } from "react-native";
 
 let tagsList: Tag[] = [
   { name: "Media & Entertainment", type: "outline" },
@@ -25,9 +27,15 @@ let tagsList: Tag[] = [
   { name: "Art", type: "outline" },
 ];
 
+type modeType = "date" | "time";
+
 export default function CreateEventScreenInfo({ path }: { path: string }) {
-  const [title, setTitle] = useState("");
   const [dateTime, setDateTime] = useState(new Date());
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+
+  const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [maxTickets, setMaxTickets] = useState("");
@@ -36,16 +44,16 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
 
   const validateForm = () => {
     const positiveNumberRegex = new RegExp(/^[1-9][0-9]*$/);
-
+    const selectedDate = Platform.OS == "ios" ? dateTime : date;
     if (
       title === "" ||
-      dateTime == null ||
+      selectedDate == null ||
       location === "" ||
       description === "" ||
       maxTickets === ""
     ) {
       emptyValueToast();
-    } else if (dateTime <= dateToday) {
+    } else if (selectedDate <= dateToday) {
       invalidDateToast();
     } else if (
       Number(maxTickets) == 0 ||
@@ -67,10 +75,12 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
       });
     }
 
+    const selectedDate = Platform.OS == "ios" ? dateTime : date;
+
     const event: Event = {
       id: uuid(),
       booked_tickets: 0,
-      date_time: String(dateTime),
+      date_time: String(selectedDate),
       date_time_updated: String(new Date()),
       location: location,
       max_tickets: Number(maxTickets),
@@ -89,6 +99,25 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
       setTags([...tagsList]);
       tagsList[index].type = "outline";
     }
+  };
+
+  const onChange = (event: any, selectedDate: any) => {
+    const currentDate = selectedDate;
+    setShow(false);
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode: SetStateAction<string>) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatePicker = () => {
+    showMode("date");
+  };
+
+  const showTimePicker = () => {
+    showMode("time");
   };
 
   return (
@@ -111,20 +140,48 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
             <Text style={styles.text} lightColor="black" darkColor="white">
               Date and Time
             </Text>
-            {
-              /*
-              React Native Community, 2024. react-native-datetimepicker. [Online] 
-              Available at: https://github.com/react-native-datetimepicker/datetimepicker?tab=readme-ov-file#getting-started
-              [Accessed 28 March 2024].
-              */
-            }
-            <RNDateTimePicker
-              mode={"datetime"}
-              value={dateTime}
-              onChange={(dateTime) =>
-                setDateTime(new Date(dateTime.nativeEvent.timestamp))
-              }
-            />
+            {Platform.OS == "ios" ? (
+              <RNDateTimePicker
+                mode={"datetime"}
+                value={dateTime}
+                onChange={(dateTime) =>
+                  setDateTime(new Date(dateTime.nativeEvent.timestamp))
+                }
+              />
+            ) : (
+              <>
+                {/*
+                React Native Community, 2024. react-native-datetimepicker. [Online] 
+                Available at: https://github.com/react-native-datetimepicker/datetimepicker?tab=readme-ov-file#getting-started
+                [Accessed 28 March 2024].
+                */}
+                <SafeAreaView>
+                  <Button onPress={showDatePicker} title="Choose Date" />
+                  <Button onPress={showTimePicker} title="Choose Time" />
+                  <Text>
+                    Selected:{" "}
+                    {String(new Date(date).getDate()).padStart(2, "0") +
+                      "/" +
+                      String(new Date(date).getMonth() + 1).padStart(2, "0") +
+                      "/" +
+                      new Date(date).getFullYear() +
+                      " " +
+                      String(new Date(date).getHours()) +
+                      ":" +
+                      String(new Date(date).getMinutes()).padStart(2, "0")}
+                  </Text>
+                  {show && (
+                    <DateTimePicker
+                      testID="dateTimePicker"
+                      value={date}
+                      mode={mode as modeType}
+                      is24Hour={true}
+                      onChange={onChange}
+                    />
+                  )}
+                </SafeAreaView>
+              </>
+            )}
           </View>
           <Text style={styles.text} lightColor="black" darkColor="white">
             Location
@@ -168,13 +225,11 @@ export default function CreateEventScreenInfo({ path }: { path: string }) {
             Tags
           </Text>
           <View style={styles.tagsList}>
-            {
-              /*
+            {/*
               React Native Elements Community, 2024. Chip. [Online]
               Available at: https://reactnativeelements.com/docs/components/chip
               [Accessed 9 April 2024].
-              */
-            }
+              */}
             {tagsList.map((tag, index) => (
               <Chip
                 style={{ backgroundColor: "#CAC4CE" }}

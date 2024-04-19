@@ -72,13 +72,23 @@ export default function AccountScreenInfo({ path }: { path: string }) {
             shadowOpacity: 0.5,
           }}
         >
-          <Card.Title style={styles.cardTitle}>
+          <Card.Title style={styles.cardTitle} testID="accountName">
             {firstName} {lastName}
           </Card.Title>
-          <Text style={styles.text} darkColor="black" lightColor="black">
+          <Text
+            style={styles.text}
+            darkColor="black"
+            lightColor="black"
+            testID="accountUniversity"
+          >
             {university}
           </Text>
-          <Text style={styles.text} darkColor="black" lightColor="black">
+          <Text
+            style={styles.text}
+            darkColor="black"
+            lightColor="black"
+            testID="accountEmail"
+          >
             {emailValue}
           </Text>
           <Card.Divider style={{ marginVertical: 30 }} />
