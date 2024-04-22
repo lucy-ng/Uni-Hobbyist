@@ -1,3 +1,9 @@
+/*
+650 Industries, Inc., 2024. 
+Navigate between pages. [Online] 
+Available at: https://docs.expo.dev/router/navigating-pages/
+[Accessed 22 April 2024]. 
+*/
 import { router } from "expo-router";
 import { Event } from "./database";
 
