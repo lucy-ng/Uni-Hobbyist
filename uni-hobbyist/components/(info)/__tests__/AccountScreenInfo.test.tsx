@@ -1,21 +1,32 @@
 import AccountScreenInfo from "@/components/(info)/AccountScreenInfo";
 import { render, screen } from "@testing-library/react-native";
 import renderer from "react-test-renderer";
+import firebase from "firebase/app";
 
 beforeAll(() => {
   jest.resetAllMocks();
 });
 
-jest.mock("firebase/app", () => require("firebase/app"))
-jest.mock("firebase/database", () => require("firebase/database"))
-jest.mock("firebase/auth", () => require("firebase/auth"))
+firebase.initializeApp = jest.fn();
 
-test("renders correctly with account details", async () => {
+
+jest.mock("firebase/app", () => {
+  const data = { name: "unnamed" };
+  const snapshot = { val: () => data };
+  return {
+    initializeApp: jest.fn().mockReturnValue({
+      database: jest.fn().mockReturnValue({
+        ref: jest.fn().mockReturnThis(),
+        once: jest.fn(() => Promise.resolve(snapshot))
+      })
+    })
+  };
+});
+
+test("account details are fetched", async () => {
   const expectedName = "Bob Smith";
   const expectedUniversity = "City University of London";
   const expectedEmail = "bobsmith@city.ac.uk";
-
-  render(<AccountScreenInfo path={"app/(tabs)/AccountScreen.tsx"} />);
 
   const name = await screen.findByTestId("accountName");
   expect(name).toEqual(expectedName);

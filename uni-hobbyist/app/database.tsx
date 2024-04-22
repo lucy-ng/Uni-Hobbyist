@@ -112,46 +112,6 @@ export const createEventInfo = (event: Event) => {
     });
 };
 
-export const fetchBookings = (accountId: string) => {
-  let bookingsList: Event[] = [];
-
-  get(child(dbRef, `bookings`))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        for (let i = 0; i < Object.keys(data).length; i++) {
-          let id = data[Object.keys(data)[i]].account_id;
-          if (id == accountId) {
-            let eventId = data[Object.keys(data)[i]].event_id;
-
-            get(child(dbRef, `events/${eventId}`))
-              .then((snapshot) => {
-                if (snapshot.exists()) {
-                  const data = snapshot.val();
-                  bookingsList.push(data as Event);
-                } else {
-                  errorToast();
-                }
-              })
-              .catch((error) => {
-                console.error(error);
-                errorToast();
-              });
-          }
-        }
-        return bookingsList;
-      } else {
-        return bookingsList;
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      errorToast();
-      return bookingsList;
-    });
-  return bookingsList;
-};
-
 export const deleteEventInfo = (eventId: string) => {
   get(child(dbRef, `bookings`))
     .then((snapshot) => {

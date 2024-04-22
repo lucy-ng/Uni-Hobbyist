@@ -74,6 +74,9 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
                   errorToast();
                 });
             }
+            if (!bookingsList.length) {
+              noBookingsResultsToast();
+            }
           }
         }
       })
