@@ -3,7 +3,7 @@ import { styles } from "../Styles";
 import { useEffect, useState } from "react";
 import { Text, View } from "../Themed";
 import { Card } from "@rneui/base";
-import { dbRef, deleteBooking, Booking, auth } from "@/app/database";
+import { dbRef, deleteBooking, Booking, getAuth } from "@/app/database";
 import { get, child } from "firebase/database";
 import { errorToast, noBookingsResultsToast } from "../Toast";
 import { AntDesign } from "@expo/vector-icons";
@@ -15,6 +15,7 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
   const [deleteModal, setDeleteModal] = useState(false);
   const [bookingId, setBookingId] = useState("");
   const [eventId, setEventId] = useState("");
+  const auth = getAuth();
   const userId = auth.currentUser ? auth.currentUser.uid : "";
 
   useEffect(() => {

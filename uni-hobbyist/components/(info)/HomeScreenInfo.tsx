@@ -5,7 +5,7 @@ import { child, get } from "firebase/database";
 import { errorToast, noSearchResultsToast } from "../Toast";
 import { View, Pressable, Text, TextInput } from "../Themed";
 import { Card } from "@rneui/base";
-import { type Event, dbRef, auth, Tag } from "@/app/database";
+import { type Event, dbRef, Tag, getAuth } from "@/app/database";
 import { eventInfoAction } from "@/app/actions";
 import { Chip } from "@rneui/themed";
 import { AntDesign } from "@expo/vector-icons";
@@ -25,6 +25,7 @@ export default function HomeScreenInfo({ path }: { path: string }) {
   const [searchValue, setSearchValue] = useState("");
   const [events, setEvents] = useState<Event[]>([]);
   const [tags, setTags] = useState<Array<Tag>>(tagsList ?? []);
+  const auth = getAuth();
   const userId = auth.currentUser ? auth.currentUser.uid : "";
 
   useEffect(() => {

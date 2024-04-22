@@ -3,9 +3,10 @@ import { View } from "../Themed";
 import { Card } from "@rneui/themed";
 import Button from "../Button";
 import { styles } from "../Styles";
-import { auth } from "@/app/database";
+import { getAuth } from "@/app/database";
 
 export default function DashboardScreenInfo({ path }: { path: string }) {
+  const auth = getAuth();
   const userId = auth.currentUser ? auth.currentUser.uid : "";
 
   return (

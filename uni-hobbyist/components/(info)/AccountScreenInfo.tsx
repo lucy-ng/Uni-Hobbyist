@@ -1,7 +1,6 @@
 import { styles } from "../Styles";
 import { Text, View } from "../Themed";
 import { useEffect, useState } from "react";
-import { auth, dbRef } from "@/app/database";
 import { signOut } from "firebase/auth";
 import { get, child } from "firebase/database";
 import { errorToast } from "../Toast";
@@ -9,9 +8,8 @@ import { logout } from "@/app/authenticationSlice";
 import { Card } from "@rneui/base";
 import { logoutAction, manageAccountAction } from "@/app/actions";
 import { useAppDispatch } from "@/app/hooks";
-
-import { getAuth } from "@firebase/auth";
 import Button from "../Button";
+import { dbRef, getAuth } from "@/app/database";
 
 export default function AccountScreenInfo({ path }: { path: string }) {
   const [accountId, setAccountId] = useState("");
@@ -20,6 +18,7 @@ export default function AccountScreenInfo({ path }: { path: string }) {
   const [university, setUniversity] = useState("");
   const [emailValue, setEmail] = useState("");
   const dispatch = useAppDispatch();
+  const auth = getAuth();
 
   useEffect(() => {
     const userId = auth.currentUser ? auth.currentUser.uid : "";
@@ -50,7 +49,6 @@ export default function AccountScreenInfo({ path }: { path: string }) {
   */
 
   const logoutFunction = () => {
-    const auth = getAuth();
     signOut(auth)
       .then(() => {
         dispatch(logout());

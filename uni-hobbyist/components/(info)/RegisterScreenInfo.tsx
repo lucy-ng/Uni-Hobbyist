@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Text, View, TextInput } from "../Themed";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { styles } from "../Styles";
-import { auth, db, dbRef } from "@/app/database";
+import { db, dbRef, getAuth } from "@/app/database";
 import Button from "../Button";
 import {
   emailErrorToast,
@@ -26,6 +26,7 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
   const [university, setUniversity] = useState("");
   const [emailValue, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const auth = getAuth();
 
   /*
   Google LLC, 2024. Read and Write Data on the Web. [Online] 

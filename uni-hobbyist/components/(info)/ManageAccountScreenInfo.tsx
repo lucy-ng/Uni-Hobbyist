@@ -11,13 +11,14 @@ import {
 import { child, get, ref, set } from "firebase/database";
 import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native";
-import { auth, db, dbRef } from "@/app/database";
+import { getAuth, db, dbRef } from "@/app/database";
 import { goBackAction } from "@/app/actions";
 
 export default function ManageAccountScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const params = useLocalSearchParams();
+  const auth = getAuth();
   const userId = auth.currentUser ? auth.currentUser.uid : "";
 
   useEffect(() => {

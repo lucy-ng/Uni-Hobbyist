@@ -64,14 +64,14 @@ const firebaseConfig = {
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+});
+
+export { getAuth };
+
 export const db = getDatabase(app);
 export const dbRef = ref(getDatabase());
-
-export const auth = !getAuth.length
-  ? initializeAuth(app, {
-      persistence: getReactNativePersistence(ReactNativeAsyncStorage),
-    })
-  : getAuth();
 
 /*
 Google LLC, 2024. Read and Write Data on the Web. [Online] 

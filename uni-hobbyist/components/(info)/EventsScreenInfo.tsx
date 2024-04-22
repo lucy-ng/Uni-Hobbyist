@@ -3,13 +3,14 @@ import { styles } from "../Styles";
 import { useEffect, useState } from "react";
 import { Text, View } from "../Themed";
 import { Card } from "@rneui/base";
-import { type Event, dbRef, auth } from "@/app/database";
+import { type Event, dbRef, getAuth } from "@/app/database";
 import { manageEventAction } from "@/app/actions";
 import { get, child } from "firebase/database";
 import { errorToast, noEventsResultsToast } from "../Toast";
 
 export default function EventsScreenInfo({ path }: { path: string }) {
   const [events, setEvents] = useState<Event[]>([]);
+  const auth = getAuth()
   const userId = auth.currentUser ? auth.currentUser.uid : "";
 
   useEffect(() => {

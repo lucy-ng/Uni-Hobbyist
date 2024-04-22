@@ -2,7 +2,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { styles } from "../Styles";
 import { Text, View } from "../Themed";
 import { useEffect, useState } from "react";
-import { auth, db, dbRef } from "@/app/database";
+import { db, dbRef, getAuth } from "@/app/database";
 import Button from "../Button";
 import { get, child, ref, set } from "firebase/database";
 import {
@@ -25,7 +25,7 @@ export default function BookEventScreenInfo({ path }: { path: string }) {
   const [bookedTickets, setBookedTickets] = useState(0);
   const [maxTickets, setMaxTickets] = useState(0);
   const [bookModal, setBookModal] = useState(false);
-
+  const auth = getAuth();
   const params = useLocalSearchParams();
 
   useEffect(() => {

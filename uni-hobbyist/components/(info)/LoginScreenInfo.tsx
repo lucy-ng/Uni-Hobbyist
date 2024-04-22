@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Text, View, TextInput, Pressable } from "../Themed";
 import { styles } from "../Styles";
 import Button, { RegisterButton } from "../Button";
-import { Link } from "expo-router";
 import {
   emailErrorToast,
   emptyValueToast,
@@ -13,7 +12,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { useAppDispatch } from "@/app/hooks";
 import { login } from "@/app/authenticationSlice";
 import { homeAction } from "@/app/actions";
-import { getAuth } from "@firebase/auth";
+import { getAuth } from "@/app/database";
 
 export default function LoginScreenInfo({ path }: { path: string }) {
   const [emailValue, setEmail] = useState("");
@@ -102,7 +101,7 @@ export default function LoginScreenInfo({ path }: { path: string }) {
         lightBorderColor="#CAC4CE"
         darkBorderColor="#CAC4CE"
       />
-      <View style={{ alignItems: "center"}}>
+      <View style={{ alignItems: "center" }}>
         <Button title="Login" onPress={validateForm} />
         <View
           style={styles.separator}
