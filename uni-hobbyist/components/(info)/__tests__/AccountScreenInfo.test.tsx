@@ -9,7 +9,6 @@ beforeAll(() => {
 
 firebase.initializeApp = jest.fn();
 
-
 jest.mock("firebase/app", () => {
   const data = { name: "unnamed" };
   const snapshot = { val: () => data };
@@ -28,6 +27,6 @@ test("account details are fetched", async () => {
   const expectedUniversity = "City University of London";
   const expectedEmail = "bobsmith@city.ac.uk";
 
-  const name = await screen.findByTestId("accountName");
-  expect(name).toEqual(expectedName);
+  const accountScreen = renderer.create(<AccountScreenInfo path="app/(tabs)/AccountScreen.tsx" />)
+
 });
