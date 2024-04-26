@@ -1,16 +1,22 @@
 import { ScrollView, TouchableOpacity } from "react-native";
 import { styles } from "../Styles";
 import { useEffect, useState } from "react";
-import { Text, View } from "../Themed";
+import { Pressable, Text, View } from "../Themed";
 import { Card } from "@rneui/base";
 import { type Event, dbRef, getAuth } from "@/app/database";
 import { manageEventAction } from "@/app/actions";
 import { get, child } from "firebase/database";
 import { errorToast, noEventsResultsToast } from "../Toast";
+import { Icon } from "@rneui/themed";
 
 export default function EventsScreenInfo({ path }: { path: string }) {
   const [events, setEvents] = useState<Event[]>([]);
-  const auth = getAuth()
+  const [dateTimeSortIcon, setDateTimeSortIcon] = useState(
+    "clock-time-four-outline"
+  );
+  const [nameSortIcon, setNameSortIcon] = useState("sort-alphabetical-variant");
+
+  const auth = getAuth();
   const userId = auth.currentUser ? auth.currentUser.uid : "";
 
   useEffect(() => {
@@ -83,9 +89,79 @@ export default function EventsScreenInfo({ path }: { path: string }) {
       });
   }, []);
 
+  const changeDateTimeSortIcon = () => {
+    if (dateTimeSortIcon == "clock-time-four-outline") {
+      setEvents(
+        events
+          .filter((event, index) => events.indexOf(event) == index)
+          .sort((a, b) =>
+            new Date(a.date_time) > new Date(b.date_time) ? 1 : -1
+          )
+      );
+      setDateTimeSortIcon("sort-clock-ascending");
+    } else if (dateTimeSortIcon == "sort-clock-ascending") {
+      setEvents(
+        events
+          .filter((event, index) => events.indexOf(event) == index)
+          .sort((a, b) =>
+            new Date(a.date_time) > new Date(b.date_time) ? -1 : 1
+          )
+      );
+      setDateTimeSortIcon("sort-clock-descending");
+    } else if (dateTimeSortIcon == "sort-clock-descending") {
+      setEvents(
+        events.filter((event, index) => events.indexOf(event) == index)
+      );
+      setDateTimeSortIcon("clock-time-four-outline");
+    }
+  };
+
+  const changeNameSortIcon = () => {
+    if (nameSortIcon == "sort-alphabetical-variant") {
+      setEvents(
+        events
+          .filter((event, index) => events.indexOf(event) == index)
+          .sort((a, b) => (a.title > b.title ? 1 : -1))
+      );
+      setNameSortIcon("sort-alphabetical-ascending-variant");
+    } else if (nameSortIcon == "sort-alphabetical-ascending-variant") {
+      setEvents(
+        events
+          .filter((event, index) => events.indexOf(event) == index)
+          .sort((a, b) => (a.title > b.title ? -1 : 1))
+      );
+      setNameSortIcon("sort-alphabetical-descending-variant");
+    } else if (nameSortIcon == "sort-alphabetical-descending-variant") {
+      setEvents(
+        events.filter((event, index) => events.indexOf(event) == index)
+      );
+      setNameSortIcon("sort-alphabetical-variant");
+    }
+  };
+
   return (
     <>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ marginBottom: 30 }}
+      >
+        <View style={styles.sortBox}>
+          <Pressable onPress={() => changeDateTimeSortIcon()}>
+            <Icon
+              name={dateTimeSortIcon}
+              type={"material-community"}
+              color={"#8D86C9"}
+            />
+          </Pressable>
+          <Pressable onPress={() => changeNameSortIcon()}>
+            <Icon
+              name={nameSortIcon}
+              type={"material-community"}
+              color={"#8D86C9"}
+              style={styles.endSortIcon}
+            />
+          </Pressable>
+        </View>
         <View style={styles.bodyHeaderContainer}>
           {events.map((event) => (
             <TouchableOpacity
@@ -101,6 +177,8 @@ export default function EventsScreenInfo({ path }: { path: string }) {
                   shadowRadius: 3,
                   shadowOpacity: 0.5,
                   minWidth: "83%",
+                  maxWidth: "92%",
+                  paddingBottom: 70,
                 }}
               >
                 <Card.Title style={styles.title}>{event.title}</Card.Title>
@@ -158,6 +236,11 @@ export default function EventsScreenInfo({ path }: { path: string }) {
                 */}
                 <Text style={styles.text} darkColor="black" lightColor="black">
                   {String(event.booked_tickets).replace(
+                    /^(?:0+(?=[1-9])|0+(?=0$))/gm,
+                    ""
+                  )}{" "}
+                  /{" "}
+                  {String(event.max_tickets).replace(
                     /^(?:0+(?=[1-9])|0+(?=0$))/gm,
                     ""
                   )}

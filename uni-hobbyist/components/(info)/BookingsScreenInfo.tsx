@@ -1,7 +1,7 @@
 import { ScrollView, TouchableOpacity } from "react-native";
 import { styles } from "../Styles";
 import { useEffect, useState } from "react";
-import { Text, View } from "../Themed";
+import { Pressable, Text, View } from "../Themed";
 import { Card } from "@rneui/base";
 import { dbRef, deleteBooking, Booking, getAuth } from "@/app/database";
 import { get, child } from "firebase/database";
@@ -9,12 +9,18 @@ import { errorToast, noBookingsResultsToast } from "../Toast";
 import { AntDesign } from "@expo/vector-icons";
 import Button from "../Button";
 import Modal from "react-native-modal";
+import { Icon } from "@rneui/themed";
 
 export default function BookingsScreenInfo({ path }: { path: string }) {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [deleteModal, setDeleteModal] = useState(false);
   const [bookingId, setBookingId] = useState("");
   const [eventId, setEventId] = useState("");
+  const [dateTimeSortIcon, setDateTimeSortIcon] = useState(
+    "clock-time-four-outline"
+  );
+  const [nameSortIcon, setNameSortIcon] = useState("sort-alphabetical-variant");
+
   const auth = getAuth();
   const userId = auth.currentUser ? auth.currentUser.uid : "";
 
@@ -65,8 +71,7 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
                           bookingsList.indexOf(booking) == index
                       )
                     );
-                  }
-                  if (!bookingsList.length) {
+                  } else {
                     noBookingsResultsToast();
                   }
                 })
@@ -88,6 +93,56 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
     setBookingId(bookingIdValue);
     setEventId(eventIdValue);
     setDeleteModal(true);
+  };
+
+  const changeDateTimeSortIcon = () => {
+    if (dateTimeSortIcon == "clock-time-four-outline") {
+      setBookings(
+        bookings
+          .filter((booking, index) => bookings.indexOf(booking) == index)
+          .sort((a, b) =>
+            new Date(a.date_time) > new Date(b.date_time) ? 1 : -1
+          )
+      );
+      setDateTimeSortIcon("sort-clock-ascending");
+    } else if (dateTimeSortIcon == "sort-clock-ascending") {
+      setBookings(
+        bookings
+          .filter((booking, index) => bookings.indexOf(booking) == index)
+          .sort((a, b) =>
+            new Date(a.date_time) > new Date(b.date_time) ? -1 : 1
+          )
+      );
+      setDateTimeSortIcon("sort-clock-descending");
+    } else if (dateTimeSortIcon == "sort-clock-descending") {
+      setBookings(
+        bookings.filter((booking, index) => bookings.indexOf(booking) == index)
+      );
+      setDateTimeSortIcon("clock-time-four-outline");
+    }
+  };
+
+  const changeNameSortIcon = () => {
+    if (nameSortIcon == "sort-alphabetical-variant") {
+      setBookings(
+        bookings
+          .filter((booking, index) => bookings.indexOf(booking) == index)
+          .sort((a, b) => (a.title > b.title ? 1 : -1))
+      );
+      setNameSortIcon("sort-alphabetical-ascending-variant");
+    } else if (nameSortIcon == "sort-alphabetical-ascending-variant") {
+      setBookings(
+        bookings
+          .filter((booking, index) => bookings.indexOf(booking) == index)
+          .sort((a, b) => (a.title > b.title ? -1 : 1))
+      );
+      setNameSortIcon("sort-alphabetical-descending-variant");
+    } else if (nameSortIcon == "sort-alphabetical-descending-variant") {
+      setBookings(
+        bookings.filter((booking, index) => bookings.indexOf(booking) == index)
+      );
+      setNameSortIcon("sort-alphabetical-variant");
+    }
   };
 
   return (
@@ -124,6 +179,24 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
           showsVerticalScrollIndicator={false}
           style={{ marginBottom: 30 }}
         >
+          <View style={styles.sortBox}>
+            <Pressable onPress={() => changeDateTimeSortIcon()}>
+              <Icon
+                name={dateTimeSortIcon}
+                type={"material-community"}
+                color={"#8D86C9"}
+              />
+            </Pressable>
+            <Pressable onPress={() => changeNameSortIcon()}>
+              <Icon
+                name={nameSortIcon}
+                type={"material-community"}
+                color={"#8D86C9"}
+                style={styles.endSortIcon}
+              />
+            </Pressable>
+          </View>
+
           {bookings.map((booking) => (
             <Card
               key={booking.event_id}
@@ -132,6 +205,8 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
                 shadowRadius: 3,
                 shadowOpacity: 0.5,
                 minWidth: "83%",
+                maxWidth: "92%",
+                paddingBottom: 70,
               }}
             >
               <Card.Title style={styles.title}>{booking.title}</Card.Title>

@@ -27,10 +27,9 @@ export default function HomeScreenInfo({ path }: { path: string }) {
   const [tags, setTags] = useState<Array<Tag>>(tagsList ?? []);
   const auth = getAuth();
   const userId = auth.currentUser ? auth.currentUser.uid : "";
+  const dateToday = new Date();
 
   useEffect(() => {
-    const userId = auth.currentUser ? auth.currentUser.uid : "";
-
     let eventsList: Event[] = [];
     const hostedEvents: String[] = [];
 
@@ -79,7 +78,8 @@ export default function HomeScreenInfo({ path }: { path: string }) {
                 searchedEvent.tags.includes(tag.name) &&
                 tag.type == "solid" &&
                 !eventsList.includes(searchedEvent) &&
-                !hostedEvents.includes(id)
+                !hostedEvents.includes(id) &&
+                new Date(newEvent.date_time) >= dateToday
               ) {
                 eventsList.push(newEvent);
               }
@@ -136,7 +136,11 @@ export default function HomeScreenInfo({ path }: { path: string }) {
                     tags: event.tags ?? [],
                   };
 
-                  if (searchValue == "" && !hostedEvents.includes(eventId)) {
+                  if (
+                    searchValue == "" &&
+                    !hostedEvents.includes(eventId) &&
+                    new Date(event.date_time) >= dateToday
+                  ) {
                     eventsList.push(eventData);
                   } else if (
                     (title
@@ -155,15 +159,20 @@ export default function HomeScreenInfo({ path }: { path: string }) {
                         ) ||
                       searchValue.toLowerCase().trim().replace(/\s/g, "") ==
                         title.toLowerCase().trim().replace(/\s/g, "")) &&
-                    !hostedEvents.includes(eventId)
+                    !hostedEvents.includes(eventId) &&
+                    new Date(event.date_time) >= dateToday
                   ) {
                     eventsList.push(eventData);
                   }
                 }
                 setEvents(
-                  eventsList.filter(
-                    (event, index) => eventsList.indexOf(event) == index
-                  )
+                  eventsList
+                    .filter(
+                      (event, index) => eventsList.indexOf(event) == index
+                    )
+                    .sort((a, b) =>
+                      new Date(a.date_time) > new Date(b.date_time) ? 1 : -1
+                    )
                 );
               }
 
@@ -244,7 +253,7 @@ export default function HomeScreenInfo({ path }: { path: string }) {
           </ScrollView>
         </View>
 
-        <ScrollView style={{ marginBottom: 80 }}>
+        <ScrollView style={{ marginTop: 20, marginBottom: 70 }}>
           {events.map((event) => (
             <TouchableOpacity
               onPress={() => {
@@ -259,6 +268,8 @@ export default function HomeScreenInfo({ path }: { path: string }) {
                   shadowRadius: 3,
                   shadowOpacity: 0.5,
                   minWidth: "83%",
+                  maxWidth: "92%",
+                  paddingBottom: 70,
                 }}
               >
                 <Card.Title style={styles.title}>{event.title}</Card.Title>

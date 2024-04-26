@@ -93,7 +93,7 @@ export const styles = StyleSheet.create({
     padding: 10,
     paddingBottom: 100,
     alignItems: "stretch",
-    minWidth: "65%"
+    minWidth: "65%",
   },
   modalInfoView: {
     borderRadius: 20,
@@ -116,7 +116,7 @@ export const styles = StyleSheet.create({
   searchFilterBox: {
     maxWidth: "83%",
     maxHeight: "20%",
-    padding: 10
+    padding: 10,
   },
   searchBox: {
     alignItems: "center",
@@ -130,7 +130,7 @@ export const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     fontSize: 16,
-    backgroundColor: "#CAC4CE"
+    backgroundColor: "#CAC4CE",
   },
   tagsList: {
     marginVertical: 20,
@@ -144,9 +144,18 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignContent: "center",
   },
+  sortBox: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  endSortIcon: {
+    marginLeft: 20,
+    marginRight: 20,
+  },
 
-  /* 
-  650 Industries, Inc., 2024. Styling a React Native button. [Online] 
+  /*
+  650 Industries, Inc., 2024. Styling a React Native button. [Online]
   Available at: https://docs.expo.dev/ui-programming/react-native-styling-buttons/
   [Accessed 14 March 2024].
   */
