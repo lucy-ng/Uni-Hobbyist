@@ -1,3 +1,4 @@
+import { AntDesign } from "@expo/vector-icons";
 import { Tooltip, TooltipProps } from "@rneui/themed";
 import React from "react";
 import { useState } from "react";
@@ -20,7 +21,14 @@ const TooltipButton: React.FC<TooltipProps> = (props) => {
         setOpen(false);
       }}
       {...props}
-    />
+    >
+      <AntDesign
+        name="infocirlce"
+        size={24}
+        color="#8D86C9"
+        style={{ marginLeft: 10 }}
+      />
+    </Tooltip>
   );
 };
 

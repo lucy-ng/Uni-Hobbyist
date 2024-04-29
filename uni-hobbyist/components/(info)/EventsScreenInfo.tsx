@@ -8,6 +8,7 @@ import { manageEventAction } from "@/app/actions";
 import { get, child } from "firebase/database";
 import { errorToast, noEventsResultsToast } from "../Toast";
 import { Icon } from "@rneui/themed";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function EventsScreenInfo({ path }: { path: string }) {
   const [events, setEvents] = useState<Event[]>([]);
@@ -141,112 +142,111 @@ export default function EventsScreenInfo({ path }: { path: string }) {
 
   return (
     <>
+      <View style={styles.sortBox}>
+        <Pressable onPress={() => changeDateTimeSortIcon()}>
+          <Icon
+            name={dateTimeSortIcon}
+            type={"material-community"}
+            color={"#8D86C9"}
+          />
+        </Pressable>
+        <Pressable onPress={() => changeNameSortIcon()}>
+          <Icon
+            name={nameSortIcon}
+            type={"material-community"}
+            color={"#8D86C9"}
+            style={styles.endSortIcon}
+          />
+        </Pressable>
+      </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{ marginBottom: 30 }}
+        style={{ marginTop: 10, marginBottom: 100, maxHeight: "85%" }}
       >
-        <View style={styles.sortBox}>
-          <Pressable onPress={() => changeDateTimeSortIcon()}>
-            <Icon
-              name={dateTimeSortIcon}
-              type={"material-community"}
-              color={"#8D86C9"}
-            />
-          </Pressable>
-          <Pressable onPress={() => changeNameSortIcon()}>
-            <Icon
-              name={nameSortIcon}
-              type={"material-community"}
-              color={"#8D86C9"}
-              style={styles.endSortIcon}
-            />
-          </Pressable>
-        </View>
         <View style={styles.bodyHeaderContainer}>
           {events.map((event) => (
-            <TouchableOpacity
-              onPress={() => {
-                manageEventAction(event);
-              }}
+            <Card
               key={event.id}
+              containerStyle={{
+                shadowColor: "#CAC4CE",
+                shadowRadius: 3,
+                shadowOpacity: 0.5,
+                minWidth: "83%",
+                maxWidth: "92%",
+                paddingBottom: 70,
+              }}
             >
-              <Card
-                key={event.id}
-                containerStyle={{
-                  shadowColor: "#CAC4CE",
-                  shadowRadius: 3,
-                  shadowOpacity: 0.5,
-                  minWidth: "83%",
-                  maxWidth: "92%",
-                  paddingBottom: 70,
-                }}
+              <Card.Title style={styles.title}>{event.title}</Card.Title>
+              <Card.Divider />
+              <Text
+                style={styles.cardText}
+                lightColor="black"
+                darkColor="black"
               >
-                <Card.Title style={styles.title}>{event.title}</Card.Title>
-                <Card.Divider />
-                <Text
-                  style={styles.cardText}
-                  lightColor="black"
-                  darkColor="black"
-                >
-                  Date and Time:{" "}
-                </Text>
-                <Text style={styles.text} darkColor="black" lightColor="black">
-                  {String(new Date(event.date_time).getDate()).padStart(
+                Date and Time:{" "}
+              </Text>
+              <Text style={styles.text} darkColor="black" lightColor="black">
+                {String(new Date(event.date_time).getDate()).padStart(2, "0") +
+                  "/" +
+                  String(new Date(event.date_time).getMonth() + 1).padStart(
                     2,
                     "0"
                   ) +
-                    "/" +
-                    String(new Date(event.date_time).getMonth() + 1).padStart(
-                      2,
-                      "0"
-                    ) +
-                    "/" +
-                    new Date(event.date_time).getFullYear() +
-                    " " +
-                    String(new Date(event.date_time).getHours()) +
-                    ":" +
-                    String(new Date(event.date_time).getMinutes()).padStart(
-                      2,
-                      "0"
-                    )}
-                </Text>
-                <Text>{"\n"}</Text>
-                <Text
-                  style={styles.cardText}
-                  lightColor="black"
-                  darkColor="black"
-                >
-                  Location:
-                </Text>
-                <Text style={styles.text} darkColor="black" lightColor="black">
-                  {event.location}
-                </Text>
-                <Text>{"\n"}</Text>
-                <Text
-                  style={styles.cardText}
-                  lightColor="black"
-                  darkColor="black"
-                >
-                  Tickets Booked:{" "}
-                </Text>
-                {/*    
+                  "/" +
+                  new Date(event.date_time).getFullYear() +
+                  " " +
+                  String(new Date(event.date_time).getHours()) +
+                  ":" +
+                  String(new Date(event.date_time).getMinutes()).padStart(
+                    2,
+                    "0"
+                  )}
+              </Text>
+              <Text>{"\n"}</Text>
+              <Text
+                style={styles.cardText}
+                lightColor="black"
+                darkColor="black"
+              >
+                Location:
+              </Text>
+              <Text style={styles.text} darkColor="black" lightColor="black">
+                {event.location}
+              </Text>
+              <Text>{"\n"}</Text>
+              <Text
+                style={styles.cardText}
+                lightColor="black"
+                darkColor="black"
+              >
+                Tickets Booked:{" "}
+              </Text>
+              {/*    
                 anubhava, 2020. regex: remove leading zeros, but keep single zero. [Online] 
                 Available at: https://stackoverflow.com/questions/60509557/regex-remove-leading-zeros-but-keep-single-zero
                 [Accessed 14 April 2024].
                 */}
-                <Text style={styles.text} darkColor="black" lightColor="black">
-                  {String(event.booked_tickets).replace(
-                    /^(?:0+(?=[1-9])|0+(?=0$))/gm,
-                    ""
-                  )}{" "}
-                  /{" "}
-                  {String(event.max_tickets).replace(
-                    /^(?:0+(?=[1-9])|0+(?=0$))/gm,
-                    ""
-                  )}
-                </Text>
-              </Card>
-            </TouchableOpacity>
+              <Text style={styles.text} darkColor="black" lightColor="black">
+                {String(event.booked_tickets).replace(
+                  /^(?:0+(?=[1-9])|0+(?=0$))/gm,
+                  ""
+                )}{" "}
+                /{" "}
+                {String(event.max_tickets).replace(
+                  /^(?:0+(?=[1-9])|0+(?=0$))/gm,
+                  ""
+                )}
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  manageEventAction(event);
+                }}
+                key={event.id}
+                style={styles.editButton}
+              >
+                <AntDesign name="edit" size={24} color="#8D86C9" />
+              </TouchableOpacity>
+            </Card>
           ))}
         </View>
       </ScrollView>

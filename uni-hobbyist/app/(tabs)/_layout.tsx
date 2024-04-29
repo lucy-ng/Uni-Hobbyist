@@ -3,7 +3,7 @@ import { Tabs } from "expo-router";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 
@@ -27,8 +27,7 @@ export default function TabLayout() {
         },
       }}
     >
-      {
-      /*
+      {/*
       Pictogrammers, 2024. 
       Icon details - "home" from MaterialCommunityIcons. [Online] 
       Available at: https://icons.expo.fyi/Index/MaterialCommunityIcons/home
@@ -77,6 +76,22 @@ export default function TabLayout() {
               size={24}
               color="#9067C6"
             />
+          ),
+        }}
+      />
+      {/*
+      Material UI SAS, 2024. 
+      Icon details - "calendar-month" from MaterialIcons. [Online] 
+      Available at: https://icons.expo.fyi/Index/MaterialIcons/calendar-month
+      [Accessed 27 April 2024]. 
+      */}
+      <Tabs.Screen
+        name="CalendarScreen"
+        options={{
+          title: "Calendar",
+          unmountOnBlur: true,
+          tabBarIcon: ({ color }) => (
+            <MaterialIcons name="calendar-month" size={24} color="#9067C6" />
           ),
         }}
       />

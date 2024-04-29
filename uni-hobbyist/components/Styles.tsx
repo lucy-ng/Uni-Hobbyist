@@ -109,6 +109,10 @@ export const styles = StyleSheet.create({
   dateTimeBox: {
     marginBottom: 20,
   },
+  editButton: {
+    alignItems: "center",
+    marginTop: 20,
+  },
   deleteButton: {
     alignItems: "center",
     marginTop: 20,
@@ -152,6 +156,11 @@ export const styles = StyleSheet.create({
   endSortIcon: {
     marginLeft: 20,
     marginRight: 20,
+  },
+  tooltipBox: {
+    display: "flex",
+    flexDirection: "row",
+    alignSelf: "center",
   },
 
   /*

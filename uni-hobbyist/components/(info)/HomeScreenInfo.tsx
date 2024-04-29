@@ -253,7 +253,10 @@ export default function HomeScreenInfo({ path }: { path: string }) {
           </ScrollView>
         </View>
 
-        <ScrollView style={{ marginTop: 20, marginBottom: 70 }}>
+        <ScrollView
+          style={{ marginTop: 20, marginBottom: 100, maxHeight: "65%" }}
+          showsVerticalScrollIndicator={false}
+        >
           {events.map((event) => (
             <TouchableOpacity
               onPress={() => {
@@ -268,8 +271,7 @@ export default function HomeScreenInfo({ path }: { path: string }) {
                   shadowRadius: 3,
                   shadowOpacity: 0.5,
                   minWidth: "83%",
-                  maxWidth: "92%",
-                  paddingBottom: 70,
+                  maxWidth: "93%",
                 }}
               >
                 <Card.Title style={styles.title}>{event.title}</Card.Title>

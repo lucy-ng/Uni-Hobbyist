@@ -175,28 +175,27 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
             />
           </View>
         </Modal>
+        <View style={styles.sortBox}>
+          <Pressable onPress={() => changeDateTimeSortIcon()}>
+            <Icon
+              name={dateTimeSortIcon}
+              type={"material-community"}
+              color={"#8D86C9"}
+            />
+          </Pressable>
+          <Pressable onPress={() => changeNameSortIcon()}>
+            <Icon
+              name={nameSortIcon}
+              type={"material-community"}
+              color={"#8D86C9"}
+              style={styles.endSortIcon}
+            />
+          </Pressable>
+        </View>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          style={{ marginBottom: 30 }}
+          style={{ marginTop: 10, marginBottom: 100, maxHeight: "85%" }}
         >
-          <View style={styles.sortBox}>
-            <Pressable onPress={() => changeDateTimeSortIcon()}>
-              <Icon
-                name={dateTimeSortIcon}
-                type={"material-community"}
-                color={"#8D86C9"}
-              />
-            </Pressable>
-            <Pressable onPress={() => changeNameSortIcon()}>
-              <Icon
-                name={nameSortIcon}
-                type={"material-community"}
-                color={"#8D86C9"}
-                style={styles.endSortIcon}
-              />
-            </Pressable>
-          </View>
-
           {bookings.map((booking) => (
             <Card
               key={booking.event_id}

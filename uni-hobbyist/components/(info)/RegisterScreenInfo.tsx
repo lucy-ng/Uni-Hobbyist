@@ -19,6 +19,7 @@ import {
 import { child, get, ref, set } from "firebase/database";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { loginScreenAction } from "@/app/actions";
+import TooltipButton from "../Tooltip";
 
 export default function RegisterScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
@@ -122,7 +123,7 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
   return (
     <>
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.bodyContainer}>
+        <View style={styles.keyboardContainer}>
           <Text style={styles.inputText} lightColor="black" darkColor="white">
             First Name
           </Text>
@@ -172,9 +173,23 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
             lightBorderColor="#CAC4CE"
             darkBorderColor="#CAC4CE"
           />
-          <Text style={styles.inputText} lightColor="black" darkColor="white">
-            Password
-          </Text>
+          <View style={styles.tooltipBox}>
+            <Text style={styles.inputText} lightColor="black" darkColor="white">
+              Password
+            </Text>
+            <TooltipButton
+              popover={
+                <Text style={styles.altText} lightColor="black" darkColor="white">
+                  - Minimum of 6 characters{"\n"}- Must contain a lowercase
+                  character{"\n"}- Must contain an uppercase character{"\n"}-
+                  Must contain a number{"\n"}- Must contain a non-alphanumeric
+                  character{"\n"} (e.g. *, $, ^)
+                </Text>
+              }
+              width={250}
+              height={250}
+            />
+          </View>
           <TextInput
             style={styles.input}
             secureTextEntry={true}
