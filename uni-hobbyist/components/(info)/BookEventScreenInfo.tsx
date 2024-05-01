@@ -14,7 +14,7 @@ import { useLocalSearchParams } from "expo-router";
 import { Card } from "@rneui/base";
 import Modal from "react-native-modal";
 import { AntDesign } from "@expo/vector-icons";
-import { goBackAction } from "@/app/actions";
+import { homeAction } from "@/app/actions";
 import { v4 as uuid } from "uuid";
 import { Chip } from "@rneui/themed";
 
@@ -102,7 +102,7 @@ export default function BookEventScreenInfo({ path }: { path: string }) {
               })
                 .then(() => {
                   setBookModal(false);
-                  goBackAction();
+                  homeAction();
                   bookEventSuccessToast();
                 })
                 .catch((error: any) => {

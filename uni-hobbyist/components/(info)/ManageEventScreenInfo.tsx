@@ -20,7 +20,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import Button from "../Button";
 import { AntDesign } from "@expo/vector-icons";
 import { Chip } from "@rneui/themed";
-import { goBackAction } from "@/app/actions";
+import { homeAction } from "@/app/actions";
 import Modal from "react-native-modal";
 
 let tagsList: Tag[] = [
@@ -131,7 +131,7 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
       tags: selectedTags ?? [],
     })
       .then(() => {
-        goBackAction();
+        homeAction();
         updateEventSuccessToast();
       })
       .catch((error) => {

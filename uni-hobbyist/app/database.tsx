@@ -16,7 +16,7 @@ import {
 } from "@/components/Toast";
 
 import { ChipProps } from "@rneui/themed";
-import { goBackAction } from "./actions";
+import { homeAction } from "./actions";
 
 export type Tag = {
   name: string;
@@ -103,7 +103,7 @@ export const createEventInfo = (event: Event) => {
     time_booked: "",
   })
     .then(() => {
-      goBackAction();
+      homeAction();
       createEventSuccessToast();
     })
     .catch((error: any) => {
@@ -125,7 +125,7 @@ export const deleteEventInfo = (eventId: string) => {
               .then(() => {
                 remove(ref(db, "events/" + eventId))
                   .then(() => {
-                    goBackAction();
+                    homeAction();
                     deleteEventSuccessToast();
                   })
                   .catch((error) => {
@@ -163,7 +163,7 @@ export const deleteBooking = (bookingId: string, eventId: string) => {
           .then(() => {
             remove(ref(db, "bookings/" + bookingId))
               .then(() => {
-                goBackAction();
+                homeAction();
                 deleteBookingSuccessToast();
               })
               .catch((error) => {

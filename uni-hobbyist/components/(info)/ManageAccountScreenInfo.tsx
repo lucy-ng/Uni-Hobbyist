@@ -12,7 +12,7 @@ import { child, get, ref, set } from "firebase/database";
 import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native";
 import { getAuth, db, dbRef } from "@/app/database";
-import { goBackAction } from "@/app/actions";
+import { homeAction } from "@/app/actions";
 
 export default function ManageAccountScreenInfo({ path }: { path: string }) {
   const [firstName, setFirstName] = useState("");
@@ -61,7 +61,7 @@ export default function ManageAccountScreenInfo({ path }: { path: string }) {
       university: params.university,
     })
       .then(() => {
-        goBackAction();
+        homeAction();
         updateAccountSuccessToast();
       })
       .catch((error) => {

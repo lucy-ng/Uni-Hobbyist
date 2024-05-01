@@ -7,10 +7,6 @@ Available at: https://docs.expo.dev/router/navigating-pages/
 import { router } from "expo-router";
 import { Event } from "./database";
 
-export const goBackAction = () => {
-  router.back();
-};
-
 export const homeAction = () => {
   router.replace("/(tabs)/HomeScreen");
 };
