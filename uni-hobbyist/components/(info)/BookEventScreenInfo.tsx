@@ -92,7 +92,7 @@ export default function BookEventScreenInfo({ path }: { path: string }) {
               const event = snapshot.val();
               set(ref(db, `events/${eventId}`), {
                 title: event.title,
-                booked_tickets: event.booked_tickets + 1,
+                booked_tickets: Number(event.booked_tickets) + 1,
                 date_time: event.date_time,
                 date_time_updated: event.date_time_updated,
                 description: event.description,
