@@ -17,7 +17,6 @@ import { ScrollView, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import Modal from "react-native-modal";
 import Button from "../Button";
-import { Icon } from "@rneui/themed";
 
 export default function CalendarScreenInfo({ path }: { path: string }) {
   const startYear = new Date(new Date().getFullYear(), 0, 1);
@@ -31,11 +30,6 @@ export default function CalendarScreenInfo({ path }: { path: string }) {
   const [deleteModal, setDeleteModal] = useState(false);
   const [bookingId, setBookingId] = useState("");
   const [eventId, setEventId] = useState("");
-
-  const [dateTimeSortIcon, setDateTimeSortIcon] = useState(
-    "clock-time-four-outline"
-  );
-  const [nameSortIcon, setNameSortIcon] = useState("sort-alphabetical-variant");
 
   const auth = getAuth();
   const userId = auth.currentUser ? auth.currentUser.uid : "";
@@ -62,6 +56,7 @@ export default function CalendarScreenInfo({ path }: { path: string }) {
             let dateBooked = data[Object.keys(data)[i]].date_booked;
             let timeBooked = data[Object.keys(data)[i]].time_booked;
 
+            // fetch hosted events
             if (userId == accountId && dateBooked == "" && timeBooked == "") {
               get(child(dbRef, `events`))
                 .then((snapshot) => {
@@ -118,6 +113,7 @@ export default function CalendarScreenInfo({ path }: { path: string }) {
               dateBooked != "" &&
               timeBooked != ""
             ) {
+              // fetch bookings
               get(child(dbRef, `events`))
                 .then((snapshot) => {
                   if (snapshot.exists()) {
@@ -184,6 +180,7 @@ export default function CalendarScreenInfo({ path }: { path: string }) {
       });
   }, [dateValue]);
 
+  // set selected date
   const markedDatesArray: any[] = [
     {
       date: dateValue,
@@ -196,6 +193,7 @@ export default function CalendarScreenInfo({ path }: { path: string }) {
     },
   ];
 
+  // set lines under dates with events
   dates.map((date, index) => {
     markedDatesArray.push({
       key: index,
@@ -218,76 +216,6 @@ export default function CalendarScreenInfo({ path }: { path: string }) {
     setBookingId(bookingIdValue);
     setEventId(eventIdValue);
     setDeleteModal(true);
-  };
-
-  const changeDateTimeSortIcon = () => {
-    if (dateTimeSortIcon == "clock-time-four-outline") {
-      setEvents(
-        events
-          .filter((event, index) => events.indexOf(event) == index)
-          .sort((a, b) =>
-            new Date(a.date_time) > new Date(b.date_time) ? 1 : -1
-          )
-      );
-      setBookings(
-        bookings
-          .filter((booking, index) => bookings.indexOf(booking) == index)
-          .sort((a, b) =>
-            new Date(a.date_time) > new Date(b.date_time) ? 1 : -1
-          )
-      );
-
-      setDateTimeSortIcon("sort-clock-ascending");
-    } else if (dateTimeSortIcon == "sort-clock-ascending") {
-      setEvents(
-        events
-          .filter((event, index) => events.indexOf(event) == index)
-          .sort((a, b) =>
-            new Date(a.date_time) > new Date(b.date_time) ? -1 : 1
-          )
-      );
-      setBookings(
-        bookings
-          .filter((booking, index) => bookings.indexOf(booking) == index)
-          .sort((a, b) =>
-            new Date(a.date_time) > new Date(b.date_time) ? -1 : 1
-          )
-      );
-
-      setDateTimeSortIcon("sort-clock-descending");
-    } else if (dateTimeSortIcon == "sort-clock-descending") {
-      setEvents(
-        events.filter((event, index) => events.indexOf(event) == index)
-      );
-      setBookings(
-        bookings.filter((booking, index) => bookings.indexOf(booking) == index)
-      );
-
-      setDateTimeSortIcon("clock-time-four-outline");
-    }
-  };
-
-  const changeNameSortIcon = () => {
-    if (nameSortIcon == "sort-alphabetical-variant") {
-      setEvents(
-        events
-          .filter((event, index) => events.indexOf(event) == index)
-          .sort((a, b) => (a.title > b.title ? 1 : -1))
-      );
-      setNameSortIcon("sort-alphabetical-ascending-variant");
-    } else if (nameSortIcon == "sort-alphabetical-ascending-variant") {
-      setEvents(
-        events
-          .filter((event, index) => events.indexOf(event) == index)
-          .sort((a, b) => (a.title > b.title ? -1 : 1))
-      );
-      setNameSortIcon("sort-alphabetical-descending-variant");
-    } else if (nameSortIcon == "sort-alphabetical-descending-variant") {
-      setEvents(
-        events.filter((event, index) => events.indexOf(event) == index)
-      );
-      setNameSortIcon("sort-alphabetical-variant");
-    }
   };
 
   return (
@@ -339,23 +267,6 @@ export default function CalendarScreenInfo({ path }: { path: string }) {
           maxDate={endYear}
           onDateSelected={(moment) => selectedDateAction(moment)}
         />
-        <View style={styles.sortBox}>
-          <Pressable onPress={() => changeDateTimeSortIcon()}>
-            <Icon
-              name={dateTimeSortIcon}
-              type={"material-community"}
-              color={"#8D86C9"}
-            />
-          </Pressable>
-          <Pressable onPress={() => changeNameSortIcon()}>
-            <Icon
-              name={nameSortIcon}
-              type={"material-community"}
-              color={"#8D86C9"}
-              style={styles.endSortIcon}
-            />
-          </Pressable>
-        </View>
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={{ marginTop: 10, marginBottom: 100, maxHeight: "85%" }}

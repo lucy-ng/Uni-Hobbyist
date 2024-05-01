@@ -21,6 +21,7 @@ export default function ManageAccountScreenInfo({ path }: { path: string }) {
   const auth = getAuth();
   const userId = auth.currentUser ? auth.currentUser.uid : "";
 
+  // fetch first and last name
   useEffect(() => {
     get(child(dbRef, `accounts/${userId}`))
       .then((snapshot) => {

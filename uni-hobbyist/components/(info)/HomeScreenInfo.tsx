@@ -72,6 +72,7 @@ export default function HomeScreenInfo({ path }: { path: string }) {
               description: searchedEvent.description,
             };
 
+            // fetch bookings on and after today's date
             tags.forEach((tag) => {
               if (
                 searchedEvent.tags &&
@@ -136,6 +137,7 @@ export default function HomeScreenInfo({ path }: { path: string }) {
                     tags: event.tags ?? [],
                   };
 
+                  // fetch bookings on and after today's date
                   if (
                     searchValue == "" &&
                     !hostedEvents.includes(eventId) &&

@@ -40,6 +40,7 @@ export default function RegisterScreenInfo({ path }: { path: string }) {
   */
 
   const handleSubmit = () => {
+    // create account with information
     get(child(dbRef, `accounts`))
       .then((snapshot) => {
         if (snapshot.exists()) {

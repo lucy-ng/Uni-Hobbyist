@@ -24,6 +24,7 @@ export default function AccountScreenInfo({ path }: { path: string }) {
     const userId = auth.currentUser ? auth.currentUser.uid : "";
     setAccountId(userId);
 
+    // fetch account details
     get(child(dbRef, `accounts/${userId}`))
       .then((snapshot) => {
         if (snapshot.exists()) {

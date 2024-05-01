@@ -24,6 +24,7 @@ export default function EventsScreenInfo({ path }: { path: string }) {
     const eventsList: Event[] = [];
     const hostedEvents: String[] = [];
 
+    // fetch hosted events
     get(child(dbRef, "bookings"))
       .then((snapshot) => {
         if (snapshot.exists()) {

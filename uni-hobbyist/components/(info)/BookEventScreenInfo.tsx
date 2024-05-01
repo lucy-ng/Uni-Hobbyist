@@ -32,6 +32,7 @@ export default function BookEventScreenInfo({ path }: { path: string }) {
   const params = useLocalSearchParams();
 
   useEffect(() => {
+    // fetch event information
     get(child(dbRef, `events/${params.eventId}`))
       .then((snapshot) => {
         if (snapshot.exists()) {
@@ -77,6 +78,7 @@ export default function BookEventScreenInfo({ path }: { path: string }) {
     const hours = String(dateToday.getHours());
     const minutes = String(dateToday.getMinutes()).padStart(2, "0");
 
+    // add booking and update event tickets
     set(ref(db, "bookings/" + uuid()), {
       account_id: userId,
       event_id: eventId,
@@ -220,6 +222,9 @@ export default function BookEventScreenInfo({ path }: { path: string }) {
                 </View>
               </>
             ) : null}
+            {/*
+            Display number of tickets left if 5 are left 
+            */}
             <View style={styles.ticketsLeftBox}>
               {maxTickets - bookedTickets <= 5 &&
                 maxTickets - bookedTickets != 1 &&
@@ -245,6 +250,9 @@ export default function BookEventScreenInfo({ path }: { path: string }) {
             </View>
           </Card>
 
+          {/*
+          display sold out sign 
+          */}
           {bookedTickets != maxTickets ? (
             <Button title="Book" onPress={() => setBookModal(true)} />
           ) : (

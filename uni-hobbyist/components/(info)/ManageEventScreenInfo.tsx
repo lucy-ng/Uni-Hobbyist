@@ -54,6 +54,7 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
   const params = useLocalSearchParams();
 
   useEffect(() => {
+    // fetch event information from selecting an event
     setTitle(String(params.title));
     setDateTime(new Date(String(params.date_time)));
     setDate(new Date(String(params.date_time)));
@@ -118,6 +119,7 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
 
     const selectedDate = Platform.OS == "ios" ? dateTime : date;
 
+    // update event information
     set(ref(db, "events/" + params.id), {
       booked_tickets: bookedTickets,
       date_time: String(selectedDate),

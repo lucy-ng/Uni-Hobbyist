@@ -27,6 +27,7 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
   useEffect(() => {
     const bookingsList: Booking[] = [];
 
+    // fetch bookings
     get(child(dbRef, "bookings"))
       .then((snapshot) => {
         if (snapshot.exists()) {
@@ -39,6 +40,7 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
             const dateBooked = data[Object.keys(data)[i]].date_booked;
             const timeBooked = data[Object.keys(data)[i]].time_booked;
 
+            // skip hosted events with datebooked and timeBooked
             if (userId == accountId && dateBooked != "" && timeBooked != "") {
               get(child(dbRef, `events`))
                 .then((snapshot) => {
@@ -95,6 +97,7 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
     setDeleteModal(true);
   };
 
+  // sort by date and time
   const changeDateTimeSortIcon = () => {
     if (dateTimeSortIcon == "clock-time-four-outline") {
       setBookings(
@@ -122,6 +125,7 @@ export default function BookingsScreenInfo({ path }: { path: string }) {
     }
   };
 
+  // sort by name
   const changeNameSortIcon = () => {
     if (nameSortIcon == "sort-alphabetical-variant") {
       setBookings(
