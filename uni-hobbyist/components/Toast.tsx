@@ -69,7 +69,6 @@ export const updateEventSuccessToast = () => {
   });
 };
 
-
 export const deleteEventSuccessToast = () => {
   Toast.show({
     type: "success",
@@ -88,6 +87,13 @@ export const invalidMaxTicketsToast = () => {
   Toast.show({
     type: "error",
     text1: "Invalid number of tickets.",
+  });
+};
+
+export const invalidBookedTicketsToast = () => {
+  Toast.show({
+    type: "error",
+    text1: "Invalid number of booked tickets.",
   });
 };
 
@@ -137,13 +143,6 @@ export const loginErrorToast = () => {
   Toast.show({
     type: "error",
     text2: "Login failed. Please try again.",
-  });
-};
-
-export const emailSentToast = () => {
-  Toast.show({
-    type: "success",
-    text1: "Email Sent!",
   });
 };
 

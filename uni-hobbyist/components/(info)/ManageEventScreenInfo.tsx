@@ -10,7 +10,9 @@ import { Platform, SafeAreaView } from "react-native";
 import {
   emptyValueToast,
   errorToast,
+  invalidBookedTicketsToast,
   invalidDateToast,
+  invalidMaxTicketsToast,
   updateEventSuccessToast,
 } from "../Toast";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
@@ -44,6 +46,7 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [maxTickets, setMaxTickets] = useState("");
+  const [bookedTickets, setBookedTickets] = useState("");
   const [tags, setTags] = useState<Array<Tag>>(tagsList ?? []);
   const [deleteModal, setDeleteModal] = useState(false);
 
@@ -57,6 +60,7 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
     setLocation(String(params.location));
     setDescription(String(params.description));
     setMaxTickets(String(params.max_tickets));
+    setBookedTickets(String(params.booked_tickets));
 
     let fetchedTags: string[] = (params.tags as string[]) ?? [];
     let newTags = tagsList;
@@ -73,18 +77,30 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
   }, []);
 
   const validateForm = () => {
-    const selectedDate = Platform.OS == "ios" ? dateTime : date
+    const positiveNumberRegex = new RegExp(/^[1-9][0-9]*$/);
+    const selectedDate = Platform.OS == "ios" ? dateTime : date;
 
     if (
       title === "" ||
       selectedDate == null ||
       location === "" ||
       description === "" ||
-      maxTickets === ""
+      maxTickets === "" ||
+      bookedTickets === ""
     ) {
       emptyValueToast();
     } else if (selectedDate <= dateToday) {
       invalidDateToast();
+    } else if (
+      Number(maxTickets) == 0 ||
+      !positiveNumberRegex.test(maxTickets)
+    ) {
+      invalidMaxTicketsToast();
+    } else if (
+      Number(bookedTickets) == 0 ||
+      !positiveNumberRegex.test(bookedTickets)
+    ) {
+      invalidBookedTicketsToast();
     } else {
       handleSubmit();
     }
@@ -100,10 +116,10 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
       });
     }
 
-    const selectedDate = Platform.OS == "ios" ? dateTime : date
+    const selectedDate = Platform.OS == "ios" ? dateTime : date;
 
     set(ref(db, "events/" + params.id), {
-      booked_tickets: params.booked_tickets,
+      booked_tickets: bookedTickets,
       date_time: String(selectedDate),
       date_time_updated: String(new Date()),
       location: location,
@@ -274,6 +290,19 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
             style={styles.input}
             value={maxTickets}
             onChangeText={setMaxTickets}
+            lightColor="black"
+            darkColor="white"
+            lightBorderColor="#CAC4CE"
+            darkBorderColor="#CAC4CE"
+            keyboardType="numeric"
+          />
+          <Text style={styles.text} lightColor="black" darkColor="white">
+            Number of Booked Tickets
+          </Text>
+          <TextInput
+            style={styles.input}
+            value={bookedTickets}
+            onChangeText={setBookedTickets}
             lightColor="black"
             darkColor="white"
             lightBorderColor="#CAC4CE"

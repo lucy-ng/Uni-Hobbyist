@@ -162,6 +162,10 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignSelf: "center",
   },
+  ticketsLeftBox: {
+    backgroundColor: "white",
+    marginTop: 20,
+  },
 
   /*
   650 Industries, Inc., 2024. Styling a React Native button. [Online]

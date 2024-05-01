@@ -2,7 +2,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { styles } from "../Styles";
 import { Text, View } from "../Themed";
 import { useEffect, useState } from "react";
-import { db, dbRef, getAuth } from "@/app/database";
+import { Tag, db, dbRef, getAuth } from "@/app/database";
 import Button from "../Button";
 import { get, child, ref, set } from "firebase/database";
 import {
@@ -16,6 +16,7 @@ import Modal from "react-native-modal";
 import { AntDesign } from "@expo/vector-icons";
 import { goBackAction } from "@/app/actions";
 import { v4 as uuid } from "uuid";
+import { Chip } from "@rneui/themed";
 
 export default function BookEventScreenInfo({ path }: { path: string }) {
   const [title, setTitle] = useState("");
@@ -25,6 +26,8 @@ export default function BookEventScreenInfo({ path }: { path: string }) {
   const [bookedTickets, setBookedTickets] = useState(0);
   const [maxTickets, setMaxTickets] = useState(0);
   const [bookModal, setBookModal] = useState(false);
+  const [tags, setTags] = useState<Array<Tag>>([]);
+
   const auth = getAuth();
   const params = useLocalSearchParams();
 
@@ -39,6 +42,15 @@ export default function BookEventScreenInfo({ path }: { path: string }) {
           setDescription(data.description);
           setBookedTickets(data.booked_tickets);
           setMaxTickets(data.max_tickets);
+
+          let fetchedTags: string[] = (data.tags as string[]) ?? [];
+          let newTags: Tag[] = [];
+
+          fetchedTags.forEach((tag, index) => {
+            newTags.push({ name: tag, type: "solid" });
+          });
+
+          setTags(newTags);
         } else {
           errorToast();
         }
@@ -181,6 +193,56 @@ export default function BookEventScreenInfo({ path }: { path: string }) {
             <Text style={styles.text} lightColor="black" darkColor="black">
               {description}
             </Text>
+            <Text>{"\n"}</Text>
+            {tags.length ? (
+              <>
+                <Text
+                  style={styles.cardText}
+                  lightColor="black"
+                  darkColor="black"
+                >
+                  Tags:
+                </Text>
+                <View
+                  style={{
+                    backgroundColor: "white",
+                    marginVertical: 20,
+                    flexWrap: "wrap",
+                    flexDirection: "row",
+                    alignContent: "center",
+                    alignSelf: "center",
+                    maxWidth: "80%",
+                  }}
+                >
+                  {tags.map((tag) => (
+                    <Chip key={tag.name} title={tag.name} type={tag.type} />
+                  ))}
+                </View>
+              </>
+            ) : null}
+            <View style={styles.ticketsLeftBox}>
+              {maxTickets - bookedTickets <= 5 &&
+                maxTickets - bookedTickets != 1 &&
+                bookedTickets != maxTickets && (
+                  <Text
+                    style={styles.altText}
+                    lightColor="black"
+                    darkColor="black"
+                  >
+                    {maxTickets - bookedTickets} tickets left!
+                  </Text>
+                )}
+              {maxTickets - bookedTickets == 1 &&
+                bookedTickets != maxTickets && (
+                  <Text
+                    style={styles.altText}
+                    lightColor="black"
+                    darkColor="black"
+                  >
+                    {maxTickets - bookedTickets} ticket left!
+                  </Text>
+                )}
+            </View>
           </Card>
 
           {bookedTickets != maxTickets ? (
