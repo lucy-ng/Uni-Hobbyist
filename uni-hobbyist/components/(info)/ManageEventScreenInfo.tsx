@@ -97,10 +97,7 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
       !positiveNumberRegex.test(maxTickets)
     ) {
       invalidMaxTicketsToast();
-    } else if (
-      Number(bookedTickets) == 0 ||
-      !positiveNumberRegex.test(bookedTickets)
-    ) {
+    } else if (!positiveNumberRegex.test(bookedTickets)) {
       invalidBookedTicketsToast();
     } else {
       handleSubmit();
