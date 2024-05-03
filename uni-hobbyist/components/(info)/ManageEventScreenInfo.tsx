@@ -78,7 +78,7 @@ export default function ManageEventScreenInfo({ path }: { path: string }) {
   }, []);
 
   const validateForm = () => {
-    const positiveNumberRegex = new RegExp(/^[1-9][0-9]*$/);
+    const positiveNumberRegex = new RegExp(/^[0-9][0-9]*$/);
     const selectedDate = Platform.OS == "ios" ? dateTime : date;
 
     if (
